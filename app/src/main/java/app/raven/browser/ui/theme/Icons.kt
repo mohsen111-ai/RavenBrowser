@@ -114,6 +114,8 @@ object Icons {
     val Sound = icon { p("M4 9v6h4l5 4V5L8 9H4z"); p("M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11") }
     /** Full size: arrows out to the corners. */
     val Expand = icon { p("M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7") }
+    /** A profile: a person (head and shoulders). */
+    val Person = icon { c(12f, 8f, 3.6f); p("M4.5 20c.8-3.8 3.8-6 7.5-6s6.7 2.2 7.5 6") }
     /** Full screen for pages: the four corners of the screen, nothing in between. */
     val FullPage = icon { p("M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15") }
     /** Video only: a screen with a play mark. */

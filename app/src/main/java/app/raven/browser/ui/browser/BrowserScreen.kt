@@ -393,7 +393,7 @@ private fun TopBar(c: Container, ui: UiState, tab: BrowserTab, tabCount: Int) {
         // Hold for a quick new tab or private tab; tap for all of them.
         var quick by remember { mutableStateOf(false) }
         Box {
-            TabsButton(tabCount, private, button, onLongClick = { quick = true }) {
+            TabsButton(tabCount, private, button, onLongClick = { quick = true }, ring = profileColor(c, tab)) {
                 captureThumbnail(ui, tab) { ui.go(Screen.Tabs) }
             }
             val context = LocalContext.current
@@ -417,6 +417,15 @@ private fun TopBar(c: Container, ui: UiState, tab: BrowserTab, tabCount: Int) {
         }
         IconButton(Icons.Menu, "Menu", { ui.sheet = Sheet.Menu }, size = button)
     }
+}
+
+/** The colour of [tab]'s profile, when there's more than one profile (and it isn't a private tab). */
+@Composable
+internal fun profileColor(c: Container, tab: BrowserTab): Color? {
+    val profiles by c.profiles.all.collectAsState()
+    if (profiles.size < 2 || tab.private) return null
+    val p = profiles.firstOrNull { it.id == tab.profile } ?: return null
+    return Color(app.raven.browser.data.Profiles.colors[p.color % app.raven.browser.data.Profiles.colors.size])
 }
 
 /** The strip the address bar floats in. Over the home screen ([sky]) the bar is glass and the wallpaper shows through. */
@@ -472,8 +481,9 @@ internal fun Moonlight(loading: Boolean, progress: Float, modifier: Modifier) {
 
 @Composable
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
-internal fun TabsButton(count: Int, private: Boolean, size: androidx.compose.ui.unit.Dp, onLongClick: (() -> Unit)? = null, onClick: () -> Unit) {
-    val edge = if (private) Space.Nebula else Raven.accent
+internal fun TabsButton(count: Int, private: Boolean, size: androidx.compose.ui.unit.Dp, onLongClick: (() -> Unit)? = null, ring: Color? = null, onClick: () -> Unit) {
+    // Ringed in the profile's colour when there's more than one profile.
+    val edge = if (private) Space.Nebula else ring ?: Raven.accent
     Box(
         Modifier
             .size(size)
@@ -549,7 +559,7 @@ private fun Suggestions(c: Container, ui: UiState, tab: BrowserTab, top: android
         // Bookmarks first (private tabs may read them, never history); then history, without repeating them.
         marks = c.db.suggestBookmarks(text)
         val saved = marks.map { it.url }.toSet()
-        results = if (tab.private) emptyList() else c.db.suggest(text).filter { it.url !in saved }
+        results = if (tab.private) emptyList() else c.db.suggest(text, profile = tab.profile).filter { it.url !in saved }
     }
     val engine = c.settings.current.searchEngine
     // While you type, Raven connects to where Go would take you (the site, or the search engine) and to the top

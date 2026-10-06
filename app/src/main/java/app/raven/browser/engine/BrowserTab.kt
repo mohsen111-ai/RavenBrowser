@@ -6,11 +6,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import org.mozilla.geckoview.GeckoSession
 import org.mozilla.geckoview.MediaSession
 
-/** One tab: its Gecko session plus the observable state the UI shows. */
+/** One tab: its Gecko session plus the observable state the UI shows. [profile]: whose tab it is ("" the first profile). */
 class BrowserTab(
     val id: String,
     val private: Boolean,
     val session: GeckoSession,
+    val profile: String = "",
 ) {
     val url = MutableStateFlow("")
     val title = MutableStateFlow("")

@@ -74,11 +74,13 @@ fun HistoryScreen(c: Container, ui: UiState, onBack: () -> Unit) {
     var visits by remember { mutableStateOf<List<Visit>>(emptyList()) }
     var clearing by remember { mutableStateOf(false) }
     val version by c.db.historyVersion.collectAsState()
+    // The history of the profile you're in.
+    val profile by c.tabs.profile.collectAsState()
     val scope = rememberCoroutineScope()
     val zone = ZoneId.systemDefault()
-    LaunchedEffect(query, range, version) {
+    LaunchedEffect(query, range, version, profile) {
         val since = range.days?.let { LocalDate.now().minusDays(it).atStartOfDay(zone).toInstant().toEpochMilli() } ?: 0L
-        visits = c.db.history(query, since).let { list ->
+        visits = c.db.history(query, since, profile = profile).let { list ->
             if (range == Range.YESTERDAY) {
                 val today = LocalDate.now().atStartOfDay(zone).toInstant().toEpochMilli()
                 list.filter { it.time < today }
@@ -169,7 +171,7 @@ fun HistoryScreen(c: Container, ui: UiState, onBack: () -> Unit) {
                                     -1L -> LocalDate.now().atStartOfDay(zone).toInstant().toEpochMilli()
                                     else -> System.currentTimeMillis() - span
                                 }
-                                scope.launch { c.db.clearHistory(since) }
+                                scope.launch { c.db.clearHistory(since, profile) }
                                 clearing = false
                             }.padding(vertical = 14.dp, horizontal = 8.dp),
                         )

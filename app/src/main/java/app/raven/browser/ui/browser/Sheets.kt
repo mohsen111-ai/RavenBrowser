@@ -416,9 +416,20 @@ fun LongPressSheet(c: Container, ui: UiState, sheet: Sheet.LongPress) {
         val private = tab?.private == true
         if (link != null) {
             ActionRow(Icons.NewTab, "Open in new tab") {
-                c.tabs.newTab(url = link, private = private, select = false, openerId = tab?.id)
+                c.tabs.newTab(url = link, private = private, select = false, openerId = tab?.id, profile = tab?.profile ?: c.tabs.profile.value)
                 c.engine.messages.tryEmit("Opened in a new tab")
                 close()
+            }
+            // The same link as someone else: in each other profile, signed in as them.
+            val profiles by c.profiles.all.collectAsState()
+            if (!private && profiles.size > 1) {
+                profiles.filter { it.id != (tab?.profile ?: "") }.forEach { p ->
+                    ActionRow(Icons.Person, "Open in ${p.name}", tint = Color(app.raven.browser.data.Profiles.colors[p.color % app.raven.browser.data.Profiles.colors.size])) {
+                        c.tabs.newTab(url = link, select = false, profile = p.id)
+                        c.engine.messages.tryEmit("Opened in ${p.name}")
+                        close()
+                    }
+                }
             }
             if (!private) ActionRow(Icons.Eclipse, "Open in private tab", tint = Space.Nebula) { c.tabs.newTab(url = link, private = true); close() }
             ActionRow(Icons.Link, "Copy link") { copy(context, link); close() }
@@ -431,7 +442,7 @@ fun LongPressSheet(c: Container, ui: UiState, sheet: Sheet.LongPress) {
                 style = MaterialTheme.typography.labelSmall, color = Space.Text2, modifier = Modifier.padding(start = 24.dp, top = 10.dp, bottom = 4.dp),
             )
             ActionRow(Icons.NewTab, if (e.type == ContextElement.TYPE_IMAGE) "Open image in new tab" else "Open in new tab") {
-                c.tabs.newTab(url = src, private = private, openerId = tab?.id); close()
+                c.tabs.newTab(url = src, private = private, openerId = tab?.id, profile = tab?.profile ?: c.tabs.profile.value); close()
             }
             ActionRow(Icons.Download, if (e.type == ContextElement.TYPE_IMAGE) "Save image" else "Save file") {
                 c.downloads.downloadUrl(src, private, tab?.url?.value); close()
@@ -485,7 +496,7 @@ fun SiteInfoSheet(c: Container, ui: UiState, tab: BrowserTab) {
     var perms by remember { mutableStateOf<List<GeckoSession.PermissionDelegate.ContentPermission>>(emptyList()) }
     var version by remember { mutableStateOf(0) }
     LaunchedEffect(tab.url.value, version) {
-        c.engine.runtime.storageController.getPermissions(tab.url.value, tab.private).accept({ list ->
+        c.engine.runtime.storageController.getPermissions(tab.url.value, app.raven.browser.data.Profile.contextOf(tab.profile), tab.private).accept({ list ->
             perms = list.orEmpty().filter { it.permission in permissionNames.keys }
         }, { })
     }

@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.ComponentCallbacks2
 import android.os.Build
 import app.raven.browser.data.Database
+import app.raven.browser.data.Profiles
 import app.raven.browser.data.Settings
 import app.raven.browser.downloads.DownloadManager
 import app.raven.browser.engine.Engine
@@ -28,7 +29,9 @@ class Container(app: Application) {
     val engine = Engine(app, settings)
     val blockedToday = BlockedCounter(app)
     val media = MediaControls(app)
-    val tabs = TabManager(app, engine, db, settings, downloads, media)
+    /** The people using Raven, each with their own sign-ins, history and tabs. */
+    val profiles = Profiles(app)
+    val tabs = TabManager(app, engine, db, settings, downloads, media, profiles)
     val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     /** Private tabs are locked (the lock is on and you left Raven); a fingerprint or the screen lock opens them. */
     val privateLocked = MutableStateFlow(false)

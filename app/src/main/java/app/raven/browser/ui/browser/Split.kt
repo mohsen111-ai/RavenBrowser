@@ -274,6 +274,7 @@ private fun HalfBar(c: Container, ui: UiState, tab: BrowserTab, muted: Boolean, 
         sound = sound,
         sideBySide = sideBySide,
         tabCount = tabCount,
+        ring = profileColor(c, tab),
         onAddress = { mine(); ui.editText = ""; ui.editing = true },
         onSiteInfo = { mine(); ui.sheet = Sheet.SiteInfo },
         onSound = { c.tabs.setSplitSound(it) },
@@ -297,6 +298,7 @@ fun HalfBarContent(
     sound: SplitSound,
     sideBySide: Boolean,
     tabCount: Int,
+    ring: Color? = null,
     onAddress: () -> Unit,
     onSiteInfo: () -> Unit,
     onSound: (SplitSound) -> Unit,
@@ -343,7 +345,7 @@ fun HalfBarContent(
         }
         SoundButton(muted, sound, sideBySide, onSound)
         if (hasPage) IconButton(if (loading) Icons.Close else Icons.Reload, if (loading) "Stop loading" else "Reload", onReload, size = 38.dp, iconSize = 17.dp)
-        TabsButton(tabCount, private, 38.dp, onClick = onTabs)
+        TabsButton(tabCount, private, 38.dp, ring = ring, onClick = onTabs)
         IconButton(Icons.Menu, "Menu", onMenu, size = 38.dp, iconSize = 18.dp)
     }
 }

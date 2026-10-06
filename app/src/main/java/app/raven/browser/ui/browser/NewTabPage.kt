@@ -125,7 +125,7 @@ fun NewTabPage(c: Container, ui: UiState, tab: BrowserTab) {
     LaunchedEffect(prefs.pinnedSites, prefs.hiddenSites, historyVersion) {
         val pinned = prefs.pinnedSites.map { PinnedSite(it, siteLabel(it), true) }
         val pinnedHosts = pinned.map { siteLabel(it.url) }.toSet()
-        val top = c.db.topSites(8, prefs.hiddenSites).map { PinnedSite(it.url, siteLabel(it.host), false) }.filter { siteLabel(it.url) !in pinnedHosts }
+        val top = c.db.topSites(8, prefs.hiddenSites, tab.profile).map { PinnedSite(it.url, siteLabel(it.host), false) }.filter { siteLabel(it.url) !in pinnedHosts }
         val fallback = defaultSites.filter { it !in prefs.hiddenSites }.map { PinnedSite("https://$it/", siteLabel(it), false) }
         sites = (pinned + top + fallback).distinctBy { it.label }.take(5)
     }
@@ -134,7 +134,7 @@ fun NewTabPage(c: Container, ui: UiState, tab: BrowserTab) {
     val openTabs by c.tabs.tabs.collectAsState()
     val back = when {
         !tab.hasNoPage -> tab
-        else -> openTabs.filter { it.id != tab.id && !it.private && !it.hasNoPage }.maxByOrNull { it.lastActive }
+        else -> openTabs.filter { it.id != tab.id && !it.private && !it.hasNoPage && it.profile == tab.profile }.maxByOrNull { it.lastActive }
     }
     var menuFor by remember { mutableStateOf<PinnedSite?>(null) }
     var adding by remember { mutableStateOf(false) }

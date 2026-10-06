@@ -291,3 +291,26 @@ fun RenameFlockDialog(old: String, onDismiss: () -> Unit, onRename: (String) -> 
         containerColor = Space.Surface,
     )
 }
+
+/** Asks for a name: [title], a line on what it's for, and the button that keeps it. */
+@Composable
+fun NameDialog(title: String, detail: String?, initial: String, confirm: String, onDismiss: () -> Unit, onDone: (String) -> Unit) {
+    var name by remember { mutableStateOf(initial) }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(title) },
+        text = {
+            Column {
+                if (detail != null) Text(detail, style = MaterialTheme.typography.bodySmall, color = Space.Text2, modifier = Modifier.padding(bottom = 12.dp))
+                OutlinedTextField(
+                    name, { name = it }, singleLine = true, placeholder = { Text("Name") },
+                    keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences, imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { onDone(name) }),
+                )
+            }
+        },
+        confirmButton = { TextButton({ onDone(name) }) { Text(confirm, color = Raven.accent) } },
+        dismissButton = { TextButton(onDismiss) { Text("Cancel", color = Space.Text2) } },
+        containerColor = Space.Surface,
+    )
+}

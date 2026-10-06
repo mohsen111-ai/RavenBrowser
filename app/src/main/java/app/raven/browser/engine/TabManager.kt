@@ -9,6 +9,8 @@ import android.os.Looper
 import android.os.SystemClock
 import android.util.Log
 import app.raven.browser.data.Database
+import app.raven.browser.data.Profile
+import app.raven.browser.data.Profiles
 import app.raven.browser.data.Settings
 import app.raven.browser.downloads.DownloadManager
 import kotlinx.coroutines.CoroutineScope
@@ -52,6 +54,7 @@ class TabManager(
     private val settings: Settings,
     private val downloads: DownloadManager,
     private val media: MediaControls,
+    val profiles: Profiles,
 ) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private val main = Handler(Looper.getMainLooper())
@@ -61,6 +64,10 @@ class TabManager(
     private val _selectedId = MutableStateFlow<String?>(null)
     val selectedId: StateFlow<String?> = _selectedId.asStateFlow()
     val selected: BrowserTab? get() = _tabs.value.firstOrNull { it.id == _selectedId.value }
+
+    private val _profile = MutableStateFlow("")
+    /** The profile you're in: the one the tab on screen belongs to, and where new tabs open. */
+    val profile: StateFlow<String> = _profile.asStateFlow()
 
     val events = MutableSharedFlow<TabEvent>(extraBufferCapacity = 16)
     val prompts = MutableStateFlow<List<UiPrompt>>(emptyList())
@@ -88,7 +95,9 @@ class TabManager(
         if (list != null && list.length() > 0 && !settings.current.eraseOnClose) {
             for (i in 0 until list.length()) {
                 val o = list.getJSONObject(i)
-                val tab = createTab(private = false, id = o.optString("id", UUID.randomUUID().toString()))
+                // A tab of a profile that's since been removed goes to the first profile.
+                val profile = o.optString("profile").takeIf { id -> profiles.all.value.any { it.id == id } } ?: ""
+                val tab = createTab(private = false, id = o.optString("id", UUID.randomUUID().toString()), profile = profile)
                 tab.url.value = o.optString("url")
                 tab.title.value = o.optString("title")
                 tab.startedFromNewTab = o.optBoolean("fromNewTab")
@@ -124,8 +133,9 @@ class TabManager(
         fromApp: Boolean = false,
         openerId: String? = null,
         flock: String? = null,
+        profile: String = _profile.value,
     ): BrowserTab {
-        val tab = createTab(private)
+        val tab = createTab(private, profile = profile)
         tab.openedFromApp = fromApp
         tab.openerId = openerId
         if (!private) tab.flock.value = flock
@@ -141,14 +151,17 @@ class TabManager(
         return tab
     }
 
-    private fun createTab(private: Boolean, id: String = UUID.randomUUID().toString()): BrowserTab {
+    private fun createTab(private: Boolean, id: String = UUID.randomUUID().toString(), profile: String = ""): BrowserTab {
+        // Each profile keeps its own sign-ins and site data (an engine context); private tabs keep nothing anyway.
+        val owner = if (private) "" else profile
         val session = GeckoSession(
             GeckoSessionSettings.Builder()
                 .usePrivateMode(private)
+                .contextId(Profile.contextOf(owner))
                 .suspendMediaWhenInactive(false)
                 .build(),
         )
-        val tab = BrowserTab(id, private, session)
+        val tab = BrowserTab(id, private, session, owner)
         wire(tab)
         return tab
     }
@@ -267,6 +280,7 @@ class TabManager(
         }
         target.lastActive = now
         _selectedId.value = id
+        if (!target.private) _profile.value = target.profile
         enforceAwakeLimit()
         persist()
     }
@@ -276,7 +290,7 @@ class TabManager(
      * private), in the order the Tabs screen shows them; null at either end.
      */
     fun neighbour(tab: BrowserTab, step: Int): BrowserTab? {
-        val same = _tabs.value.filter { it.private == tab.private }
+        val same = _tabs.value.filter { it.private == tab.private && it.profile == tab.profile }
         val i = same.indexOfFirst { it.id == tab.id }
         return if (i < 0) null else same.getOrNull(i + step)
     }
@@ -311,9 +325,12 @@ class TabManager(
         _tabs.value = rest
         var standIn: String? = null
         if (wasSelected) {
-            val sameKind = rest.filter { it.private == tab.private && it.id != _floatingId.value }
-            val next = otherHalf?.let(::find) ?: sameKind.getOrNull(index.coerceAtMost(sameKind.lastIndex)) ?: rest.lastOrNull { it.id != _floatingId.value }
-            if (next != null) select(next.id) else standIn = newTab(select = true).id
+            // The next tab of the same kind and profile; after the last private tab, back to everyday tabs; after a
+            // profile's last tab, a fresh one in that profile.
+            val sameKind = rest.filter { it.private == tab.private && it.profile == tab.profile && it.id != _floatingId.value }
+            val next = otherHalf?.let(::find) ?: sameKind.getOrNull(index.coerceAtMost(sameKind.lastIndex))
+                ?: if (tab.private) rest.lastOrNull { !it.private && it.profile == _profile.value && it.id != _floatingId.value } else null
+            if (next != null) select(next.id) else standIn = newTab(select = true, profile = if (tab.private) _profile.value else tab.profile).id
         }
         if (undoable) keepForUndo(listOf(index to tab), if (wasSelected) id else null, standIn)
         persist()
@@ -323,20 +340,21 @@ class TabManager(
         _tabs.value.firstOrNull { it.session == session }?.let { close(it.id) }
     }
 
-    /** Closes every tab, or every private ([private] true) or everyday one (false). */
+    /** Closes every tab (Clean slate, erase on close), or every private one. */
     fun closeAll(private: Boolean? = null, undoable: Boolean = false) =
-        closeGroup(_tabs.value.filter { private == null || it.private == private }.map { it.id }.toSet(), undoable, private)
+        closeGroup(_tabs.value.filter { private == null || it.private == private }.map { it.id }.toSet(), undoable)
 
-    /** Closes these tabs together, with one Undo for all of them. */
+    /** Closes these tabs together (a flock, the tabs on one side of the Tabs screen), with one Undo for all of them. */
     fun closeTabs(ids: Set<String>) {
-        if (ids.size == 1) close(ids.first(), undoable = true) else closeGroup(ids, undoable = true, private = null)
+        if (ids.size == 1) close(ids.first(), undoable = true) else closeGroup(ids, undoable = true)
     }
 
-    private fun closeGroup(ids: Set<String>, undoable: Boolean, private: Boolean?) {
+    private fun closeGroup(ids: Set<String>, undoable: Boolean) {
         val all = _tabs.value
         val (gone, keep) = all.partition { it.id in ids }
         if (gone.isEmpty()) return
         val selectedGone = _selectedId.value?.takeIf { it in ids }
+        val was = gone.firstOrNull { it.id == selectedGone }
         if (_floatingId.value in ids) { _floatingId.value = null; floatParked.value = false }
         _split.value?.let { s -> if (s.top in ids || s.bottom in ids) { _split.value = null; keep.forEach { setMuted(it, false) } } }
         dropPrompts(ids)
@@ -344,9 +362,11 @@ class TabManager(
         _tabs.value = keep
         var standIn: String? = null
         if (keep.none { it.id == _selectedId.value }) {
-            // Closing every normal tab never drops you into a private one: a fresh new tab instead.
-            val next = keep.lastOrNull { !it.private } ?: keep.lastOrNull()
-            if (next != null && (private != false || !next.private)) select(next.id) else standIn = newTab(select = true).id
+            // Closing everyday tabs never drops you into a private one, nor into another profile: a fresh new tab
+            // instead. After the private tabs, back to the everyday ones.
+            val profile = (if (was == null || was.private) _profile.value else was.profile).takeIf { p -> profiles.all.value.any { it.id == p } } ?: ""
+            val next = keep.lastOrNull { !it.private && it.profile == profile }
+            if (next != null) select(next.id) else standIn = newTab(select = true, profile = profile).id
         }
         if (undoable) keepForUndo(all.withIndex().filter { it.value.id in ids }.map { it.index to it.value }, selectedGone, standIn)
         persist()
@@ -605,6 +625,23 @@ class TabManager(
         find(s.bottom)?.let { setMuted(it, sound == SplitSound.TOP) }
     }
 
+    // ------------------------------------------------------------------ profiles
+
+    /** Switches to a profile (on the Tabs screen): new tabs open in it from now on. */
+    fun useProfile(id: String) {
+        if (profiles.all.value.any { it.id == id }) _profile.value = id
+    }
+
+    /** A profile goes with everything it kept: its tabs close, and its sign-ins, site data and history are erased. */
+    fun removeProfile(id: String) {
+        if (id.isEmpty()) return
+        profiles.remove(id)
+        if (_profile.value == id) _profile.value = ""
+        closeGroup(_tabs.value.filter { !it.private && it.profile == id }.map { it.id }.toSet(), undoable = false)
+        Profile.contextOf(id)?.let { runCatching { engine.runtime.storageController.clearDataForSessionContext(it) } }
+        scope.launch { db.clearHistory(profile = id) }
+    }
+
     // ------------------------------------------------------------------ flocks (tab groups)
 
     private val _flocksVersion = MutableStateFlow(0)
@@ -656,6 +693,7 @@ class TabManager(
                 put("fromNewTab", t.startedFromNewTab)
                 t.openerId?.let { put("opener", it) }
                 t.flock.value?.let { put("flock", it) }
+                if (t.profile.isNotEmpty()) put("profile", t.profile)
                 t.state?.let { put("state", it.toString()) }
             })
         }
@@ -752,7 +790,7 @@ class TabManager(
                 tab.expectingLoad = false
                 tab.url.value = u
                 tab.committedUrl = u
-                if (!tab.private && u.startsWith("http")) scope.launch { db.recordVisit(u, tab.title.value) }
+                if (!tab.private && u.startsWith("http")) scope.launch { db.recordVisit(u, tab.title.value, tab.profile) }
                 persist()
             }
 
@@ -768,7 +806,7 @@ class TabManager(
             }
 
             override fun onNewSession(session: GeckoSession, uri: String): GeckoResult<GeckoSession> {
-                val t = newTab(private = tab.private, select = true, open = false)
+                val t = newTab(private = tab.private, select = true, open = false, profile = tab.profile)
                 t.url.value = uri
                 t.openedByPage = true
                 t.openerId = tab.id
@@ -786,7 +824,7 @@ class TabManager(
                 if (t.startsWith("data:")) return
                 tab.title.value = t
                 val u = tab.url.value
-                if (!tab.private && u.startsWith("http")) scope.launch { db.updateTitle(u, t) }
+                if (!tab.private && u.startsWith("http")) scope.launch { db.updateTitle(u, t, tab.profile) }
             }
 
             override fun onContextMenu(session: GeckoSession, screenX: Int, screenY: Int, element: ContentDelegate.ContextElement) {

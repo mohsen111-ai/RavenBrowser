@@ -87,6 +87,9 @@ fun SettingsScreen(c: Container, onBack: () -> Unit) {
                 }
             }
 
+            SectionLabel("Profiles")
+            Card { ProfilesList(c) }
+
             SectionLabel("Search")
             Card {
                 ListRow("Search engine", value = p.searchEngine.label, chevron = true, onClick = {

@@ -62,6 +62,7 @@ import app.raven.browser.ui.tabs.Hand
 import app.raven.browser.ui.tabs.TabCardInfo
 import app.raven.browser.ui.tabs.TabsLayout
 import app.raven.browser.ui.tabs.TabSide
+import app.raven.browser.ui.tabs.ProfileChip
 import app.raven.browser.ui.tabs.FlocksGrid
 import app.raven.browser.ui.tabs.FlockInfo
 import app.raven.browser.ui.sky.Wallpapers
@@ -213,6 +214,31 @@ open class Shots {
             }
         }
         compose.onRoot().captureRoboImage("$dir/tabs_${if (private) "private" else "everyday"}.png")
+    }
+
+    /** The Tabs screen with three profiles: the chips at the top, and each card ringed in its profile's colour. */
+    @Test fun tabsProfiles() {
+        val img = image(Wallpapers.byId("flight"))
+        val work = Color(0xFFE8A86A)
+        val cards = listOf(
+            TabCardInfo("1", "Inbox · Work mail", "Proton", false, false, false, page(0xFF1B2433.toInt(), true), profileColor = work),
+            TabCardInfo("2", "GitHub · Pull requests", "GitHub", false, false, false, page(0xFF24292F.toInt(), true), profileColor = work),
+            TabCardInfo("3", "Calendar · This week", "Calendar", false, true, false, page(0xFF3A3F4A.toInt(), false), profileColor = work),
+        )
+        compose.setContent {
+            RavenTheme(0, false, true) {
+                TabsLayout(
+                    backdrop = img, side = TabSide.Everyday, normalCount = 3, privateCount = 0, flockCount = 0,
+                    subtitle = "3 open", onCloseAll = {}, onSide = {}, newLabel = "New tab", onNewTab = {}, onDone = {},
+                    profiles = listOf(
+                        ProfileChip("", "Personal", Color(0xFFC7CCD8), 5, false),
+                        ProfileChip("w", "Work", work, 3, true),
+                        ProfileChip("i", "Instagram 2", Color(0xFFE58FA8), 1, false),
+                    ),
+                ) { Hand(cards, Space.accents[0], onOpen = {}, onClose = {}) }
+            }
+        }
+        compose.onRoot().captureRoboImage("$dir/tabs_profiles.png")
     }
 
     @Test fun tabsEveryday() = tabs(false)
