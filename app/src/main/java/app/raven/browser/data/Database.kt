@@ -100,6 +100,37 @@ class Database(context: Context) : SQLiteOpenHelper(context, "raven.db", null, 3
         }
     }
 
+    /** All history, for a backup: url, title, host, time and profile of each visit. */
+    suspend fun exportHistory(): org.json.JSONArray = withContext(Dispatchers.IO) {
+        val arr = org.json.JSONArray()
+        readableDatabase.rawQuery("SELECT url, title, host, time, profile FROM visits ORDER BY time", null).use { c ->
+            while (c.moveToNext()) arr.put(org.json.JSONArray().put(c.getString(0)).put(c.getString(1)).put(c.getString(2)).put(c.getLong(3)).put(c.getString(4)))
+        }
+        arr
+    }
+
+    /** A backup's history, added to what's here (a visit already here isn't added twice). */
+    suspend fun importHistory(arr: org.json.JSONArray) = withContext(Dispatchers.IO) {
+        val db = writableDatabase
+        db.beginTransaction()
+        try {
+            for (i in 0 until arr.length()) {
+                val v = arr.optJSONArray(i) ?: continue
+                val url = v.optString(0)
+                val time = v.optLong(3)
+                val profile = v.optString(4)
+                val here = db.rawQuery("SELECT 1 FROM visits WHERE url = ? AND time = ? AND profile = ? LIMIT 1", arrayOf(url, time.toString(), profile)).use { it.moveToFirst() }
+                if (url.isNotEmpty() && !here) {
+                    db.insert("visits", null, ContentValues().apply { put("url", url); put("title", v.optString(1)); put("host", v.optString(2)); put("time", time); put("profile", profile) })
+                }
+            }
+            db.setTransactionSuccessful()
+        } finally {
+            db.endTransaction()
+        }
+        _version.value++
+    }
+
     suspend fun deleteVisit(id: Long) = withContext(Dispatchers.IO) {
         writableDatabase.delete("visits", "id = ?", arrayOf(id.toString()))
         _version.value++
@@ -195,6 +226,20 @@ class Database(context: Context) : SQLiteOpenHelper(context, "raven.db", null, 3
         val args = listOfNotNull(q, q, folder, limit.toString()).toTypedArray()
         readableDatabase.rawQuery(sql, args).use { c ->
             buildList { while (c.moveToNext()) add(Bookmark(c.getLong(0), c.getString(1), c.getString(2), c.getString(3), c.getString(4), c.getLong(5))) }
+        }
+    }
+
+    /** All bookmarks, for a backup. */
+    suspend fun exportBookmarks(): org.json.JSONArray = org.json.JSONArray().also { arr ->
+        bookmarks(limit = Int.MAX_VALUE).forEach { b -> arr.put(org.json.JSONObject().put("url", b.url).put("title", b.title).put("host", b.host).put("folder", b.folder).put("created", b.created)) }
+    }
+
+    /** A backup's bookmarks, added to these (one already saved stays as it is). */
+    suspend fun importBookmarks(arr: org.json.JSONArray) {
+        for (i in 0 until arr.length()) {
+            val o = arr.optJSONObject(i) ?: continue
+            val url = o.optString("url").ifEmpty { continue }
+            restoreBookmark(Bookmark(0, url, o.optString("title"), o.optString("host").ifEmpty { url }, o.optString("folder"), o.optLong("created", System.currentTimeMillis())))
         }
     }
 

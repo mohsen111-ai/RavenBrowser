@@ -682,8 +682,17 @@ class TabManager(
         main.postDelayed(persistRunnable, 1500)
     }
 
+    /** A backup's tabs were put in place: nothing more is saved over them before Raven restarts. */
+    @Volatile private var frozen = false
+
     private fun writeState() {
+        if (frozen) return
         if (settings.current.eraseOnClose) { stateFile.delete(); return }
+        scope.launch(Dispatchers.IO) { runCatching { stateFile.writeText(savedState().toString()) } }
+    }
+
+    /** The everyday tabs as Raven keeps them between starts (also what a backup holds). */
+    fun savedState(): JSONObject {
         val arr = JSONArray()
         _tabs.value.filter { !it.private && !it.hasNoPage }.forEach { t ->
             arr.put(JSONObject().apply {
@@ -698,8 +707,14 @@ class TabManager(
             })
         }
         val sel = selected?.takeIf { !it.private }?.id
-        val json = JSONObject().put("tabs", arr).put("selected", sel ?: "").toString()
-        scope.launch(Dispatchers.IO) { runCatching { stateFile.writeText(json) } }
+        return JSONObject().put("tabs", arr).put("selected", sel ?: "")
+    }
+
+    /** Puts a backup's tabs where Raven finds them when it starts; Raven restarts right after. */
+    fun replaceSavedState(json: JSONObject) {
+        frozen = true
+        main.removeCallbacks(persistRunnable)
+        stateFile.writeText(json.toString())
     }
 
     // ------------------------------------------------------------------ add-on actions

@@ -248,6 +248,9 @@ fun SettingsScreen(c: Container, onBack: () -> Unit) {
                 })
             }
 
+            SectionLabel("Backup and restore")
+            Card { BackupRows(c) }
+
             SectionLabel("About")
             Card {
                 ListRow("Raven ${BuildConfig.VERSION_NAME}", detail = "Gecko engine ${BuildConfig.GECKO_VERSION} · uBlock Origin by Raymond Hill")

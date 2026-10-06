@@ -158,6 +158,39 @@ class Settings(context: Context) {
         putLong("addonsLastChecked", p.addonsLastChecked)
     }
 
+    /** Every setting as it's stored, for a backup. */
+    fun export(): org.json.JSONObject {
+        val o = org.json.JSONObject()
+        sp.all.forEach { (k, v) ->
+            when (v) {
+                is Boolean -> o.put(k, org.json.JSONObject().put("b", v))
+                is Int -> o.put(k, org.json.JSONObject().put("i", v))
+                is Long -> o.put(k, org.json.JSONObject().put("l", v))
+                is String -> o.put(k, org.json.JSONObject().put("s", v))
+            }
+        }
+        return o
+    }
+
+    /** A backup's settings in place of these (Raven restarts afterwards, so every part reads them afresh). */
+    fun import(o: org.json.JSONObject) {
+        sp.edit(commit = true) {
+            clear()
+            o.keys().forEach { k ->
+                val v = o.optJSONObject(k) ?: return@forEach
+                when {
+                    v.has("b") -> putBoolean(k, v.getBoolean("b"))
+                    v.has("i") -> putInt(k, v.getInt("i"))
+                    v.has("l") -> putLong(k, v.getLong("l"))
+                    v.has("s") -> putString(k, v.getString("s"))
+                }
+            }
+            // A restored Raven never shows the welcome screens again.
+            putBoolean("onboardingDone", true)
+        }
+        _prefs.value = load()
+    }
+
     private inline fun <reified E : Enum<E>> enumOr(name: String?, default: E): E =
         enumValues<E>().firstOrNull { it.name == name } ?: default
 }

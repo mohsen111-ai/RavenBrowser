@@ -52,17 +52,20 @@ class Profiles(context: Context) {
         save(_all.value.filter { it.id != id })
     }
 
-    /** Puts back a list read from a backup. */
-    fun replaceAll(list: List<Profile>) {
-        if (list.none { it.id.isEmpty() }) return
-        save(list)
+    fun export(): JSONArray = JSONArray().also { arr -> _all.value.forEach { arr.put(JSONObject().put("id", it.id).put("name", it.name).put("color", it.color)) } }
+
+    /** A backup's profiles in place of these, written at once (Raven restarts right after). */
+    fun import(arr: JSONArray) {
+        val list = List(arr.length()) { i -> arr.getJSONObject(i).let { Profile(it.getString("id"), it.getString("name"), it.optInt("color")) } }
+        if (list.any { it.id.isEmpty() }) save(list, now = true)
     }
 
-    private fun save(list: List<Profile>) {
+    private fun save(list: List<Profile>, now: Boolean = false) {
         _all.value = list
         val arr = JSONArray()
         list.forEach { arr.put(JSONObject().put("id", it.id).put("name", it.name).put("color", it.color)) }
-        sp.edit().putString("list", arr.toString()).apply()
+        val edit = sp.edit().putString("list", arr.toString())
+        if (now) edit.commit() else edit.apply()
     }
 
     private fun load(): List<Profile> {

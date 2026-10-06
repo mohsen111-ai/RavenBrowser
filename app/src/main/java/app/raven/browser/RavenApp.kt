@@ -59,6 +59,34 @@ class Container(app: Application) {
         scope.launch { db.loadBookmarked() }
     }
 
+    /**
+     * Everything a backup file holds: settings (home sites among them), profiles, the everyday tabs, history and
+     * bookmarks. Never sign-ins to websites, and never the VPN's location files.
+     */
+    suspend fun backupContents(): org.json.JSONObject {
+        val open = tabs.savedState()
+        return org.json.JSONObject()
+            .put("raven", BuildConfig.VERSION_NAME)
+            .put("made", System.currentTimeMillis())
+            .put("settings", settings.export())
+            .put("profiles", profiles.export())
+            .put("tabs", open)
+            .put("history", db.exportHistory())
+            .put("bookmarks", db.exportBookmarks())
+    }
+
+    /**
+     * Puts a backup back. History and bookmarks are added to what's here; tabs, settings and profiles take the place
+     * of today's. Raven must restart afterwards, so every part starts from them.
+     */
+    suspend fun restoreBackup(o: org.json.JSONObject) {
+        o.optJSONArray("history")?.let { db.importHistory(it) }
+        o.optJSONArray("bookmarks")?.let { db.importBookmarks(it) }
+        o.optJSONArray("profiles")?.let { profiles.import(it) }
+        o.optJSONObject("settings")?.let { settings.import(it) }
+        o.optJSONObject("tabs")?.let { tabs.replaceSavedState(it) }
+    }
+
     fun eraseBrowsingData(history: Boolean, cookies: Boolean, cache: Boolean) {
         var flags = 0L
         if (cookies) flags = flags or StorageController.ClearFlags.SITE_DATA
