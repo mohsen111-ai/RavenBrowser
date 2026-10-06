@@ -1,0 +1,28 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>Raven video test</title>
+<style>
+  body { background: #241c17; color: #f2e8dc; font: 20px sans-serif; margin: 12px; }
+  video { width: 100%; background: #000; }
+  button { font-size: 26px; width: 48%; height: 64px; }
+  #state { font-size: 24px; }
+</style>
+<!-- A 20-second 16:9 test picture with a tone (wide.webm), so fullscreen should turn the screen to landscape. -->
+<video id="v" src="wide.webm" controls loop playsinline></video>
+<p><button id="play">Play</button> <button id="full">Fullscreen</button></p>
+<p id="state">idle</p>
+<script>
+  const v = document.getElementById("v");
+  const show = () => {
+    document.getElementById("state").textContent =
+      "state: " + (v.paused ? "paused" : "playing") + " | fullscreen: " + (document.fullscreenElement ? "yes" : "no") +
+      " | screen: " + (screen.orientation ? screen.orientation.type : "?");
+  };
+  document.getElementById("play").onclick = () => v.play().catch((e) => { document.getElementById("state").textContent = "play failed " + e.name; });
+  document.getElementById("full").onclick = () => v.requestFullscreen().catch((e) => { document.getElementById("state").textContent = "fullscreen failed " + e.name; });
+  for (const e of ["playing", "pause"]) v.addEventListener(e, show);
+  document.addEventListener("fullscreenchange", show);
+  if (screen.orientation) screen.orientation.addEventListener("change", show);
+  navigator.mediaSession.metadata = new MediaMetadata({ title: "Raven test video", artist: "Raven tests" });
+</script>

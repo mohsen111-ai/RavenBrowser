@@ -1,0 +1,98 @@
+name: Build Raven
+
+# Started by hand when a version is ready, so GitHub isn't asked to build every small change.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# One build at a time: two releases created at once were sometimes refused (HTTP 403).
+concurrency:
+  group: build-raven
+  cancel-in-progress: false
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      # Each build gets its own number (1.0.N); N carries on from the last build made before this repository
+      # (1.0.36), so a new version always installs over the one on the phone.
+      - name: Version number
+        run: echo "RAVEN_BUILD=$(( ${{ github.run_number }} + 36 ))" >> "$GITHUB_ENV"
+
+      # The runner image already has JDK 21; downloading one can fail when the download site is busy.
+      - name: Use the runner's JDK 21
+        run: echo "JAVA_HOME=$JAVA_HOME_21_X64" >> "$GITHUB_ENV"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Install Android 17 SDK (GeckoView 157 compiles against API 37.1)
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-37.1" "build-tools;37.0.0" > /dev/null
+
+      # Every build must be signed with the same key, or a new version won't install over the old one. The key
+      # lives only in the three RAVEN_* repository secrets, which GitHub never hands to anyone else's changes.
+      # This repository is public, so it never makes or caches a key of its own: without the secrets it stops.
+      - name: Use the signing key from repository secrets
+        env:
+          KEYSTORE_BASE64: ${{ secrets.RAVEN_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.RAVEN_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.RAVEN_KEY_ALIAS }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ] || [ -z "$KEYSTORE_PASSWORD" ] || [ -z "$KEY_ALIAS" ]; then
+            echo "::error::The RAVEN_KEYSTORE_BASE64, RAVEN_KEYSTORE_PASSWORD and RAVEN_KEY_ALIAS secrets aren't set, so Raven can't be signed."
+            exit 1
+          fi
+          echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/raven.jks"
+          {
+            echo "RAVEN_KEYSTORE_FILE=$RUNNER_TEMP/raven.jks"
+            echo "RAVEN_KEYSTORE_PASSWORD=$KEYSTORE_PASSWORD"
+            echo "RAVEN_KEY_ALIAS=$KEY_ALIAS"
+          } >> "$GITHUB_ENV"
+
+      - name: Build phone APK (arm64)
+        run: |
+          ./gradlew :app:assembleRelease -PgeckoAbi=arm64-v8a --console=plain
+          "$ANDROID_HOME/build-tools/37.0.0/apksigner" verify --print-certs app/build/outputs/apk/release/app-release.apk | grep -i "SHA-256"
+          cp app/build/outputs/apk/release/app-release.apk "Raven-1.0.$RAVEN_BUILD.apk"
+
+      - name: Keep the R8 map for decoding crash reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: mapping-${{ env.RAVEN_BUILD }}
+          path: app/build/outputs/mapping/release/mapping.prt
+          retention-days: 90
+
+      - name: Publish to Releases
+        id: publish
+        continue-on-error: true
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: raven-${{ env.RAVEN_BUILD }}
+          name: Raven 1.0.${{ env.RAVEN_BUILD }}
+          target_commitish: ${{ github.sha }}
+          prerelease: true
+          files: Raven-*.apk
+          body: |
+            Raven for Android phones (arm64). Open this page on your phone, tap the APK below to download it,
+            then open it to install. A newer Raven installs over the one you have and keeps your tabs and settings.
+
+      - name: Wait before trying again
+        if: steps.publish.outcome == 'failure'
+        run: sleep 45
+
+      - name: Publish to Releases (second try)
+        if: steps.publish.outcome == 'failure'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: raven-${{ env.RAVEN_BUILD }}
+          name: Raven 1.0.${{ env.RAVEN_BUILD }}
+          target_commitish: ${{ github.sha }}
+          prerelease: true
+          files: Raven-*.apk
+          body: |
+            Raven for Android phones (arm64). Open this page on your phone, tap the APK below to download it,
+            then open it to install. A newer Raven installs over the one you have and keeps your tabs and settings.

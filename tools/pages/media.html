@@ -1,0 +1,57 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>Raven media test</title>
+<style>
+  body { background: #241c17; color: #f2e8dc; font: 22px sans-serif; margin: 16px; }
+  button { font-size: 40px; width: 100%; height: 30vh; }
+  #state { font-size: 34px; margin-top: 16px; }
+</style>
+<button id="play">Play</button>
+<p id="state">idle</p>
+<p id="which"></p>
+<script>
+  // Two minutes of a quiet 440 Hz tone as a WAV, made here so the test needs nothing from the internet.
+  function tone(seconds) {
+    const rate = 8000, n = rate * seconds, buf = new ArrayBuffer(44 + n * 2), v = new DataView(buf);
+    const put = (at, s) => { for (let i = 0; i < s.length; i++) v.setUint8(at + i, s.charCodeAt(i)); };
+    put(0, "RIFF"); v.setUint32(4, 36 + n * 2, true); put(8, "WAVE"); put(12, "fmt ");
+    v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+    v.setUint32(24, rate, true); v.setUint32(28, rate * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true);
+    put(36, "data"); v.setUint32(40, n * 2, true);
+    for (let i = 0; i < n; i++) v.setInt16(44 + i * 2, Math.sin(i * 2 * Math.PI * 440 / rate) * 6000, true);
+    return URL.createObjectURL(new Blob([buf], { type: "audio/wav" }));
+  }
+  // media.html?two is titled "Raven media test two", so tests can tell several media tabs apart.
+  if (location.search) document.title += " " + location.search.slice(1);
+  // Which one this is, on the page too, so a test can tell which tab it's looking at.
+  if (location.search) document.getElementById("which").textContent = "tab: " + location.search.slice(1);
+  const audio = new Audio(tone(120));
+  audio.loop = true;
+  // The state is page text, so the test reads it from the screen (uiautomator sees page content).
+  // Only when it changes: rewriting the same text twice a second kept the screen from ever settling, and the test
+  // tool reads the screen only once it has (run 24 found nothing on this page).
+  const show = (t) => {
+    const el = document.getElementById("state");
+    if (el.textContent !== "state: " + t) el.textContent = "state: " + t;
+  };
+  let nexts = 0, previous = 0;
+  document.getElementById("play").onclick = () => audio.play().catch((e) => show("play failed " + e.name));
+  // "(muted)" when Raven keeps the tab quiet (split screen's speaker), so the test can see whose sound is on.
+  const status = () => (audio.paused ? "paused" : "playing") + (audio.muted ? " (muted)" : "");
+  audio.onplaying = () => show(status());
+  audio.onpause = () => show(status());
+  audio.onvolumechange = () => show(status());
+  // And from the player itself twice a second, once it has been started: a tab paused while in the background can
+  // be shown before its pause event arrives (run 23 showed "playing" though the player had been paused).
+  // Only a change of state is shown, so a message like "next 1" stays until the player itself changes.
+  let polled = "";
+  setInterval(() => {
+    if (!audio.played.length) return;
+    const s = status();
+    if (s !== polled) { polled = s; show(s); }
+  }, 500);
+  navigator.mediaSession.metadata = new MediaMetadata({ title: "Raven test tone", artist: "Raven tests", album: "Emulator" });
+  navigator.mediaSession.setActionHandler("nexttrack", () => show("next " + ++nexts));
+  navigator.mediaSession.setActionHandler("previoustrack", () => show("previous " + ++previous));
+</script>

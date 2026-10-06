@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Themed icon (Android 13+): the raven's head alone, tinted by the phone. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
+    <group android:translateX="18" android:translateY="18" android:scaleX="0.72" android:scaleY="0.72">
+        <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M10,49 C18,44 28,39 40,36 C46,28 56,23 67,25 C78,27 85,36 86,48 C87,62 89,78 96,96 L100,125 L50,125 L50,96 C49,90 45,86 47,80 L41,79 L45,74 L38,71 L43,67 L36,63 L42,59 C32,56 20,53 10,49 Z M52,37m-2.8,0a2.8,2.8 0,1 1,5.6 0a2.8,2.8 0,1 1,-5.6 0" />
+    </group>
+</vector>

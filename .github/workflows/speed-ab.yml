@@ -1,0 +1,72 @@
+name: Speed A/B (Raven against copies of itself)
+
+# Raven, Raven without its page helper and Raven without the page-language check, side by side on one Android 16
+# emulator with slow internet: shows which part costs Raven time on a site's first visit. Started by hand.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  speed-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - name: Free disk space (the emulator needs room for its virtual phone storage)
+        run: |
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/.ghcup /usr/local/share/boost /usr/local/lib/node_modules \
+            "$AGENT_TOOLSDIRECTORY" /usr/local/share/powershell /usr/share/swift "$ANDROID_HOME/ndk" || true
+          df -h /
+
+      - uses: actions/checkout@v4
+
+      - name: Enable KVM for the emulator
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Use the runner's JDK 21
+        run: echo "JAVA_HOME=$JAVA_HOME_21_X64" >> "$GITHUB_ENV"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Install Android 17 SDK (GeckoView 157 compiles against API 37.1)
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-37.1" "build-tools;37.0.0" > /dev/null
+
+      - name: Build Raven and its two test copies for the emulator (x86_64)
+        run: |
+          ./gradlew :app:assembleRelease -PgeckoAbi=x86_64 --console=plain
+          cp app/build/outputs/apk/release/app-release.apk raven-x86_64.apk
+          for v in nohelper notranslate; do
+            ./gradlew :app:assembleRelease -PgeckoAbi=x86_64 -PspeedVariant=$v --console=plain
+            cp app/build/outputs/apk/release/app-release.apk raven-$v-x86_64.apk
+          done
+          ./gradlew --stop
+          rm -rf app/build
+          df -h /
+
+      - name: Run on Android 16 emulator
+        timeout-minutes: 60
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 36
+          target: google_apis
+          arch: x86_64
+          cores: 3
+          ram-size: 4096M
+          disk-size: 4G
+          emulator-boot-timeout: 1500
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot
+          disable-animations: true
+          script: bash tools/speedab.sh
+
+      - name: Publish results to a speed-ab branch
+        if: always()
+        run: |
+          mkdir -p smoke "$RUNNER_TEMP/pub" && cp -r smoke/. "$RUNNER_TEMP/pub/"
+          cd "$RUNNER_TEMP/pub"
+          git init -q && git add -A
+          git -c user.name=ci -c user.email=ci@users.noreply.github.com commit -qm "Speed A/B, run ${{ github.run_number }}" --allow-empty
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" HEAD:refs/heads/speed-ab-${{ github.run_number }}

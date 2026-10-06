@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Status bar: the raven's head, drawn whole so it reads at 24dp. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp" android:viewportWidth="100" android:viewportHeight="100">
+    <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd"
+        android:pathData="M6,49 C15,43 26,37 39,34 C45,24 57,18 69,21 C82,24 90,35 91,49 C92,64 93,80 97,96 L48,96 C47,90 44,86 46,80 L40,79 L44,74 L37,71 L42,67 L35,63 L41,59 C30,56 17,53 6,49 Z M53,36m-4,0a4,4 0,1 1,8 0a4,4 0,1 1,-8 0" />
+</vector>
