@@ -48,6 +48,8 @@ data class Prefs(
     val trueBlack: Boolean = false,
     val reduceMotion: Motion = Motion.AUTO,
     val addressBarTop: Boolean = true,
+    /** Full screen for pages: every bar hidden (Raven's and the phone's) until a swipe down from the top. */
+    val fullPage: Boolean = false,
     val pictureInPicture: Boolean = true,
     /** A new wallpaper each time Raven opens (or always [wallpaper] when off); [wallpapersOff] sit the rotation out. */
     val wallpaperRotate: Boolean = true,
@@ -97,6 +99,7 @@ class Settings(context: Context) {
             trueBlack = sp.getBoolean("trueBlack", d.trueBlack),
             reduceMotion = enumOr(sp.getString("reduceMotion", null), d.reduceMotion),
             addressBarTop = sp.getBoolean("addressBarTop", d.addressBarTop),
+            fullPage = sp.getBoolean("fullPage", d.fullPage),
             pictureInPicture = sp.getBoolean("pictureInPicture", d.pictureInPicture),
             wallpaperRotate = sp.getBoolean("wallpaperRotate", d.wallpaperRotate),
             wallpaper = sp.getString("wallpaper", null) ?: d.wallpaper,
@@ -130,6 +133,7 @@ class Settings(context: Context) {
         putBoolean("trueBlack", p.trueBlack)
         putString("reduceMotion", p.reduceMotion.name)
         putBoolean("addressBarTop", p.addressBarTop)
+        putBoolean("fullPage", p.fullPage)
         putBoolean("pictureInPicture", p.pictureInPicture)
         putBoolean("wallpaperRotate", p.wallpaperRotate)
         putString("wallpaper", p.wallpaper)

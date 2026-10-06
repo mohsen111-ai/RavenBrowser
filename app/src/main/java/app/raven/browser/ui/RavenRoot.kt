@@ -158,8 +158,13 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
             ui.fullscreen = fullscreen
             ui.fullscreenTabId = fullTab?.id
             android.util.Log.i("Raven", "fullscreen: ${fullTab?.id?.take(6) ?: "none"}${if (fullTab != null && fullTab?.id == floatingId) " (floating tab)" else if (fullTab != null && fullTab?.id != tab?.id) " (other half)" else ""}")
+        }
+        // The phone's own bars go too, for a fullscreen video and for full screen pages (a swipe from the edge shows
+        // them for a moment, over the page).
+        val hideSystemBars = fullscreen || (ui.fullPage && ui.screen == Screen.Browser)
+        LaunchedEffect(hideSystemBars) {
             val controller = WindowCompat.getInsetsController(activity.window, activity.window.decorView)
-            if (fullscreen) {
+            if (hideSystemBars) {
                 controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
                 controller.hide(WindowInsetsCompat.Type.systemBars())
             } else {

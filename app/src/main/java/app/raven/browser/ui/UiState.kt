@@ -32,6 +32,12 @@ class UiState {
     var fullscreen by mutableStateOf(false)
     /** The tab whose page is fullscreen (the one on screen, a half of split screen, or the floating tab). */
     var fullscreenTabId by mutableStateOf<String?>(null)
+    /** Full screen for pages hides every bar on the page on screen now (set by the browser screen). */
+    var fullPage by mutableStateOf(false)
+    /** Full screen for pages is on and a swipe down from the top brought the bars back for a moment. */
+    var barsPeek by mutableStateOf(false)
+    /** When the bars were last asked back (each swipe starts their moment again). */
+    var peekAt by mutableStateOf(0L)
     /** The video is playing in a small picture-in-picture window over other apps. */
     var pip by mutableStateOf(false)
     /** The Tabs screen shows its Private side (kept out of screenshots and recent apps when the lock is on). */
@@ -53,6 +59,12 @@ class UiState {
     /** Split screen: the share of the screen the top (or left) half takes. */
     var splitRatio by mutableStateOf(0.5f)
     val snackbar = SnackbarHostState()
+
+    /** Full screen for pages: the bars come back for a moment. */
+    fun peekBars() {
+        barsPeek = true
+        peekAt = android.os.SystemClock.elapsedRealtime()
+    }
 
     fun go(screen: Screen) {
         sheet = null

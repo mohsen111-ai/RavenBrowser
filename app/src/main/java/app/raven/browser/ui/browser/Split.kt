@@ -70,7 +70,7 @@ import kotlin.math.roundToInt
 
 /** Two tabs sharing the screen, each with its own small bar; the half you touched last is the active one. */
 @Composable
-internal fun SplitArea(c: Container, ui: UiState, top: BrowserTab, bottom: BrowserTab, selectedId: String) {
+internal fun SplitArea(c: Container, ui: UiState, top: BrowserTab, bottom: BrowserTab, selectedId: String, barsHidden: Boolean = false, peek: Boolean = false) {
     val sound by c.tabs.splitSound.collectAsState()
     val onBrowser = ui.screen == Screen.Browser
     // A half whose video went fullscreen fills the whole screen until it comes back.
@@ -92,8 +92,8 @@ internal fun SplitArea(c: Container, ui: UiState, top: BrowserTab, bottom: Brows
             c.tabs.endSplit(if (keepFirst) top.id else bottom.id)
         },
         full = full,
-        first = { sideBySide -> Half(c, ui, top, first = true, sideBySide, top.id == selectedId, sound, full != SplitFull.NONE) },
-        second = { sideBySide -> Half(c, ui, bottom, first = false, sideBySide, bottom.id == selectedId, sound, full != SplitFull.NONE) },
+        first = { sideBySide -> Half(c, ui, top, first = true, sideBySide, top.id == selectedId, sound, full != SplitFull.NONE, barsHidden, peek) },
+        second = { sideBySide -> Half(c, ui, bottom, first = false, sideBySide, bottom.id == selectedId, sound, full != SplitFull.NONE, barsHidden, peek) },
     )
 }
 
@@ -211,7 +211,10 @@ private fun SplitHandle(sideBySide: Boolean, onDrag: (Float) -> Unit, onDragEnd:
  * and comes back when you scroll up.
  */
 @Composable
-private fun Half(c: Container, ui: UiState, tab: BrowserTab, first: Boolean, sideBySide: Boolean, active: Boolean, sound: SplitSound, fullscreen: Boolean) {
+private fun Half(
+    c: Container, ui: UiState, tab: BrowserTab, first: Boolean, sideBySide: Boolean, active: Boolean, sound: SplitSound,
+    fullscreen: Boolean, barsHidden: Boolean, peek: Boolean,
+) {
     val muted by tab.muted.collectAsState()
     // Read here, so the half's name follows its page.
     val title by tab.title.collectAsState()
@@ -238,9 +241,11 @@ private fun Half(c: Container, ui: UiState, tab: BrowserTab, first: Boolean, sid
             .semantics { contentDescription = "$name: $label" },
     ) {
         Column(Modifier.fillMaxSize()) {
-            if (!scrolledAway && !fullscreen) HalfBar(c, ui, tab, muted, sound, sideBySide)
+            if (!scrolledAway && !fullscreen && !barsHidden) HalfBar(c, ui, tab, muted, sound, sideBySide)
             Box(Modifier.weight(1f).fillMaxWidth()) { TabPage(c, ui, tab, primary = active) }
         }
+        // Full screen for pages: the bar comes over the page for a moment after a swipe down from the top.
+        if (barsHidden && peek && !fullscreen) HalfBar(c, ui, tab, muted, sound, sideBySide)
         if (!fullscreen) HalfChrome(active)
     }
 }

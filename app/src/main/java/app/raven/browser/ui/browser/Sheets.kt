@@ -152,6 +152,14 @@ fun MenuSheet(c: Container, ui: UiState, tab: BrowserTab) {
         add(MenuTileSpec(Icons.Translate, if (translated) "Translated" else "Translate", "Translate page", enabled = hasPage, on = translated) { ui.sheet = Sheet.Translate })
         // On: the tile lights up with the accent.
         add(MenuTileSpec(Icons.Desktop, "Desktop site", "Desktop site", enabled = hasPage, on = desktop) { setDesktop(tab, !desktop); close() })
+        // Every bar hidden on every page, until it's turned off here again; a swipe down from the top shows them.
+        add(MenuTileSpec(Icons.FullPage, "Full screen", "Full screen for pages", on = prefs.fullPage) {
+            val on = !prefs.fullPage
+            c.settings.update { it.copy(fullPage = on) }
+            ui.barsPeek = false
+            close()
+            c.engine.messages.tryEmit(if (on) "Full screen. Swipe down from the top to see the bar." else "Full screen off")
+        })
         add(MenuTileSpec(Icons.Sliders, "Settings", "Settings") { ui.go(Screen.Settings) })
         add(MenuTileSpec(Icons.Puzzle, "Add-ons", "Add-ons") { ui.go(Screen.Addons) })
         add(MenuTileSpec(Icons.Pdf, "Save as PDF", "Save as PDF", enabled = hasPage) { close(); savePdf(c, tab) })

@@ -36,6 +36,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -61,6 +62,8 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.text.TextRange
@@ -114,17 +117,65 @@ fun BrowserScreen(c: Container, ui: UiState) {
         val top = split?.let { s -> tabs.firstOrNull { it.id == s.top } }
         val bottom = split?.let { s -> tabs.firstOrNull { it.id == s.bottom } }
         val halves = tab != null && top != null && bottom != null
+        // Full screen for pages: every bar hidden until a swipe down from the top brings them back for a moment.
+        // Raven's home keeps its bar (it's where you search from).
+        val prefs by c.settings.prefs.collectAsState()
+        val overNewTab = tab?.ntpOverlay?.collectAsState()?.value == true
+        val url = tab?.url?.collectAsState()?.value.orEmpty()
+        val onHome = overNewTab || url.isBlank() || url == "about:blank"
+        val fullPage = prefs.fullPage && !ui.fullscreen && tab != null && (halves || !onHome)
+        SideEffect { ui.fullPage = fullPage }
+        val typing = ui.editing || ui.findOpen
+        // The moment ends a few seconds after the last swipe, once you're not typing or in a sheet.
+        LaunchedEffect(ui.barsPeek, ui.peekAt, typing, ui.sheet) {
+            if (ui.barsPeek && !typing && ui.sheet == null) {
+                delay(3500)
+                ui.barsPeek = false
+            }
+        }
         // In split screen the big bar only comes back to type an address or find in the active half.
-        val bigBar = !ui.fullscreen && tab != null && (!halves || ui.editing || ui.findOpen)
+        val bigBar = !ui.fullscreen && tab != null && (!halves || typing) && !fullPage
         if (bigBar) Bars(c, ui, tab, tabs.size)
+        val density = androidx.compose.ui.platform.LocalDensity.current
+        val edge = with(density) { 40.dp.toPx() }
+        val pull = with(density) { 28.dp.toPx() }
         // Without the big bar, the halves keep clear of the phone's status bar themselves.
-        Box(Modifier.weight(1f).fillMaxWidth().then(if (halves && !bigBar && !ui.fullscreen) Modifier.statusBarsPadding() else Modifier)) {
+        Box(
+            Modifier.weight(1f).fillMaxWidth()
+                .then(if (halves && !bigBar && !ui.fullscreen && !fullPage) Modifier.statusBarsPadding() else Modifier)
+                // Full screen: a finger that comes down at the top and pulls down brings the bars back. It's only
+                // watched, never taken, so the page still gets it.
+                .pointerInput(fullPage) {
+                    if (!fullPage) return@pointerInput
+                    awaitPointerEventScope {
+                        while (true) {
+                            val down = awaitPointerEvent(PointerEventPass.Initial)
+                            val first = down.changes.firstOrNull() ?: continue
+                            if (down.type != PointerEventType.Press || first.position.y > edge) continue
+                            while (true) {
+                                val e = awaitPointerEvent(PointerEventPass.Initial)
+                                val ch = e.changes.firstOrNull { it.id == first.id } ?: break
+                                if (!ch.pressed) break
+                                if (ch.position.y - first.position.y > pull) { ui.peekBars(); break }
+                            }
+                        }
+                    }
+                },
+        ) {
             if (halves) {
-                SplitArea(c, ui, top, bottom, tab.id)
+                SplitArea(c, ui, top, bottom, tab.id, barsHidden = fullPage, peek = fullPage && ui.barsPeek && !typing)
             } else if (tab != null) {
                 TabPage(c, ui, tab, primary = true)
             }
-            if (ui.editing && tab != null) Suggestions(c, ui, tab)
+            if (ui.editing && tab != null) Suggestions(c, ui, tab, top = if (fullPage) 78.dp else 0.dp)
+            // Full screen: the bar comes over the page for its moment (or while you type), without moving the page.
+            if (tab != null) {
+                androidx.compose.animation.AnimatedVisibility(
+                    fullPage && (typing || (ui.barsPeek && !halves)),
+                    enter = androidx.compose.animation.slideInVertically { -it } + androidx.compose.animation.fadeIn(),
+                    exit = androidx.compose.animation.slideOutVertically { -it } + androidx.compose.animation.fadeOut(),
+                ) { Bars(c, ui, tab, tabs.size) }
+            }
         }
     }
 }
@@ -490,7 +541,7 @@ fun go(c: Container, ui: UiState, tab: BrowserTab, text: String) {
 }
 
 @Composable
-private fun Suggestions(c: Container, ui: UiState, tab: BrowserTab) {
+private fun Suggestions(c: Container, ui: UiState, tab: BrowserTab, top: androidx.compose.ui.unit.Dp = 0.dp) {
     val text = ui.editText
     var results by remember { mutableStateOf<List<Visit>>(emptyList()) }
     var marks by remember { mutableStateOf<List<app.raven.browser.data.Bookmark>>(emptyList()) }
@@ -514,6 +565,7 @@ private fun Suggestions(c: Container, ui: UiState, tab: BrowserTab) {
             .fillMaxSize()
             .background(if (tab.private) Space.NebulaGround else Raven.ground)
             .padding(horizontal = 12.dp),
+        contentPadding = androidx.compose.foundation.layout.PaddingValues(top = top),
     ) {
         val pageUrl = tab.url.value
         if (text.isEmpty() && !tab.isNewTabPage) item { CurrentPageRow(ui, tab, pageUrl, UrlInput.searchTerms(pageUrl, engine)) }
