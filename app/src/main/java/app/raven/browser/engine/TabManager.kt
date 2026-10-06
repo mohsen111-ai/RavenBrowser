@@ -40,6 +40,8 @@ sealed interface TabEvent {
     class Message(val text: String) : TabEvent
     class OpenExternal(val intent: Intent, val fallbackUrl: String? = null, val tabId: String? = null) : TabEvent
     class ContextMenu(val tabId: String, val element: ContentDelegate.ContextElement) : TabEvent
+    /** Tabs you closed: "Tab closed · Undo" shows for a few seconds. */
+    class Closed(val batch: Long, val count: Int) : TabEvent
 }
 
 /** All open tabs: creating, switching, sleeping, crash recovery, and restoring them after a restart. */
@@ -70,6 +72,8 @@ class TabManager(
     var selectionDelegateFactory: (() -> GeckoSession.SelectionActionDelegate)? = null
 
     private val stateFile = File(context.filesDir, "tabs.json")
+    /** How far a page must scroll one way before its bar hides or comes back (the engine counts in CSS pixels). */
+    private val scrollThreshold = 48
 
     init {
         engine.tabs = this
@@ -291,25 +295,27 @@ class TabManager(
         _tabs.value.firstOrNull { it.session == session }?.let { select(it.id) }
     }
 
-    fun close(id: String) {
+    /** [undoable]: you closed it yourself, so "Tab closed · Undo" shows for a few seconds. */
+    fun close(id: String, undoable: Boolean = false) {
         val list = _tabs.value
         val index = list.indexOfFirst { it.id == id }
         if (index < 0) return
         val tab = list[index]
+        val wasSelected = _selectedId.value == id
         if (_floatingId.value == id) { _floatingId.value = null; floatParked.value = false }
         val otherHalf = _split.value?.let { s -> when (id) { s.top -> s.bottom; s.bottom -> s.top; else -> null } }
         if (otherHalf != null) { _split.value = null; find(otherHalf)?.let { setMuted(it, false) } }
         dropPrompts(setOf(tab.id))
-        media.forget(tab)
-        Displays.release(tab.session)
-        if (tab.session.isOpen) tab.session.close()
+        shut(tab, undoable)
         val rest = list - tab
         _tabs.value = rest
-        if (_selectedId.value == id) {
+        var standIn: String? = null
+        if (wasSelected) {
             val sameKind = rest.filter { it.private == tab.private && it.id != _floatingId.value }
             val next = otherHalf?.let(::find) ?: sameKind.getOrNull(index.coerceAtMost(sameKind.lastIndex)) ?: rest.lastOrNull { it.id != _floatingId.value }
-            if (next != null) select(next.id) else newTab(select = true)
+            if (next != null) select(next.id) else standIn = newTab(select = true).id
         }
+        if (undoable) keepForUndo(listOf(index to tab), if (wasSelected) id else null, standIn)
         persist()
     }
 
@@ -317,19 +323,94 @@ class TabManager(
         _tabs.value.firstOrNull { it.session == session }?.let { close(it.id) }
     }
 
-    fun closeAll(private: Boolean? = null) {
-        val (gone, keep) = _tabs.value.partition { private == null || it.private == private }
-        val goneIds = gone.map { it.id }.toSet()
-        if (_floatingId.value in goneIds) { _floatingId.value = null; floatParked.value = false }
-        _split.value?.let { s -> if (s.top in goneIds || s.bottom in goneIds) { _split.value = null; keep.forEach { setMuted(it, false) } } }
-        dropPrompts(goneIds)
-        gone.forEach { media.forget(it); Displays.release(it.session); if (it.session.isOpen) it.session.close() }
+    /** Closes every tab, or every private ([private] true) or everyday one (false). */
+    fun closeAll(private: Boolean? = null, undoable: Boolean = false) =
+        closeGroup(_tabs.value.filter { private == null || it.private == private }.map { it.id }.toSet(), undoable, private)
+
+    /** Closes these tabs together, with one Undo for all of them. */
+    fun closeTabs(ids: Set<String>) {
+        if (ids.size == 1) close(ids.first(), undoable = true) else closeGroup(ids, undoable = true, private = null)
+    }
+
+    private fun closeGroup(ids: Set<String>, undoable: Boolean, private: Boolean?) {
+        val all = _tabs.value
+        val (gone, keep) = all.partition { it.id in ids }
+        if (gone.isEmpty()) return
+        val selectedGone = _selectedId.value?.takeIf { it in ids }
+        if (_floatingId.value in ids) { _floatingId.value = null; floatParked.value = false }
+        _split.value?.let { s -> if (s.top in ids || s.bottom in ids) { _split.value = null; keep.forEach { setMuted(it, false) } } }
+        dropPrompts(ids)
+        gone.forEach { shut(it, undoable) }
         _tabs.value = keep
+        var standIn: String? = null
         if (keep.none { it.id == _selectedId.value }) {
             // Closing every normal tab never drops you into a private one: a fresh new tab instead.
             val next = keep.lastOrNull { !it.private } ?: keep.lastOrNull()
-            if (next != null && (private != false || !next.private)) select(next.id) else newTab(select = true)
+            if (next != null && (private != false || !next.private)) select(next.id) else standIn = newTab(select = true).id
         }
+        if (undoable) keepForUndo(all.withIndex().filter { it.value.id in ids }.map { it.index to it.value }, selectedGone, standIn)
+        persist()
+    }
+
+    // ------------------------------------------------------------------ Undo
+
+    /**
+     * Tabs you just closed, set aside for a few seconds: paused and out of sight, but not shut, so Undo brings each one
+     * back exactly as it was (the place on the page, what was typed, the sign-ins of a private tab). [standIn]: the
+     * new tab that took the screen because nothing was left; Undo takes it away again if it's still untouched.
+     */
+    private class Closed(val batch: Long, val tabs: List<Pair<Int, BrowserTab>>, val selected: String?, val standIn: String?)
+    private var closed: Closed? = null
+    private var batches = 0L
+
+    /** A tab leaves the list: shut at once, or (for Undo) quietened and kept until [finishClosed]. */
+    private fun shut(tab: BrowserTab, keep: Boolean) {
+        media.forget(tab)
+        Displays.release(tab.session)
+        if (!keep) {
+            if (tab.session.isOpen) tab.session.close()
+            return
+        }
+        engine.helper.pause(tab.session)
+        tab.media?.pause()
+        tab.playing.value = false
+        if (tab.session.isOpen) {
+            tab.session.setActive(false)
+            engine.runtime.webExtensionController.setTabActive(tab.session, false)
+        }
+    }
+
+    private fun keepForUndo(tabs: List<Pair<Int, BrowserTab>>, selected: String?, standIn: String?) {
+        closed?.let { finishClosed(it.batch) }
+        val batch = ++batches
+        closed = Closed(batch, tabs, selected, standIn)
+        events.tryEmit(TabEvent.Closed(batch, tabs.size))
+        // However the bar ends, the tabs are shut for good within half a minute.
+        main.postDelayed({ finishClosed(batch) }, 30_000)
+    }
+
+    /** The Undo bar went away: the tabs it offered are shut for good. */
+    fun finishClosed(batch: Long) {
+        val c = closed?.takeIf { it.batch == batch } ?: return
+        closed = null
+        c.tabs.forEach { (_, t) -> if (t.session.isOpen) t.session.close() }
+    }
+
+    /** Undo: the tabs come back where they were, and the one you were on is on screen again. */
+    fun undoClose(batch: Long) {
+        val c = closed?.takeIf { it.batch == batch } ?: return
+        closed = null
+        val list = _tabs.value.toMutableList()
+        // The fresh new tab that stood in, if you haven't used it.
+        c.standIn?.let { id -> list.firstOrNull { it.id == id }?.takeIf { it.hasNoPage && !it.loading.value } }?.let { t ->
+            list.remove(t)
+            Displays.release(t.session)
+            if (t.session.isOpen) t.session.close()
+        }
+        c.tabs.sortedBy { it.first }.forEach { (i, t) -> list.add(i.coerceIn(0, list.size), t) }
+        _tabs.value = list
+        if (c.tabs.any { it.second.flock.value != null }) _flocksVersion.value++
+        c.selected?.let { select(it) } ?: run { if (list.none { it.id == _selectedId.value }) select(c.tabs.first().second.id) }
         persist()
     }
 
@@ -549,9 +630,11 @@ class TabManager(
     fun ungroup(flock: String) = setFlock(_tabs.value.filter { it.flock.value == flock }.map { it.id }, null)
 
     fun closeFlock(flock: String) {
-        _tabs.value.filter { it.flock.value == flock }.forEach { close(it.id) }
+        val ids = _tabs.value.filter { it.flock.value == flock }.map { it.id }.toSet()
+        closeTabs(ids)
         _flocksVersion.value++
     }
+
 
     // ------------------------------------------------------------------ persistence
 
@@ -625,6 +708,7 @@ class TabManager(
         }
         s.progressDelegate = object : ProgressDelegate {
             override fun onPageStart(session: GeckoSession, url: String) {
+                tab.resetScroll()
                 tab.loading.value = true
                 tab.progress.value = 5
                 tab.secure.value = null
@@ -739,6 +823,11 @@ class TabManager(
 
         // Also feeds Android's media controls (notification, lock screen, headphone buttons).
         s.mediaSessionDelegate = media.delegate(tab)
+
+        // Scrolling down a page tucks its bar away in split screen; scrolling back up brings it out again.
+        s.scrollDelegate = object : GeckoSession.ScrollDelegate {
+            override fun onScrollChanged(session: GeckoSession, scrollX: Int, scrollY: Int) = tab.onScrolled(scrollY, scrollThreshold)
+        }
 
         s.permissionDelegate = object : PermissionDelegate {
             override fun onContentPermissionRequest(session: GeckoSession, perm: PermissionDelegate.ContentPermission): GeckoResult<Int> {

@@ -43,6 +43,8 @@ class BrowserTab(
     val offerTranslate = MutableStateFlow(false)
     /** Raven keeps this tab quiet (its half of split screen, or the floating tab's sound button). It may still play. */
     val muted = MutableStateFlow(false)
+    /** The page was scrolled down (its half's bar in split screen steps aside); scrolling up brings it back. */
+    val scrolledAway = MutableStateFlow(false)
 
     @Volatile var state: GeckoSession.SessionState? = null
     @Volatile var lastActive: Long = SystemClock.elapsedRealtime()
@@ -61,6 +63,45 @@ class BrowserTab(
     /** A page is on its way: the blank document a new engine session starts with isn't the address. */
     var expectingLoad = false
     var insecureAllowed = false
+
+    // Where the page was last scrolled to, and how far it has gone since the direction last changed.
+    private var lastScrollY = 0
+    private var scrollRun = 0
+    private var scrollTurnedAt = 0L
+
+    /**
+     * The page scrolled to [y] (pixels). A clear move down hides the bar, a clear move up (or the top of the page)
+     * brings it back. Changes right after one are ignored: the bar going away resizes the page, which can move it.
+     */
+    fun onScrolled(y: Int, threshold: Int) {
+        val dy = y - lastScrollY
+        lastScrollY = y
+        val now = SystemClock.elapsedRealtime()
+        if (y <= threshold / 3) {
+            scrollRun = 0
+            scrolledAway.value = false
+            return
+        }
+        if (dy == 0 || now - scrollTurnedAt < 300) return
+        scrollRun = if ((dy > 0) == (scrollRun > 0)) scrollRun + dy else dy
+        val away = when {
+            scrollRun > threshold -> true
+            scrollRun < -threshold -> false
+            else -> return
+        }
+        if (away != scrolledAway.value) {
+            scrolledAway.value = away
+            scrollTurnedAt = now
+        }
+        scrollRun = 0
+    }
+
+    /** A new page: its bar shows again. */
+    fun resetScroll() {
+        lastScrollY = 0
+        scrollRun = 0
+        scrolledAway.value = false
+    }
 
     /** No page has been opened in this tab. */
     val hasNoPage: Boolean get() = url.value.isBlank() || url.value == "about:blank"

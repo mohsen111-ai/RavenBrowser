@@ -183,7 +183,8 @@ class MainActivity : FragmentActivity() {
             ui.findOpen = false
         } else if (lifecycle.currentState == Lifecycle.State.CREATED) {
             // The little window was closed (not opened back up into Raven): the video stops, as in Chrome.
-            container.tabs.selected?.media?.pause()
+            val c = container
+            (ui.fullscreenTabId?.let { id -> c.tabs.tabs.value.firstOrNull { it.id == id } } ?: c.tabs.selected)?.media?.pause()
         }
     }
 

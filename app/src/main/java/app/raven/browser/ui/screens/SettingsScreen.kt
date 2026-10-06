@@ -100,6 +100,8 @@ fun SettingsScreen(c: Container, onBack: () -> Unit) {
                     choice = Choice("Tracking protection", listOf(true to "Strict (recommended)", false to "Standard (fewer broken sites)"), p.strictTracking) { v -> set { it.copy(strictTracking = v) } }
                 })
                 Divider()
+                ListRow("Cookie popups", detail = "Says no for you: the site's Reject button is pressed, and popups without one are hidden", trailing = { Toggle(p.cookiePopups, { v -> set { it.copy(cookiePopups = v) } }, "Turn down cookie popups") })
+                Divider()
                 ListRow("HTTPS-only mode", detail = "Warns before opening unsecure sites", trailing = { Toggle(p.httpsOnly, { v -> set { it.copy(httpsOnly = v) } }, "HTTPS-only mode") })
                 Divider()
                 ListRow("Encrypted DNS", detail = "Hides which sites you look up from your network", value = p.dns.label.substringBefore(" ("), chevron = true, onClick = {

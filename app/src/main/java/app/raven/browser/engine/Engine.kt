@@ -82,6 +82,7 @@ class Engine(private val context: Context, private val settings: Settings) {
         builder.configFilePath(writeEnginePrefs(prefs))
         runtime = GeckoRuntime.create(context, builder.build())
         helper = Helper(runtime)
+        helper.consent = prefs.cookiePopups
         setUpExtensions()
         runtime.orientationController.delegate = object : OrientationController.OrientationDelegate {
             override fun onOrientationLock(aOrientation: Int): GeckoResult<AllowOrDeny> {
@@ -150,6 +151,7 @@ class Engine(private val context: Context, private val settings: Settings) {
         s.setAllowInsecureConnections(if (p.httpsOnly) GeckoRuntimeSettings.HTTPS_ONLY else GeckoRuntimeSettings.ALLOW_ALL)
         s.setPreferredColorScheme(if (p.darkWebsites) GeckoRuntimeSettings.COLOR_SCHEME_DARK else GeckoRuntimeSettings.COLOR_SCHEME_SYSTEM)
         s.setFontSizeFactor(p.textScale / 100f)
+        helper.consent = p.cookiePopups
         when (val uri = p.dns.uri) {
             null -> s.setTrustedRecursiveResolverMode(GeckoRuntimeSettings.TRR_MODE_OFF)
             else -> {

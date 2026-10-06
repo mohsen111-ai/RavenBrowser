@@ -30,6 +30,8 @@ class UiState {
     var editFill by mutableStateOf(0)
     var findOpen by mutableStateOf(false)
     var fullscreen by mutableStateOf(false)
+    /** The tab whose page is fullscreen (the one on screen, a half of split screen, or the floating tab). */
+    var fullscreenTabId by mutableStateOf<String?>(null)
     /** The video is playing in a small picture-in-picture window over other apps. */
     var pip by mutableStateOf(false)
     /** The Tabs screen shows its Private side (kept out of screenshots and recent apps when the lock is on). */

@@ -36,6 +36,8 @@ data class Prefs(
     val searchEngine: SearchEngine = SearchEngine.DUCKDUCKGO,
     val searchSuggestions: Boolean = false,
     val strictTracking: Boolean = true,
+    /** Cookie popups: the site's "Reject all" is pressed for you; popups without one are hidden. */
+    val cookiePopups: Boolean = true,
     val httpsOnly: Boolean = true,
     val dns: DnsProvider = DnsProvider.CLOUDFLARE,
     val isolation: Isolation = Isolation.LOGGED_IN,
@@ -84,6 +86,7 @@ class Settings(context: Context) {
             searchEngine = enumOr(sp.getString("searchEngine", null), d.searchEngine),
             searchSuggestions = sp.getBoolean("searchSuggestions", d.searchSuggestions),
             strictTracking = sp.getBoolean("strictTracking", d.strictTracking),
+            cookiePopups = sp.getBoolean("cookiePopups", d.cookiePopups),
             httpsOnly = sp.getBoolean("httpsOnly", d.httpsOnly),
             dns = enumOr(sp.getString("dns", null), d.dns),
             isolation = enumOr(sp.getString("isolation", null), d.isolation),
@@ -116,6 +119,7 @@ class Settings(context: Context) {
         putString("searchEngine", p.searchEngine.name)
         putBoolean("searchSuggestions", p.searchSuggestions)
         putBoolean("strictTracking", p.strictTracking)
+        putBoolean("cookiePopups", p.cookiePopups)
         putBoolean("httpsOnly", p.httpsOnly)
         putString("dns", p.dns.name)
         putString("isolation", p.isolation.name)

@@ -34,6 +34,7 @@ import app.raven.browser.ui.browser.MenuContent
 import app.raven.browser.ui.browser.FloatEdgeIcon
 import app.raven.browser.ui.browser.FloatFrame
 import app.raven.browser.ui.browser.HalfChrome
+import app.raven.browser.ui.browser.HalfBarContent
 import app.raven.browser.ui.browser.SplitLayout
 import app.raven.browser.engine.TabManager
 import app.raven.browser.ui.browser.MenuTileSpec
@@ -415,19 +416,49 @@ open class Shots {
         compose.onRoot().captureRoboImage("$dir/float_parked.png")
     }
 
+    @Composable
+    private fun HalfOver(active: Boolean, muted: Boolean, side: Boolean, address: String, title: String) {
+        Box(Modifier.fillMaxSize()) {
+            Column(Modifier.fillMaxSize()) {
+                HalfBarContent(
+                    private = false, address = address, url = "https://$address", secure = true, loading = false, progress = 1f,
+                    hasPage = true, muted = muted, sound = TabManager.SplitSound.TOP, sideBySide = side, tabCount = 6,
+                    onAddress = {}, onSiteInfo = {}, onSound = {}, onReload = {}, onTabs = {}, onMenu = {},
+                )
+                FakePage(0xFF0F0F0F, true, title)
+            }
+            HalfChrome(active)
+        }
+    }
+
     @Test fun split() {
         compose.setContent {
             RavenTheme(0, false, true) {
                 Column(Modifier.fillMaxSize().background(Space.Ground)) {
-                    Bar(null, text = "youtube.com", tabs = 6)
                     SplitLayout(0.5f, {}, {},
-                        first = { side -> Box(Modifier.fillMaxSize()) { FakePage(0xFF0F0F0F, true, "Ravens solve a puzzle box"); HalfChrome(true, false, TabManager.SplitSound.TOP, side) {} } },
-                        second = { side -> Box(Modifier.fillMaxSize()) { FakePage(0xFF0F0F0F, true, "Northern lights over Tromsø"); HalfChrome(false, true, TabManager.SplitSound.TOP, side) {} } },
+                        first = { side -> HalfOver(true, false, side, "youtube.com", "Ravens solve a puzzle box") },
+                        second = { side -> HalfOver(false, true, side, "en.wikipedia.org", "Northern lights over Tromsø") },
                     )
                 }
             }
         }
         compose.onRoot().captureRoboImage("$dir/split.png")
+    }
+
+    /** Split screen with the phone turned: the halves side by side. */
+    @Config(qualifiers = "w844dp-h390dp-xhdpi")
+    @Test fun splitSideBySide() {
+        compose.setContent {
+            RavenTheme(0, false, true) {
+                Column(Modifier.fillMaxSize().background(Space.Ground)) {
+                    SplitLayout(0.5f, {}, {},
+                        first = { side -> HalfOver(false, false, side, "youtube.com", "Ravens solve a puzzle box") },
+                        second = { side -> HalfOver(true, false, side, "en.wikipedia.org", "Northern lights over Tromsø") },
+                    )
+                }
+            }
+        }
+        compose.onRoot().captureRoboImage("$dir/split_side.png")
     }
 }
 

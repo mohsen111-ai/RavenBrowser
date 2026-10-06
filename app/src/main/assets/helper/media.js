@@ -1,6 +1,6 @@
 // Raven's helper, in every page and frame: Raven asks it to mute, unmute or pause the page's audio and video, or to
-// show only the video (the floating tab's "Video only"). It reads nothing from the page and sends nothing anywhere
-// but back to Raven.
+// show only the video (the floating tab's "Video only"), and starts consent.js (cookie popups) when that's on. It reads
+// nothing from the page and sends nothing anywhere but back to Raven.
 (() => {
   let port;
   try {
@@ -103,6 +103,9 @@
 
   port.onMessage.addListener((m) => {
     switch (m.cmd) {
+      case "consent":
+        if (m.on && typeof globalThis.ravenConsent === "function") globalThis.ravenConsent(port);
+        break;
       case "mute":
         muted = !!m.on;
         media().forEach(muted ? mute : unmute);

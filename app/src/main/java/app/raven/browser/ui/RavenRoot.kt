@@ -55,6 +55,8 @@ import app.raven.browser.ui.screens.SettingsScreen
 import app.raven.browser.ui.tabs.TabsScreen
 import app.raven.browser.ui.theme.RavenTheme
 import app.raven.browser.ui.theme.Space
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -107,13 +109,28 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
             if (session.isOpen) session.setActive((started && onBrowser && !overNewTab) || playing)
         }
 
-        // Fullscreen video: no bars, Android's or ours. Read from the tab, so it also holds for a screen
-        // Android rebuilt while you were in another app.
-        val fullscreen = tab?.fullscreen?.collectAsState()?.value == true
+        // Fullscreen video: no bars, Android's or ours. Read from the tab, so it also holds for a screen Android
+        // rebuilt while you were in another app. Any tab on screen can go fullscreen: the one the bar belongs to, a
+        // half of split screen, or the floating tab; its video then fills the whole phone screen.
+        val split by c.tabs.split.collectAsState()
+        val floatingId by c.tabs.floatingId.collectAsState()
+        val parked by c.tabs.floatParked.collectAsState()
+        val onScreen = listOfNotNull(
+            tab,
+            split?.let { s -> tabs.firstOrNull { it.id == s.top } },
+            split?.let { s -> tabs.firstOrNull { it.id == s.bottom } },
+            floatingId?.takeIf { !parked }?.let { id -> tabs.firstOrNull { it.id == id } },
+        ).distinct()
+        val fullTab by remember(onScreen.map { it.id }) {
+            if (onScreen.isEmpty()) flowOf(null)
+            else combine(onScreen.map { t -> t.fullscreen.map { on -> if (on) t else null } }) { all -> all.firstOrNull { it != null } }
+        }.collectAsState(null)
+        val fullscreen = fullTab != null
+        val fullPlaying = fullTab?.playing?.collectAsState()?.value == true
         // Like Firefox and Chrome: a wide video in fullscreen turns the screen to landscape (either way round,
         // following the phone), and the screen is free to turn again once fullscreen ends.
         // A page's own lock (a game, a video player) wins; otherwise the screen turns freely.
-        val wideVideo = tab?.wideVideo?.collectAsState()?.value
+        val wideVideo = fullTab?.wideVideo?.collectAsState()?.value
         val pageLock by c.engine.orientationLock.collectAsState()
         val shown by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
         val inFront = shown.isAtLeast(Lifecycle.State.STARTED)
@@ -133,12 +150,14 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
             activity.requestedOrientation = want
         }
         // Picture-in-picture: a fullscreen video that's playing shrinks into a small window when you leave Raven.
-        val videoSize = tab?.videoSize?.collectAsState()?.value
-        LaunchedEffect(fullscreen, playing, videoSize, prefs.pictureInPicture) {
-            (activity as? app.raven.browser.MainActivity)?.updatePip(prefs.pictureInPicture && fullscreen && playing, videoSize, playing)
+        val videoSize = fullTab?.videoSize?.collectAsState()?.value
+        LaunchedEffect(fullscreen, fullPlaying, videoSize, prefs.pictureInPicture) {
+            (activity as? app.raven.browser.MainActivity)?.updatePip(prefs.pictureInPicture && fullscreen && fullPlaying, videoSize, fullPlaying)
         }
-        LaunchedEffect(fullscreen) {
+        LaunchedEffect(fullTab?.id) {
             ui.fullscreen = fullscreen
+            ui.fullscreenTabId = fullTab?.id
+            android.util.Log.i("Raven", "fullscreen: ${fullTab?.id?.take(6) ?: "none"}${if (fullTab != null && fullTab?.id == floatingId) " (floating tab)" else if (fullTab != null && fullTab?.id != tab?.id) " (other half)" else ""}")
             val controller = WindowCompat.getInsetsController(activity.window, activity.window.decorView)
             if (fullscreen) {
                 controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
@@ -186,6 +205,16 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
                         else launch { ui.snackbar.showSnackbar("No app on this phone can open that link") }
                     }
                     is TabEvent.ContextMenu -> ui.sheet = Sheet.LongPress(e.tabId, e.element)
+                    // "Tab closed · Undo": the newest close replaces the last one's bar; when the bar goes, so do the tabs.
+                    is TabEvent.Closed -> launch {
+                        ui.snackbar.currentSnackbarData?.dismiss()
+                        val r = ui.snackbar.showSnackbar(
+                            if (e.count == 1) "Tab closed" else "${e.count} tabs closed",
+                            actionLabel = "Undo",
+                            duration = androidx.compose.material3.SnackbarDuration.Short,
+                        )
+                        if (r == androidx.compose.material3.SnackbarResult.ActionPerformed) c.tabs.undoClose(e.batch) else c.tabs.finishClosed(e.batch)
+                    }
                 }
             }
         }
@@ -204,8 +233,9 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
                 )
             }
             Screens(c, ui)
-            // The floating tab floats over every screen in Raven (not over other apps, and not in picture-in-picture).
-            if (!ui.pip) app.raven.browser.ui.browser.FloatingTab(c, ui)
+            // The floating tab floats over every screen in Raven (not over other apps, and not in picture-in-picture,
+            // unless it's the floating tab's own video that's playing there).
+            if (!ui.pip || (fullTab != null && fullTab?.id == floatingId)) app.raven.browser.ui.browser.FloatingTab(c, ui)
 
             when (val s = ui.sheet) {
                 Sheet.Menu -> tab?.let { MenuSheet(c, ui, it) }
@@ -249,7 +279,8 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
                 ui.sheet != null -> ui.sheet = null
                 ui.findOpen -> { ui.findOpen = false; t?.session?.finder?.clear() }
                 ui.editing -> ui.editing = false
-                ui.fullscreen && t != null -> t.session.exitFullScreen()
+                // A video fullscreen (here, in a half or in the floating tab): back to where it was.
+                ui.fullscreen -> (fullTab ?: t)?.session?.exitFullScreen()
                 ui.screen != Screen.Browser -> ui.screen = Screen.Browser
                 // Home showed the new tab page over a page: Back returns to that page.
                 t != null && t.ntpOverlay.value && t.overlayFromHome -> t.leaveHome()

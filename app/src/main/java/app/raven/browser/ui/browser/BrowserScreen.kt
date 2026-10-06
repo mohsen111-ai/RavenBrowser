@@ -107,15 +107,19 @@ fun BrowserScreen(c: Container, ui: UiState) {
             .navigationBarsPadding()
             .imePadding(),
     ) {
-        if (!ui.fullscreen && tab != null) Bars(c, ui, tab, tabs.size)
-        Box(Modifier.weight(1f).fillMaxWidth()) {
-            // Split screen: two tabs, the bar belonging to the half you touched last. A video going fullscreen in
-            // a half fills the whole screen, and the split comes back when it leaves fullscreen.
-            val split by c.tabs.split.collectAsState()
-            val top = split?.let { s -> tabs.firstOrNull { it.id == s.top } }
-            val bottom = split?.let { s -> tabs.firstOrNull { it.id == s.bottom } }
-            val fullscreen = tab?.fullscreen?.collectAsState()?.value == true
-            if (tab != null && top != null && bottom != null && !fullscreen) {
+        // Split screen: two tabs, each with its own small bar. A video going fullscreen in a half fills the whole
+        // screen, and the split comes back when it leaves fullscreen (the halves stay as they are meanwhile, so the
+        // page isn't rebuilt: that lost the fullscreen).
+        val split by c.tabs.split.collectAsState()
+        val top = split?.let { s -> tabs.firstOrNull { it.id == s.top } }
+        val bottom = split?.let { s -> tabs.firstOrNull { it.id == s.bottom } }
+        val halves = tab != null && top != null && bottom != null
+        // In split screen the big bar only comes back to type an address or find in the active half.
+        val bigBar = !ui.fullscreen && tab != null && (!halves || ui.editing || ui.findOpen)
+        if (bigBar) Bars(c, ui, tab, tabs.size)
+        // Without the big bar, the halves keep clear of the phone's status bar themselves.
+        Box(Modifier.weight(1f).fillMaxWidth().then(if (halves && !bigBar && !ui.fullscreen) Modifier.statusBarsPadding() else Modifier)) {
+            if (halves) {
                 SplitArea(c, ui, top, bottom, tab.id)
             } else if (tab != null) {
                 TabPage(c, ui, tab, primary = true)

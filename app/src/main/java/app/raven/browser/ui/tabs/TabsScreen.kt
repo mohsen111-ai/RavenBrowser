@@ -170,7 +170,7 @@ fun TabsScreen(c: Container, ui: UiState) {
     ) {
         val cards = shown.map { it.card(it.id == selectedId) }
         val hand: @Composable () -> Unit = {
-            Hand(cards, edge, onOpen = { id -> shown.firstOrNull { it.id == id }?.let(::open) }, onClose = { c.tabs.close(it) }, onHold = { actionsFor = it })
+            Hand(cards, edge, onOpen = { id -> shown.firstOrNull { it.id == id }?.let(::open) }, onClose = { c.tabs.close(it, undoable = true) }, onHold = { actionsFor = it })
         }
         when {
             privateSide && locked -> app.raven.browser.ui.browser.PrivateLocked(onUnlock = { main?.unlockPrivate() })
@@ -194,7 +194,7 @@ fun TabsScreen(c: Container, ui: UiState) {
             title = { Text(if (privateSide) "Close all private tabs?" else "Close all tabs?") },
             text = { Text("${shown.size} ${if (shown.size == 1) "tab" else "tabs"} will close.", color = Space.Text2) },
             confirmButton = {
-                TextButton({ confirmCloseAll = false; c.tabs.closeAll(private = privateSide) }) { Text("Close all", color = if (privateSide) Space.Nebula else Raven.accent) }
+                TextButton({ confirmCloseAll = false; c.tabs.closeAll(private = privateSide, undoable = true) }) { Text("Close all", color = if (privateSide) Space.Nebula else Raven.accent) }
             },
             dismissButton = { TextButton({ confirmCloseAll = false }) { Text("Cancel", color = Space.Text2) } },
             containerColor = Space.Surface,
@@ -213,7 +213,7 @@ fun TabsScreen(c: Container, ui: UiState) {
             onDismiss = { actionsFor = null },
             onFlock = { f -> c.tabs.setFlock(listOf(id), f); actionsFor = null },
             onNewFlock = { actionsFor = null; naming = NewFlock(id) },
-            onClose = { c.tabs.close(id); actionsFor = null },
+            onClose = { c.tabs.close(id, undoable = true); actionsFor = null },
             onFloat = if (!tab.private && !tab.hasNoPage) ({ actionsFor = null; if (c.tabs.float(id)) ui.go(Screen.Browser) }) else null,
             // Shares the screen with the tab you were on: that one on top, this one below.
             onSplit = tabs.firstOrNull { it.id == selectedId }?.takeIf { it.id != id && it.private == tab.private }?.let {
