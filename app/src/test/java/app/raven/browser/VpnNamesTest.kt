@@ -16,4 +16,14 @@ class VpnNamesTest {
         assertEquals("JP", RavenVpn.countryOf("Raven JP 3"))
         assertEquals(null, RavenVpn.countryOf("my laptop"))
     }
+
+    /** A site's own country is kept for the site, whatever part of it you're on. */
+    @Test fun sites() {
+        assertEquals("youtube.com", RavenVpn.siteOf("m.youtube.com"))
+        assertEquals("youtube.com", RavenVpn.siteOf("www.youtube.com"))
+        assertEquals("youtube.com", RavenVpn.siteOf("youtube.com"))
+        assertEquals("bbc.co.uk", RavenVpn.siteOf("www.bbc.co.uk"))
+        assertEquals("example.com.au", RavenVpn.siteOf("shop.example.com.au"))
+        assertEquals("netflix.com", RavenVpn.siteOf("WWW.Netflix.com"))
+    }
 }

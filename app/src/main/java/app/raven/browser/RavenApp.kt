@@ -56,6 +56,21 @@ class Container(app: Application) {
     init {
         downloads.runtime = engine.runtime
         tabs.onBlocked = { blockedToday.add(it) }
+        // VPN per site: a site with its own country loads only once the VPN is there (or after a few seconds anyway).
+        tabs.vpnGate = { host ->
+            if (!ravenVpn.needsSwitch(host)) null
+            else org.mozilla.geckoview.GeckoResult<org.mozilla.geckoview.AllowOrDeny>().also { result ->
+                scope.launch {
+                    val ok = kotlinx.coroutines.withTimeoutOrNull(6000) { ravenVpn.applyFor(host) }
+                    if (ok == false) engine.messages.tryEmit("Couldn't switch the VPN for this site")
+                    result.complete(org.mozilla.geckoview.AllowOrDeny.ALLOW)
+                }
+            }
+        }
+        tabs.onShown = { tab ->
+            val host = android.net.Uri.parse(tab.url.value).host
+            if (ravenVpn.needsSwitch(host)) scope.launch { ravenVpn.applyFor(host) }
+        }
         if (settings.current.eraseOnClose) eraseBrowsingData(history = true, cookies = true, cache = true)
         tabs.restore()
         engine.start()

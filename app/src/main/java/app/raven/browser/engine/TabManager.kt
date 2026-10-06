@@ -77,6 +77,14 @@ class TabManager(
     val events = MutableSharedFlow<TabEvent>(extraBufferCapacity = 16)
     val prompts = MutableStateFlow<List<UiPrompt>>(emptyList())
 
+    /**
+     * Set by the app (VPN per site): for a site about to load on screen, a wait while the VPN switches to where that
+     * site goes, or null when nothing needs to change.
+     */
+    var vpnGate: ((String?) -> GeckoResult<AllowOrDeny>?)? = null
+    /** Set by the app: another tab came on screen (the VPN follows its site). */
+    var onShown: ((BrowserTab) -> Unit)? = null
+
     /** Called with how many more requests uBlock Origin blocked (feeds "blocked today"). */
     var onBlocked: ((Int) -> Unit)? = null
 
@@ -286,6 +294,7 @@ class TabManager(
         target.lastActive = now
         _selectedId.value = id
         if (!target.private) _profile.value = target.profile
+        onShown?.invoke(target)
         enforceAwakeLimit()
         persist()
     }
@@ -974,7 +983,11 @@ class TabManager(
             return GeckoResult.fromValue(AllowOrDeny.DENY)
         }
         when (parsed.scheme?.lowercase()) {
-            "http", "https" -> return request?.let { appLink(tab, parsed, it) }
+            "http", "https" -> {
+                request?.let { appLink(tab, parsed, it) }?.let { return it }
+                // VPN per site: the page on screen waits a moment while the VPN goes where its site goes.
+                return if (request != null && tab.id == _selectedId.value) vpnGate?.invoke(parsed.host) else null
+            }
             null, "about", "data", "blob", "moz-extension", "resource", "file", "view-source", "javascript" -> return null
             "intent" -> {
                 val intent = runCatching { Intent.parseUri(uri, Intent.URI_INTENT_SCHEME) }.getOrNull()
