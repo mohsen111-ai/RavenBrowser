@@ -152,7 +152,7 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
         // Picture-in-picture: a fullscreen video that's playing shrinks into a small window when you leave Raven.
         val videoSize = fullTab?.videoSize?.collectAsState()?.value
         LaunchedEffect(fullscreen, fullPlaying, videoSize, prefs.pictureInPicture) {
-            (activity as? app.raven.browser.MainActivity)?.updatePip(prefs.pictureInPicture && fullscreen && fullPlaying, videoSize, fullPlaying)
+            (activity as? app.raven.browser.MainActivity)?.updatePip(prefs.pictureInPicture && fullscreen && fullPlaying && !c.appLocked.value, videoSize, fullPlaying)
         }
         LaunchedEffect(fullTab?.id) {
             ui.fullscreen = fullscreen
@@ -185,15 +185,22 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
         val main = activity as? app.raven.browser.MainActivity
         val privateOnScreen = tab?.private == true && ui.screen == Screen.Browser
         val resumed = visible.isAtLeast(Lifecycle.State.RESUMED)
-        LaunchedEffect(locked, privateOnScreen, resumed) {
-            if (locked && privateOnScreen && resumed) main?.unlockPrivate()
+        // (While all of Raven is locked, its own question comes first and opens these too.)
+        val appLocked by c.appLocked.collectAsState()
+        LaunchedEffect(locked, privateOnScreen, resumed, appLocked) {
+            if (locked && privateOnScreen && resumed && !appLocked) main?.unlockPrivate()
         }
         // With the lock on, private tabs stay out of screenshots and the recent apps view.
         val secret = prefs.lockPrivateTabs && ((tab?.private == true && ui.screen == Screen.Browser) || (ui.screen == Screen.Tabs && ui.privateSideShown))
-        LaunchedEffect(secret) {
+        LaunchedEffect(secret, prefs.appLock) {
             if (secret) activity.window.addFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE)
             else activity.window.clearFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE)
-            if (android.os.Build.VERSION.SDK_INT >= 33) activity.setRecentsScreenshotEnabled(!secret)
+            // With the lock for all of Raven on, the recent apps view never shows what's open (screenshots still work).
+            if (android.os.Build.VERSION.SDK_INT >= 33) activity.setRecentsScreenshotEnabled(!secret && !prefs.appLock)
+        }
+        // The lock for all of Raven: back in front while locked, it asks for a fingerprint or the screen lock at once.
+        LaunchedEffect(appLocked, resumed) {
+            if (appLocked && resumed) main?.unlockApp()
         }
 
         LaunchedEffect(Unit) {
@@ -267,6 +274,8 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
                     actionContentColor = Space.OnAccent,
                 )
             }
+            // Locked: the lock covers everything, the floating tab and any sheet too.
+            if (appLocked && !ui.pip) app.raven.browser.ui.browser.AppLocked(onUnlock = { main?.unlockApp() })
             ui.folderFor?.let { url ->
                 var folders by androidx.compose.runtime.remember(url) { androidx.compose.runtime.mutableStateOf<List<String>>(emptyList()) }
                 LaunchedEffect(url) { folders = c.db.bookmarkFolders().map { it.first } }
@@ -280,6 +289,7 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
         BackHandler(enabled = true) {
             val t = tab
             when {
+                c.appLocked.value -> activity.moveTaskToBack(true)
                 ui.folderFor != null -> ui.folderFor = null
                 ui.sheet != null -> ui.sheet = null
                 ui.findOpen -> { ui.findOpen = false; t?.session?.finder?.clear() }

@@ -44,6 +44,10 @@ data class Prefs(
     val eraseOnClose: Boolean = false,
     val supernovaButton: Boolean = true,
     val lockPrivateTabs: Boolean = false,
+    /** The lock for all of Raven: off until you turn it on. */
+    val appLock: Boolean = false,
+    /** How long Raven may be away before it locks: 0 (at once), 1, 5 or 30 minutes. */
+    val lockAfterMinutes: Int = 5,
     val accent: Int = 0,
     val trueBlack: Boolean = false,
     val reduceMotion: Motion = Motion.AUTO,
@@ -95,6 +99,8 @@ class Settings(context: Context) {
             eraseOnClose = sp.getBoolean("eraseOnClose", d.eraseOnClose),
             supernovaButton = sp.getBoolean("supernovaButton", d.supernovaButton),
             lockPrivateTabs = sp.getBoolean("lockPrivateTabs", d.lockPrivateTabs),
+            appLock = sp.getBoolean("appLock", d.appLock),
+            lockAfterMinutes = sp.getInt("lockAfterMinutes", d.lockAfterMinutes),
             accent = sp.getInt("accent", d.accent),
             trueBlack = sp.getBoolean("trueBlack", d.trueBlack),
             reduceMotion = enumOr(sp.getString("reduceMotion", null), d.reduceMotion),
@@ -129,6 +135,8 @@ class Settings(context: Context) {
         putBoolean("eraseOnClose", p.eraseOnClose)
         putBoolean("supernovaButton", p.supernovaButton)
         putBoolean("lockPrivateTabs", p.lockPrivateTabs)
+        putBoolean("appLock", p.appLock)
+        putInt("lockAfterMinutes", p.lockAfterMinutes)
         putInt("accent", p.accent)
         putBoolean("trueBlack", p.trueBlack)
         putString("reduceMotion", p.reduceMotion.name)

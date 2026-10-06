@@ -56,7 +56,53 @@ import kotlin.random.Random
  * and touches don't reach the page underneath.
  */
 @Composable
-fun PrivateLocked(onUnlock: () -> Unit, modifier: Modifier = Modifier, onLeave: (() -> Unit)? = null) {
+fun PrivateLocked(onUnlock: () -> Unit, modifier: Modifier = Modifier, onLeave: (() -> Unit)? = null) = LockScreen(
+    label = "PRIVATE TABS",
+    title = "Locked in the eclipse.",
+    text = "Use your fingerprint or screen lock to open them. Even the recent apps view only sees darkness.",
+    ground = Space.NebulaGround,
+    glow = Space.Nebula,
+    words = Color(0xFFA9A2D6),
+    labelColor = Space.Nebula,
+    fingerprint = Space.NebulaText,
+    button = PillStyle.Private,
+    onUnlock = onUnlock,
+    modifier = modifier,
+    leave = onLeave?.let { "Go to everyday tabs" to it },
+)
+
+/** Raven locked (the lock for all of Raven): the same moon, in moonlight instead of eclipse violet. */
+@Composable
+fun AppLocked(onUnlock: () -> Unit, modifier: Modifier = Modifier) = LockScreen(
+    label = "RAVEN",
+    title = "Locked for the night.",
+    text = "Use your fingerprint or screen lock to open Raven.",
+    ground = Space.Ground,
+    glow = Raven.accent,
+    words = Space.Text2,
+    labelColor = Raven.accent,
+    fingerprint = Space.Text,
+    button = PillStyle.Primary,
+    onUnlock = onUnlock,
+    modifier = modifier,
+    leave = null,
+)
+
+@Composable
+private fun LockScreen(
+    label: String,
+    title: String,
+    text: String,
+    ground: Color,
+    glow: Color,
+    words: Color,
+    labelColor: Color,
+    fingerprint: Color,
+    button: PillStyle,
+    onUnlock: () -> Unit,
+    modifier: Modifier,
+    leave: Pair<String, () -> Unit>?,
+) {
     val moving = !Raven.reduceMotion
     val pulse = if (moving) {
         rememberInfiniteTransition(label = "lock").animateFloat(0f, 1f, infiniteRepeatable(tween(2400, easing = LinearEasing), RepeatMode.Restart), label = "pulse")
@@ -65,7 +111,7 @@ fun PrivateLocked(onUnlock: () -> Unit, modifier: Modifier = Modifier, onLeave: 
     BoxWithConstraints(
         modifier
             .fillMaxSize()
-            .background(Space.NebulaGround)
+            .background(ground)
             // Swallows touches, so nothing reaches the page underneath.
             .clickable(remember { MutableInteractionSource() }, indication = null) { },
     ) {
@@ -78,7 +124,7 @@ fun PrivateLocked(onUnlock: () -> Unit, modifier: Modifier = Modifier, onLeave: 
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            // The eclipse: corona, silver rim, dark disc, the fingerprint inside; rings of violet go out from it.
+            // The eclipse: corona, silver rim, dark disc, the fingerprint inside; rings go out from it.
             Box(
                 Modifier.size(disc * 3.2f).clip(CircleShape).clickable(onClickLabel = "Unlock", onClick = onUnlock)
                     .semantics { contentDescription = "Unlock with fingerprint or screen lock" },
@@ -89,7 +135,7 @@ fun PrivateLocked(onUnlock: () -> Unit, modifier: Modifier = Modifier, onLeave: 
                     val r = disc.toPx()
                     drawCircle(
                         Brush.radialGradient(
-                            0f to Color.Transparent, 0.58f to Color(0x99C7CCD8), 0.7f to Color(0x409A8CFF), 1f to Color.Transparent,
+                            0f to Color.Transparent, 0.58f to Color(0x99C7CCD8), 0.7f to glow.copy(alpha = 0.25f), 1f to Color.Transparent,
                             center = c, radius = r * 1.7f,
                         ),
                         radius = r * 1.7f, center = c,
@@ -97,29 +143,29 @@ fun PrivateLocked(onUnlock: () -> Unit, modifier: Modifier = Modifier, onLeave: 
                     pulse?.value?.let { t ->
                         for (k in 0..1) {
                             val p = (t + k * 0.5f) % 1f
-                            drawCircle(Color(0xFF9A8CFF).copy(alpha = 0.7f * (1f - p)), radius = r * (1.05f + 0.55f * p), center = c, style = Stroke(1.5.dp.toPx()))
+                            drawCircle(glow.copy(alpha = 0.7f * (1f - p)), radius = r * (1.05f + 0.55f * p), center = c, style = Stroke(1.5.dp.toPx()))
                         }
                     }
                     drawCircle(Color(0xFFE9ECF3).copy(alpha = 0.85f), radius = r + 1.dp.toPx(), center = c, style = Stroke(1.5.dp.toPx()))
-                    drawCircle(Space.NebulaGround, radius = r, center = c)
+                    drawCircle(ground, radius = r, center = c)
                     val bead = Offset(c.x + r * 0.74f, c.y - r * 0.68f)
                     drawCircle(Color.White.copy(alpha = 0.22f), radius = 9.dp.toPx(), center = bead)
                     drawCircle(Color.White, radius = 3.dp.toPx(), center = bead)
                 }
-                Icon(Icons.Fingerprint, null, size = disc * 0.62f, tint = Space.NebulaText, stroke = 1.4f)
+                Icon(Icons.Fingerprint, null, size = disc * 0.62f, tint = fingerprint, stroke = 1.4f)
             }
             Column(Modifier.widthIn(max = 420.dp).fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("PRIVATE TABS", style = MaterialTheme.typography.labelSmall, color = Space.Nebula)
+                Text(label, style = MaterialTheme.typography.labelSmall, color = labelColor)
                 FitText(
-                    "Locked in the eclipse.", TextStyle(fontFamily = Display, fontWeight = FontWeight.ExtraBold, fontSize = 28.sp, lineHeight = 32.sp, letterSpacing = (-0.5).sp),
+                    title, TextStyle(fontFamily = Display, fontWeight = FontWeight.ExtraBold, fontSize = 28.sp, lineHeight = 32.sp, letterSpacing = (-0.5).sp),
                     Modifier.padding(top = 10.dp), textAlign = TextAlign.Center,
                 )
                 Text(
-                    "Use your fingerprint or screen lock to open them. Even the recent apps view only sees darkness.",
-                    style = MaterialTheme.typography.bodyMedium, color = Color(0xFFA9A2D6), textAlign = TextAlign.Center, modifier = Modifier.padding(top = 10.dp),
+                    text,
+                    style = MaterialTheme.typography.bodyMedium, color = words, textAlign = TextAlign.Center, modifier = Modifier.padding(top = 10.dp),
                 )
-                PillButton("Unlock", onUnlock, Modifier.padding(top = 22.dp).fillMaxWidth(), icon = Icons.Fingerprint, style = PillStyle.Private)
-                if (onLeave != null) TextButton(onLeave, modifier = Modifier.padding(top = 4.dp)) { Text("Go to everyday tabs", color = Space.Text2) }
+                PillButton("Unlock", onUnlock, Modifier.padding(top = 22.dp).fillMaxWidth(), icon = Icons.Fingerprint, style = button)
+                if (leave != null) TextButton(leave.second, modifier = Modifier.padding(top = 4.dp)) { Text(leave.first, color = Space.Text2) }
             }
         }
     }

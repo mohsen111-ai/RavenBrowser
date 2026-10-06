@@ -129,6 +129,29 @@ fun SettingsScreen(c: Container, onBack: () -> Unit) {
                     },
                 )
                 Divider()
+                ListRow(
+                    "Lock Raven", detail = "Your fingerprint or screen lock opens Raven when you come back to it. Private tabs keep their own lock.",
+                    trailing = {
+                        Toggle(p.appLock, { v ->
+                            val main = context as? app.raven.browser.MainActivity
+                            when {
+                                main == null -> Unit
+                                v && !main.canLock() -> android.widget.Toast.makeText(context, "Set a screen lock on your phone first (Settings, Security)", android.widget.Toast.LENGTH_LONG).show()
+                                else -> main.authenticate(if (v) "Lock Raven" else "Stop locking Raven") {
+                                    set { it.copy(appLock = v) }
+                                    if (!v) c.appLocked.value = false
+                                }
+                            }
+                        }, "Lock Raven")
+                    },
+                )
+                if (p.appLock) {
+                    Divider()
+                    ListRow("Lock after", detail = "How long Raven can be away before it asks", value = lockAfter(p.lockAfterMinutes), chevron = true, onClick = {
+                        choice = Choice("Lock after", listOf(0, 1, 5, 30).map { it to lockAfter(it) }, p.lockAfterMinutes) { v -> set { it.copy(lockAfterMinutes = v) } }
+                    })
+                }
+                Divider()
                 ListRow("Erase data when closing", detail = "History, cookies and site data", trailing = { Toggle(p.eraseOnClose, { v -> set { it.copy(eraseOnClose = v) } }, "Erase data when closing") })
                 Divider()
                 ListRow("Clean slate button", detail = "In the menu: closes every tab and erases what you choose. Close all on the Tabs screen only closes tabs", trailing = { Toggle(p.supernovaButton, { v -> set { it.copy(supernovaButton = v) } }, "Clean slate button") })
@@ -272,6 +295,7 @@ fun SettingsScreen(c: Container, onBack: () -> Unit) {
     }
 }
 
+private fun lockAfter(m: Int) = when (m) { 0 -> "Immediately"; 1 -> "1 minute"; else -> "$m minutes" }
 private fun minutes(m: Int) = when (m) { 0 -> "Never"; 60 -> "1 hour"; else -> "$m min" }
 private fun days(d: Int) = when (d) { 0 -> "Never"; 1 -> "1 day"; 7 -> "1 week"; 30 -> "1 month"; else -> "$d days" }
 

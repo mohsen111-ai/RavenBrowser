@@ -32,6 +32,10 @@ class Container(app: Application) {
     val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     /** Private tabs are locked (the lock is on and you left Raven); a fingerprint or the screen lock opens them. */
     val privateLocked = MutableStateFlow(false)
+    /** All of Raven is locked (its lock is on, and Raven was just started or away long enough). */
+    val appLocked = MutableStateFlow(settings.current.appLock)
+    /** When Raven last went out of sight (elapsed time), or 0 while it's on screen. */
+    var leftAt = 0L
     /** The home screen's wallpaper, a new one each time Raven opens. */
     val sky = Sky(app, settings)
     /** The home page's greeting, also a new one each time Raven opens. */

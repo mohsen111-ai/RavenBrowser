@@ -39,6 +39,7 @@ import app.raven.browser.ui.browser.SplitLayout
 import app.raven.browser.engine.TabManager
 import app.raven.browser.ui.browser.MenuTileSpec
 import app.raven.browser.ui.browser.PrivateLocked
+import app.raven.browser.ui.browser.AppLocked
 import app.raven.browser.ui.browser.RoundAction
 import app.raven.browser.ui.components.Card
 import app.raven.browser.ui.components.Divider
@@ -290,6 +291,11 @@ open class Shots {
     @Test fun locked() {
         compose.setContent { RavenTheme(0, false, true) { PrivateLocked(onUnlock = {}, onLeave = {}) } }
         compose.onRoot().captureRoboImage("$dir/locked.png")
+    }
+
+    @Test fun appLocked() {
+        compose.setContent { RavenTheme(0, false, true) { AppLocked(onUnlock = {}) } }
+        compose.onRoot().captureRoboImage("$dir/app_locked.png")
     }
 
     @Test fun bookmarks() {
