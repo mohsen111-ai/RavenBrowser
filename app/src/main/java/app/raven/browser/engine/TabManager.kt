@@ -12,6 +12,8 @@ import app.raven.browser.data.Database
 import app.raven.browser.data.Profile
 import app.raven.browser.data.Profiles
 import app.raven.browser.data.Settings
+import app.raven.browser.data.LinksInApps
+import app.raven.browser.data.SitePermissions
 import app.raven.browser.downloads.DownloadManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -42,6 +44,8 @@ sealed interface TabEvent {
     class Message(val text: String) : TabEvent
     class OpenExternal(val intent: Intent, val fallbackUrl: String? = null, val tabId: String? = null) : TabEvent
     class ContextMenu(val tabId: String, val element: ContentDelegate.ContextElement) : TabEvent
+    /** A link that has its own app on the phone: "Open in <app>" is offered while the page loads in Raven. */
+    class OfferApp(val intent: Intent, val app: String) : TabEvent
     /** Tabs you closed: "Tab closed · Undo" shows for a few seconds. */
     class Closed(val batch: Long, val count: Int) : TabEvent
 }
@@ -55,6 +59,7 @@ class TabManager(
     private val downloads: DownloadManager,
     private val media: MediaControls,
     val profiles: Profiles,
+    private val sitePermissions: SitePermissions,
 ) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private val main = Handler(Looper.getMainLooper())
@@ -813,7 +818,7 @@ class TabManager(
             override fun onCanGoForward(session: GeckoSession, canGoForward: Boolean) { tab.canGoForward.value = canGoForward }
 
             override fun onLoadRequest(session: GeckoSession, request: NavigationDelegate.LoadRequest): GeckoResult<AllowOrDeny>? =
-                handleLoad(tab, request.uri)
+                handleLoad(tab, request.uri, request)
 
             override fun onSubframeLoadRequest(session: GeckoSession, request: NavigationDelegate.LoadRequest): GeckoResult<AllowOrDeny>? {
                 val scheme = Uri.parse(request.uri).scheme?.lowercase()
@@ -900,7 +905,19 @@ class TabManager(
                 audio: Array<out PermissionDelegate.MediaSource>?,
                 callback: PermissionDelegate.MediaCallback,
             ) {
-                enqueue(UiPrompt.Media(tab.id, hostOf(uri), video.orEmpty().toList(), audio.orEmpty().toList(), callback))
+                val host = hostOf(uri)
+                val v = video.orEmpty().toList()
+                val a = audio.orEmpty().toList()
+                // What you told Raven to remember for this site (everyday tabs only): no question, the same answer.
+                if (!tab.private) {
+                    val kinds = listOfNotNull(SitePermissions.Kind.CAMERA.takeIf { v.isNotEmpty() }, SitePermissions.Kind.MICROPHONE.takeIf { a.isNotEmpty() })
+                    val answers = kinds.map { sitePermissions.get(host, it) }
+                    if (answers.isNotEmpty() && answers.all { it != null }) {
+                        runCatching { if (answers.all { it == true }) callback.grant(v.firstOrNull(), a.firstOrNull()) else callback.reject() }
+                        return
+                    }
+                }
+                enqueue(UiPrompt.Media(tab.id, host, v, a, callback))
             }
         }
 
@@ -943,7 +960,7 @@ class TabManager(
         }
     }
 
-    private fun handleLoad(tab: BrowserTab, uri: String): GeckoResult<AllowOrDeny>? {
+    private fun handleLoad(tab: BrowserTab, uri: String, request: NavigationDelegate.LoadRequest? = null): GeckoResult<AllowOrDeny>? {
         if (uri.startsWith(ErrorPages.ALLOW_HTTP)) {
             val target = Uri.parse(uri).getQueryParameter("u") ?: return GeckoResult.fromValue(AllowOrDeny.DENY)
             tab.insecureAllowed = true
@@ -957,7 +974,8 @@ class TabManager(
             return GeckoResult.fromValue(AllowOrDeny.DENY)
         }
         when (parsed.scheme?.lowercase()) {
-            null, "http", "https", "about", "data", "blob", "moz-extension", "resource", "file", "view-source", "javascript" -> return null
+            "http", "https" -> return request?.let { appLink(tab, parsed, it) }
+            null, "about", "data", "blob", "moz-extension", "resource", "file", "view-source", "javascript" -> return null
             "intent" -> {
                 val intent = runCatching { Intent.parseUri(uri, Intent.URI_INTENT_SCHEME) }.getOrNull()
                 if (intent != null) {
@@ -976,6 +994,45 @@ class TabManager(
             }
         }
     }
+
+    /**
+     * Open links in apps (Settings): a link you follow to another site that has its own app on the phone opens there
+     * (Always), or the app is offered while the page loads in Raven (Ask first). Never from a private tab, never for an
+     * address you typed, and never within the same site.
+     */
+    private fun appLink(tab: BrowserTab, uri: Uri, request: NavigationDelegate.LoadRequest): GeckoResult<AllowOrDeny>? {
+        val mode = settings.current.linksInApps
+        if (mode == LinksInApps.NEVER || tab.private || request.isDirectNavigation) return null
+        if (!request.hasUserGesture && !request.isRedirect) return null
+        if (request.target != NavigationDelegate.TARGET_WINDOW_CURRENT && request.target != NavigationDelegate.TARGET_WINDOW_NEW) return null
+        if (siteOf(uri.host) == siteOf(Uri.parse(tab.url.value).host)) return null
+        val (intent, name) = appFor(uri) ?: return null
+        return if (mode == LinksInApps.ALWAYS) {
+            events.tryEmit(TabEvent.OpenExternal(intent))
+            GeckoResult.fromValue(AllowOrDeny.DENY)
+        } else {
+            events.tryEmit(TabEvent.OfferApp(intent, name))
+            null
+        }
+    }
+
+    /** The app on the phone (not a browser, not Raven) that opens this link, and its name. */
+    private fun appFor(uri: Uri): Pair<Intent, String>? {
+        val pm = context.packageManager
+        val view = Intent(Intent.ACTION_VIEW, uri).addCategory(Intent.CATEGORY_BROWSABLE)
+        val handlers = runCatching { pm.queryIntentActivities(view, 0) }.getOrDefault(emptyList())
+        if (handlers.isEmpty()) return null
+        // Browsers open every web address; a site's own app opens its own. An address no site has finds the browsers.
+        val browsers = runCatching {
+            pm.queryIntentActivities(Intent(Intent.ACTION_VIEW, Uri.parse("https://raven.invalid/")).addCategory(Intent.CATEGORY_BROWSABLE), 0)
+        }.getOrDefault(emptyList()).map { it.activityInfo.packageName }.toSet()
+        val app = handlers.firstOrNull { it.activityInfo.packageName !in browsers && it.activityInfo.packageName != context.packageName } ?: return null
+        val name = runCatching { pm.getApplicationLabel(app.activityInfo.applicationInfo).toString() }.getOrDefault("the app")
+        return view.setClassName(app.activityInfo.packageName, app.activityInfo.name) to name
+    }
+
+    /** A site, without its subdomains (m.youtube.com and www.youtube.com are both youtube.com). */
+    private fun siteOf(host: String?): String = host.orEmpty().removePrefix("www.").split('.').takeLast(2).joinToString(".")
 
     /** A content process died: reopen the tab where it was. */
     private fun recover(tab: BrowserTab) {

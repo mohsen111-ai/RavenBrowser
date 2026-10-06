@@ -31,6 +31,13 @@ enum class Isolation(val label: String, val detail: String) {
 
 enum class Motion(val label: String) { AUTO("With Battery Saver"), ALWAYS("Always"), NEVER("Never") }
 
+/** A link to a site that has its own app on the phone (YouTube, a shop): stay in Raven, ask, or open the app. */
+enum class LinksInApps(val label: String, val detail: String) {
+    NEVER("Never", "Links always open in Raven"),
+    ASK("Ask first", "Raven offers to open the app"),
+    ALWAYS("Always", "Links open straight in the app"),
+}
+
 data class Prefs(
     val onboardingDone: Boolean = false,
     val searchEngine: SearchEngine = SearchEngine.DUCKDUCKGO,
@@ -55,6 +62,7 @@ data class Prefs(
     /** Full screen for pages: every bar hidden (Raven's and the phone's) until a swipe down from the top. */
     val fullPage: Boolean = false,
     val pictureInPicture: Boolean = true,
+    val linksInApps: LinksInApps = LinksInApps.NEVER,
     /** A new wallpaper each time Raven opens (or always [wallpaper] when off); [wallpapersOff] sit the rotation out. */
     val wallpaperRotate: Boolean = true,
     val wallpaper: String = "moonrise",
@@ -107,6 +115,7 @@ class Settings(context: Context) {
             addressBarTop = sp.getBoolean("addressBarTop", d.addressBarTop),
             fullPage = sp.getBoolean("fullPage", d.fullPage),
             pictureInPicture = sp.getBoolean("pictureInPicture", d.pictureInPicture),
+            linksInApps = enumOr(sp.getString("linksInApps", null), d.linksInApps),
             wallpaperRotate = sp.getBoolean("wallpaperRotate", d.wallpaperRotate),
             wallpaper = sp.getString("wallpaper", null) ?: d.wallpaper,
             wallpapersOff = sp.getString("wallpapersOff", null)?.split('\n')?.filter { it.isNotBlank() } ?: d.wallpapersOff,
@@ -143,6 +152,7 @@ class Settings(context: Context) {
         putBoolean("addressBarTop", p.addressBarTop)
         putBoolean("fullPage", p.fullPage)
         putBoolean("pictureInPicture", p.pictureInPicture)
+        putString("linksInApps", p.linksInApps.name)
         putBoolean("wallpaperRotate", p.wallpaperRotate)
         putString("wallpaper", p.wallpaper)
         putString("wallpapersOff", p.wallpapersOff.joinToString("\n"))

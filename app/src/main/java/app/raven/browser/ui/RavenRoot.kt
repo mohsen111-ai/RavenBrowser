@@ -217,6 +217,10 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
                         else launch { ui.snackbar.showSnackbar("No app on this phone can open that link") }
                     }
                     is TabEvent.ContextMenu -> ui.sheet = Sheet.LongPress(e.tabId, e.element)
+                    is TabEvent.OfferApp -> launch {
+                        val r = ui.snackbar.showSnackbar("Open in ${e.app}?", actionLabel = "Open", duration = androidx.compose.material3.SnackbarDuration.Short)
+                        if (r == androidx.compose.material3.SnackbarResult.ActionPerformed) runCatching { activity.startActivity(e.intent) }
+                    }
                     // "Tab closed · Undo": the newest close replaces the last one's bar; when the bar goes, so do the tabs.
                     is TabEvent.Closed -> launch {
                         ui.snackbar.currentSnackbarData?.dismiss()
@@ -327,7 +331,7 @@ private fun Screens(c: Container, ui: UiState) {
                 Screen.Tabs -> TabsScreen(c, ui)
                 Screen.Downloads -> DownloadsScreen(c, ui, back)
                 Screen.History -> HistoryScreen(c, ui, back)
-                Screen.Settings -> SettingsScreen(c, back)
+                Screen.Settings -> SettingsScreen(c, ui, back)
                 Screen.Addons -> AddonsScreen(c, ui, back)
                 Screen.Bookmarks -> app.raven.browser.ui.screens.BookmarksScreen(c, ui, back)
                 Screen.Browser -> Unit
