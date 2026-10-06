@@ -28,6 +28,14 @@ how to build it, and what each emulator test script covers.
   something is the way it is. Its Actions cache keeps a backup of the signing key (`raven-ci-key-v1`),
   refreshed by `Keep the signing key` every 3 days.
 
+## Branches
+
+Earlier sessions committed straight to `main`. New sessions start from `main`, so work left only on another
+branch is invisible to the next session. When the owner allows pushing to `main` (they may say so in their
+first message), work there. Otherwise work on your session's branch, run the tests on it (start the
+workflows with that branch as the ref), and before you finish, ask the owner whether to merge it into
+`main`.
+
 ## Rules for this public repository
 
 - **Commit as** `git -c user.name="mohsen111-ai" -c user.email="337842191+mohsen111-ai@users.noreply.github.com"`.
