@@ -189,7 +189,7 @@ fun SettingsScreen(c: Container, onBack: () -> Unit) {
                     },
                 )
                 Divider()
-                ListRow("Moving sky", detail = "Stars twinkle and the moon breathes on the home screen", trailing = { Toggle(p.movingSky, { v -> set { it.copy(movingSky = v) } }, "Moving sky") })
+                ListRow("Live wallpapers", detail = "The live ones move, stars twinkle and the moon breathes, only while the home screen shows. Still with Reduce motion or Battery Saver.", trailing = { Toggle(p.movingSky, { v -> set { it.copy(movingSky = v) } }, "Live wallpapers") })
                 Divider()
                 Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 10.dp).height(64.dp), verticalAlignment = Alignment.CenterVertically) {
                     Text("Moonlight colour", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))

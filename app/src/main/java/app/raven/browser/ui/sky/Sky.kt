@@ -19,7 +19,8 @@ import kotlinx.coroutines.withContext
 /** Where a wallpaper's moon is, in the 390 × 844 frame the wallpapers were drawn in. */
 class Moon(val x: Float, val y: Float, val r: Float)
 
-class Wallpaper(val id: String, val name: String, val res: Int?, val moon: Moon? = null)
+/** [live]: it moves (drawn in code over its picture); [twinkle]: a few of its stars twinkle (not indoors or under cloud). */
+class Wallpaper(val id: String, val name: String, val res: Int?, val moon: Moon? = null, val live: Live? = null, val twinkle: Boolean = true)
 
 object Wallpapers {
     val all = listOf(
@@ -34,6 +35,28 @@ object Wallpapers {
         Wallpaper("clouds", "Clouds", R.drawable.wall_clouds, Moon(236f, 392f, 68f)),
         Wallpaper("flight", "Night flight", R.drawable.wall_flight, Moon(300f, 338f, 40f)),
         Wallpaper("crescent", "Crescent", R.drawable.wall_crescent, Moon(196f, 400f, 118f)),
+        // The second ten, still.
+        Wallpaper("lighthouse", "Lighthouse", R.drawable.wall_lighthouse, Moon(92f, 230f, 40f)),
+        Wallpaper("ruins", "Castle ruins", R.drawable.wall_ruins, Moon(290f, 190f, 40f)),
+        Wallpaper("cabin", "Snowy cabin", R.drawable.wall_cabin, Moon(270f, 210f, 34f)),
+        Wallpaper("wolf", "Wolf", R.drawable.wall_wolf, Moon(195f, 420f, 92f)),
+        Wallpaper("dunes", "Dunes", R.drawable.wall_dunes, Moon(310f, 470f, 20f)),
+        Wallpaper("lantern", "Lantern path", R.drawable.wall_lantern, Moon(250f, 150f, 22f)),
+        Wallpaper("peaks", "Peaks", R.drawable.wall_peaks, Moon(120f, 200f, 30f)),
+        Wallpaper("oak", "Old oak", R.drawable.wall_oak, Moon(220f, 330f, 86f)),
+        Wallpaper("stones", "Standing stones", R.drawable.wall_stones, Moon(195f, 250f, 36f)),
+        Wallpaper("train", "Night train", R.drawable.wall_train, Moon(300f, 210f, 40f)),
+        // The live ten: their moving part is drawn in code (LiveSky.kt).
+        Wallpaper("meteors", "Shooting stars", R.drawable.wall_meteors, live = Live.METEORS),
+        Wallpaper("ravenmoon", "Raven and moon", R.drawable.wall_ravenmoon, Moon(195f, 380f, 112f), Live.RAVEN_MOON),
+        Wallpaper("storm", "Storm", R.drawable.wall_storm, live = Live.STORM, twinkle = false),
+        Wallpaper("fireflies", "Fireflies", R.drawable.wall_fireflies, Moon(300f, 200f, 22f), Live.FIREFLIES),
+        Wallpaper("campfire", "Campfire", R.drawable.wall_campfire, live = Live.CAMPFIRE),
+        Wallpaper("sea", "Moonlit sea", R.drawable.wall_sea, Moon(195f, 260f, 46f), Live.SEA),
+        Wallpaper("snowfall", "Snowfall", R.drawable.wall_snowfall, Moon(110f, 210f, 34f), Live.SNOWFALL),
+        Wallpaper("candle", "Candle", R.drawable.wall_candle, live = Live.CANDLE, twinkle = false),
+        Wallpaper("wind", "Night wind", R.drawable.wall_wind, Moon(290f, 250f, 40f), Live.WIND),
+        Wallpaper("circling", "Circling ravens", R.drawable.wall_circling, Moon(195f, 320f, 74f), Live.CIRCLING),
         Wallpaper("none", "Plain night", null),
     )
 

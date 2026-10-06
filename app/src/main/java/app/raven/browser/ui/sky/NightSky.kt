@@ -12,6 +12,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.withFrameNanos
+import kotlinx.coroutines.delay
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -34,9 +37,26 @@ import kotlin.math.max
 import kotlin.math.sin
 import kotlin.random.Random
 
+/** What every live wallpaper's clock counts from, so the sky behind the bar and on the page move in step. */
+private val liveEpoch = System.nanoTime()
+
+/**
+ * A live wallpaper's clock, in seconds: running (about 30 frames a second, only while it's on screen) when [moving],
+ * otherwise standing at the wallpaper's still moment.
+ */
+@Composable
+private fun liveClock(live: Live, moving: Boolean): State<Float> = produceState(live.still, live, moving) {
+    value = live.still
+    if (!moving) return@produceState
+    while (true) {
+        withFrameNanos { now -> value = live.still + (now - liveEpoch) / 1_000_000_000f }
+        delay(30)
+    }
+}
+
 /**
  * Draws the wallpaper behind this element as if it filled the whole window, so the address bar and the page
- * under it show one continuous sky. With [moving], the moon breathes and a few stars twinkle.
+ * under it show one continuous sky. With [moving], the moon breathes, a few stars twinkle, and a live wallpaper moves.
  */
 @Composable
 fun Modifier.nightSky(
@@ -65,7 +85,10 @@ fun Modifier.nightSky(
             0f, 1f, infiniteRepeatable(tween(12_000, easing = LinearEasing), RepeatMode.Restart), label = "skyClock",
         )
     } else null
-    val stars = remember(wallpaper.id) { twinkles(wallpaper) }
+    val stars = remember(wallpaper.id) { if (wallpaper.twinkle) twinkles(wallpaper) else emptyList() }
+    val live = wallpaper.live
+    val liveTime = live?.let { liveClock(it, moving) }
+    val canvas = remember { LiveCanvas() }
 
     return this
         .clipToBounds()
@@ -79,6 +102,7 @@ fun Modifier.nightSky(
                 val p = previous
                 if (p != null) drawWall(p, winW, winH, 1f)
                 shown?.let { drawWall(it, winW, winH, if (p != null) fade.value else 1f) }
+                if (live != null && liveTime != null && shown != null) drawLive(live, SkyMap(winW, winH), liveTime.value, canvas)
                 val t = clock?.value
                 if (t != null && shown != null) {
                     val map = SkyMap(winW, winH)
@@ -90,7 +114,7 @@ fun Modifier.nightSky(
 }
 
 /** The wallpaper frame (390 × 844, filled and centred the way the image is) mapped onto the window. */
-private class SkyMap(winW: Float, winH: Float) {
+internal class SkyMap(winW: Float, winH: Float) {
     private val scale = max(winW / 390f, winH / 844f)
     private val left = (winW - 390f * scale) / 2f
     private val top = (winH - 844f * scale) / 2f

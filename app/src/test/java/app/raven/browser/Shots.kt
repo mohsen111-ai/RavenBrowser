@@ -297,7 +297,7 @@ open class Shots {
                     Card {
                         WallpaperPicker(true, "moonrise", listOf("none", "snow"), thumbs, onRotate = {}, onTap = {})
                         Divider()
-                        ListRow("Moving sky", detail = "Stars twinkle and the moon breathes on the home screen", trailing = { Toggle(true, {}, "Moving sky") })
+                        ListRow("Live wallpapers", detail = "The live ones move, stars twinkle and the moon breathes, only while the home screen shows. Still with Reduce motion or Battery Saver.", trailing = { Toggle(true, {}, "Live wallpapers") })
                     }
                 }
             }
