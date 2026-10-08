@@ -1,0 +1,63 @@
+10-08 19:44:42.243   674  8400 E ActivityManager: ANR in app.raven.browser (app.raven.browser/.MainActivity)
+10-08 19:44:42.243   674  8400 E ActivityManager: PID: 6401
+10-08 19:44:42.243   674  8400 E ActivityManager: Reason: Input dispatching timed out (a5ea50f app.raven.browser/app.raven.browser.MainActivity is not responding. Waited 5000ms for FocusEvent(hasFocus=true)).
+10-08 19:44:42.243   674  8400 E ActivityManager: Parent: app.raven.browser/.MainActivity
+10-08 19:44:42.243   674  8400 E ActivityManager: ErrorId: 2ec37e5c-4800-4fba-b1da-7b019eeefd7e
+10-08 19:44:42.243   674  8400 E ActivityManager: Frozen: false
+10-08 19:44:42.243   674  8400 E ActivityManager: Load: 0.77 / 1.45 / 1.69
+10-08 19:44:42.243   674  8400 E ActivityManager: ----- Output from /proc/pressure/memory -----
+10-08 19:44:42.243   674  8400 E ActivityManager: some avg10=0.04 avg60=0.02 avg300=0.00 total=474144
+10-08 19:44:42.243   674  8400 E ActivityManager: full avg10=0.00 avg60=0.00 avg300=0.00 total=147078
+10-08 19:44:42.243   674  8400 E ActivityManager: ----- End output from /proc/pressure/memory -----
+10-08 19:44:42.243   674  8400 E ActivityManager: ----- Output from /proc/pressure/cpu -----
+10-08 19:44:42.243   674  8400 E ActivityManager: some avg10=3.56 avg60=3.10 avg300=3.61 total=76523599
+10-08 19:44:42.243   674  8400 E ActivityManager: full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+10-08 19:44:42.243   674  8400 E ActivityManager: ----- End output from /proc/pressure/cpu -----
+10-08 19:44:42.243   674  8400 E ActivityManager: ----- Output from /proc/pressure/io -----
+10-08 19:44:42.243   674  8400 E ActivityManager: some avg10=0.00 avg60=0.00 avg300=0.45 total=18987431
+10-08 19:44:42.243   674  8400 E ActivityManager: full avg10=0.00 avg60=0.00 avg300=0.10 total=5764792
+10-08 19:44:42.243   674  8400 E ActivityManager: ----- End output from /proc/pressure/io -----
+10-08 19:44:42.243   674  8400 E ActivityManager: 
+10-08 19:44:42.243   674  8400 E ActivityManager: CPU usage from 160851ms to -1ms ago (2026-10-08 19:42:00.341 to 2026-10-08 19:44:41.193):
+10-08 19:44:42.243   674  8400 E ActivityManager:   4.8% 6401/app.raven.browser: 1.5% user + 3.2% kernel / faults: 33487 minor 2 major
+10-08 19:44:42.243   674  8400 E ActivityManager:   4.1% 6479/app.raven.browser:gpu_disable_art_image_: 0.3% user + 3.7% kernel / faults: 580 minor
+10-08 19:44:42.243   674  8400 E ActivityManager:   2.7% 506/android.hardware.graphics.composer3-service.ranchu: 0.2% user + 2.4% kernel / faults: 6 minor
+10-08 19:44:42.243   674  8400 E ActivityManager:   2.6% 550/surfaceflinger: 0.8% user + 1.7% kernel / faults: 290 minor
+10-08 19:44:42.243   674  8400 E ActivityManager:   1.8% 674/system_server: 1.1% user + 0.7% kernel / faults: 16188 minor
+10-08 19:44:42.243   674  8400 E ActivityManager:   1.5% 6529/app.raven.browser:tab_disable_art_image_23: 0.9% user + 0.5% kernel / faults: 4800 minor
+10-08 19:44:42.243   674  8400 E ActivityManager:   1.1% 1595/com.google.android.inputmethod.latin: 0.8% user + 0.3% kernel / faults: 21938 minor 1 major
+10-08 19:44:42.243   674  8400 E ActivityManager:   0.7% 618/logcat: 0% user + 0.7% kernel
+10-08 19:44:42.243   674  8400 E ActivityManager:   0.7% 1098/com.android.systemui: 0.4% user + 0.2% kernel / faults: 9360 minor 1 major
+10-08 19:44:42.243   674  8400 E ActivityManager:   0.2% 495/android.hardware.media.c2@1.0-service-goldfish: 0% user + 0.1% kernel / faults: 195 minor
+--
+10-08 19:46:27.247   674  8680 E ActivityManager: ANR in app.raven.browser (app.raven.browser/.MainActivity)
+10-08 19:46:27.247   674  8680 E ActivityManager: PID: 6401
+10-08 19:46:27.247   674  8680 E ActivityManager: Reason: Input dispatching timed out (a5ea50f app.raven.browser/app.raven.browser.MainActivity is not responding. Waited 5000ms for FocusEvent(hasFocus=true)).
+10-08 19:46:27.247   674  8680 E ActivityManager: Parent: app.raven.browser/.MainActivity
+10-08 19:46:27.247   674  8680 E ActivityManager: ErrorId: be41327b-862d-4b85-9c99-5fb7aa69d87b
+10-08 19:46:27.247   674  8680 E ActivityManager: Frozen: false
+10-08 19:46:27.247   674  8680 E ActivityManager: Load: 0.22 / 1.06 / 1.52
+10-08 19:46:27.247   674  8680 E ActivityManager: ----- Output from /proc/pressure/memory -----
+10-08 19:46:27.247   674  8680 E ActivityManager: some avg10=0.08 avg60=0.02 avg300=0.00 total=512094
+10-08 19:46:27.247   674  8680 E ActivityManager: full avg10=0.00 avg60=0.00 avg300=0.00 total=152260
+10-08 19:46:27.247   674  8680 E ActivityManager: ----- End output from /proc/pressure/memory -----
+10-08 19:46:27.247   674  8680 E ActivityManager: ----- Output from /proc/pressure/cpu -----
+10-08 19:46:27.247   674  8680 E ActivityManager: some avg10=6.29 avg60=2.84 avg300=3.22 total=79245701
+10-08 19:46:27.247   674  8680 E ActivityManager: full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+10-08 19:46:27.247   674  8680 E ActivityManager: ----- End output from /proc/pressure/cpu -----
+10-08 19:46:27.247   674  8680 E ActivityManager: ----- Output from /proc/pressure/io -----
+10-08 19:46:27.247   674  8680 E ActivityManager: some avg10=0.00 avg60=0.00 avg300=0.30 total=19022076
+10-08 19:46:27.247   674  8680 E ActivityManager: full avg10=0.00 avg60=0.00 avg300=0.06 total=5782048
+10-08 19:46:27.247   674  8680 E ActivityManager: ----- End output from /proc/pressure/io -----
+10-08 19:46:27.247   674  8680 E ActivityManager: 
+10-08 19:46:27.247   674  8680 E ActivityManager: CPU usage from 104637ms to 0ms ago (2026-10-08 19:44:41.193 to 2026-10-08 19:46:25.830):
+10-08 19:46:27.247   674  8680 E ActivityManager:   4.8% 6529/app.raven.browser:tab_disable_art_image_23: 2.8% user + 2% kernel / faults: 521 minor
+10-08 19:46:27.247   674  8680 E ActivityManager:   2.3% 674/system_server: 1.2% user + 1.1% kernel / faults: 13726 minor 2 major
+10-08 19:46:27.247   674  8680 E ActivityManager:   2.1% 550/surfaceflinger: 0.2% user + 1.8% kernel / faults: 199 minor
+10-08 19:46:27.247   674  8680 E ActivityManager:   1.7% 6401/app.raven.browser: 0.7% user + 1% kernel / faults: 8755 minor 17 major
+10-08 19:46:27.247   674  8680 E ActivityManager:   1.2% 618/logcat: 0.1% user + 1.1% kernel
+10-08 19:46:27.247   674  8680 E ActivityManager:   1.2% 8196/app.raven.browser:utility_disable_art_image_: 0.6% user + 0.5% kernel / faults: 1503 minor
+10-08 19:46:27.247   674  8680 E ActivityManager:   1% 506/android.hardware.graphics.composer3-service.ranchu: 0% user + 1% kernel / faults: 2 minor
+10-08 19:46:27.247   674  8680 E ActivityManager:   1% 488/android.hardware.audio.service: 0% user + 0.9% kernel
+10-08 19:46:27.247   674  8680 E ActivityManager:   0.8% 1595/com.google.android.inputmethod.latin: 0.7% user + 0.1% kernel / faults: 16976 minor
+10-08 19:46:27.247   674  8680 E ActivityManager:   0.8% 229/logd: 0.2% user + 0.5% kernel / faults: 4941 minor
