@@ -1,0 +1,1177 @@
+10-08 11:28:46.695   670   704 I ActivityManager: Start proc 3461:app.raven.browser/u0a216 for next-top-activity {app.raven.browser/app.raven.browser.MainActivity}
+10-08 11:28:46.695   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:28:46.763   670   704 I ActivityManager: Start proc 3475:com.google.android.ext.services/u0a193 for service {com.google.android.ext.services/android.ext.services.storage.CacheQuotaServiceImpl}
+10-08 11:28:46.764   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:28:46.878   670   704 I ActivityManager: Start proc 3499:app.raven.browser:crashhelper_disable_art_image_/u0a216 for service {app.raven.browser/org.mozilla.gecko.crashhelper.CrashHelper}
+10-08 11:28:46.878   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:28:46.917   670  2820 I MediaSessionStack: addSession to bottom of stack | record: app.raven.browser/Raven/6 (userId=0)
+10-08 11:28:47.041   670   704 I ActivityManager: Start proc 3521:com.google.android.accessibility.switchaccess/u0a162 for content provider {com.google.android.accessibility.switchaccess/com.google.android.accessibility.switchaccess.systemsettings.search.SwitchAccessSearchIndexablesProvider}
+10-08 11:28:47.041   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:28:47.192   670   704 I ActivityManager: Start proc 3526:com.google.android.apps.messaging/u0a146 for content provider {com.google.android.apps.messaging/com.google.android.apps.messaging.settings.search.MessagesSearchIndexablesProvider}
+10-08 11:28:47.192   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:28:47.339   670   704 I ActivityManager: Start proc 3561:com.google.android.apps.safetyhub/u0a136 for content provider {com.google.android.apps.safetyhub/com.google.android.apps.safetyhub.platformsettings.search.EmergencySearchIndexablesProvider}
+10-08 11:28:47.339   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:28:47.364   670   704 I ActivityManager: Start proc 3573:com.google.android.healthconnect.controller/u0a209 for content provider {com.google.android.healthconnect.controller/com.android.healthconnect.controller.searchindexables.HealthConnectSearchIndexablesProvider}
+10-08 11:28:47.394   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:28:47.474   670   704 I ActivityManager: Start proc 3587:com.google.android.marvin.talkback/u0a163 for content provider {com.google.android.marvin.talkback/com.google.android.accessibility.talkback.preference.search.TalkBackSearchIndexablesProvider}
+10-08 11:28:47.476   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:28:54.334   670   704 I ActivityManager: Start proc 3846:com.google.android.apps.messaging:rcs/u0a146 for service {com.google.android.apps.messaging/com.google.android.ims.service.JibeService}
+10-08 11:28:54.334   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:28:55.658   670   704 I ActivityManager: Start proc 3928:app.raven.browser:gpu_disable_art_image_/u0a216 for service {app.raven.browser/org.mozilla.gecko.process.GeckoChildProcessServices$gpu}
+10-08 11:28:55.658   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:28:55.759   670   704 I ActivityManager: Start proc 3940:app.raven.browser:tab_disable_art_image_18/u0a216 for service {app.raven.browser/org.mozilla.gecko.process.GeckoChildProcessServices$tab18}
+10-08 11:28:55.759   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:28:57.223   670   704 I ActivityManager: Start proc 4060:com.google.android.adservices.api/u0a198 for service {com.google.android.adservices.api/com.android.adservices.common.AdServicesCommonService}
+10-08 11:28:57.223   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:29:02.143  1382  1382 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-08 11:29:02.143  1382  1382 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-08 11:29:02.197  1382  1382 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-08 11:29:02.197  1382  1382 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-08 11:29:02.501  1382  1382 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-08 11:29:02.501  1382  1382 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-08 11:29:02.573  1382  1382 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-08 11:29:02.573  1382  1382 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-08 11:29:02.614  1382  1382 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-08 11:29:02.615  1382  1382 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-08 11:29:02.787  1382  1382 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-08 11:29:02.791  1382  1382 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-08 11:29:02.837  1382  1382 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-08 11:29:02.838  1382  1382 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-08 11:29:09.164  1382  1382 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-08 11:29:09.164  1382  1382 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-08 11:29:11.783  4299  4299 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:29:11.790  4299  4299 I AndroidRuntime: Using default boot image
+10-08 11:29:11.790  4299  4299 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:29:11.974  4299  4299 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:29:13.170  4299  4299 D AndroidRuntime: Shutting down VM
+10-08 11:29:14.379  3461  3461 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-08 11:29:14.394  3461  3461 I Raven   : fullscreen: none
+10-08 11:29:17.965  1382  1382 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-08 11:29:17.965  1382  1382 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-08 11:29:19.890  1382  1382 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-08 11:29:19.893  1382  1382 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-08 11:29:34.467   670   704 I ActivityManager: Start proc 4566:com.google.android.googlequicksearchbox:googleapp/u0a147 for service {com.google.android.googlequicksearchbox/com.google.frameworks.client.data.android.server.tiktok.GoogleappProcessEndpointService}
+10-08 11:29:34.467   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:29:34.588   670   704 I ActivityManager: Start proc 4605:com.google.android.webview:webview_service/u0a166 for service {com.google.android.webview/org.chromium.android_webview.services.VariationsSeedServer}
+10-08 11:29:34.588   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:29:34.608   670   704 I ActivityManager: Start proc 4622:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0ai9000 for  {com.google.android.googlequicksearchbox/org.chromium.content.app.SandboxedProcessService0:0}
+10-08 11:29:34.608   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:29:34.709   670   704 I ActivityManager: Start proc 4661:com.google.android.webview:webview_apk/u0a166 for service {com.google.android.webview/org.chromium.android_webview.nonembedded.AwComponentUpdateService}
+10-08 11:29:34.710   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:29:49.680  4760  4760 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:29:49.683  4760  4760 I AndroidRuntime: Using default boot image
+10-08 11:29:49.683  4760  4760 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:29:49.763  4760  4760 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:29:50.801  4760  4760 D AndroidRuntime: Shutting down VM
+10-08 11:29:54.746  4781  4781 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:29:54.749  4781  4781 I AndroidRuntime: Using default boot image
+10-08 11:29:54.749  4781  4781 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:29:54.827  4781  4781 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:29:55.888  4781  4781 D AndroidRuntime: Shutting down VM
+10-08 11:29:57.835  4802  4802 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:29:57.838  4802  4802 I AndroidRuntime: Using default boot image
+10-08 11:29:57.838  4802  4802 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:29:57.919  4802  4802 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:29:58.963  4802  4802 D AndroidRuntime: Shutting down VM
+10-08 11:30:02.914  4836  4836 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:30:02.916  4836  4836 I AndroidRuntime: Using default boot image
+10-08 11:30:02.916  4836  4836 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:30:02.997  4836  4836 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:30:04.033  4836  4836 D AndroidRuntime: Shutting down VM
+10-08 11:30:04.761   670  1177 I ActivityManager: Process com.google.android.googlequicksearchbox:search (pid 1915) has died: cch+5 CEM 
+10-08 11:30:07.977  3461  3461 I Raven   : warm up: 10.0.2.2
+10-08 11:30:08.572  3461  3461 I WebExtension: releasePendingMessages: extension=helper@raven.browser nativeApp=raven session=org.mozilla.geckoview.GeckoSession@f0c5202
+10-08 11:30:08.623   670   704 I ActivityManager: Start proc 4904:app.raven.browser:tab_disable_art_image_16/u0a216 for service {app.raven.browser/org.mozilla.gecko.process.GeckoChildProcessServices$tab16}
+10-08 11:30:08.623   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:30:08.632  3461  3461 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:30:08.838  3461  3497 I GeckoSession: zerdatime 145557 - chrome startup finished
+10-08 11:30:08.865  3461  3461 D GeckoSession: handleMessage GeckoView:PageStart uri=about:blank
+10-08 11:30:08.866  3461  3461 D GeckoSession: handleMessage GeckoView:LocationChange uri=about:blank
+10-08 11:30:08.867  3461  3461 D GeckoSession: handleMessage GeckoView:PageStop uri=null
+10-08 11:30:08.888  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:08.888  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:08.888  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:08.888  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:08.943  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:08.943  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:08.943  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:08.943  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:08.982  3461  3461 I Raven   : screen: page unlocks the orientation
+10-08 11:30:08.986  3461  3461 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:30:08.989  3461  3461 D GeckoSession: handleMessage GeckoView:PageStart uri=http://10.0.2.2:8000/long.html
+10-08 11:30:09.033  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:09.033  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:09.053  3461  3461 D GeckoSession: handleMessage GeckoView:LocationChange uri=http://10.0.2.2:8000/long.html
+10-08 11:30:09.054  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:09.054  3461  3461 D GeckoSession: handleMessage GeckoView:SecurityChanged uri=null
+10-08 11:30:09.055  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:09.056  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:09.227  3461  3461 D WebExtension: handleMessage GeckoView:WebExtension:Connect
+10-08 11:30:09.227  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:09.227  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:09.227  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:09.227  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:09.228  3461  3461 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:30:09.229  3461  3461 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:30:09.229  3461  3461 D GeckoSession: handleMessage GeckoView:PageStop uri=null
+10-08 11:30:09.229  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:09.229  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:09.229  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:09.229  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:09.229  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:09.229  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:09.229  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:09.229  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:11.550   670   729 I ActivityManager: Killing 3278:com.google.android.settings.intelligence/u0a137 (adj 250): change com.google.android.settings.intelligence
+10-08 11:30:11.856   670   704 I ActivityManager: Start proc 4984:com.google.android.settings.intelligence/u0a137 for content provider {com.google.android.settings.intelligence/com.google.android.settings.intelligence.modules.gmscoreproxy.impl.PhenotypeProxyContentProvider}
+10-08 11:30:11.856   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:30:12.721   670   704 I ActivityManager: Start proc 5059:com.google.android.googlequicksearchbox:search/u0a147 for content provider {com.google.android.googlequicksearchbox/com.google.android.apps.gsa.assistant.settings.search.AssistantSettingsProvider}
+10-08 11:30:12.722   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:30:14.647  5271  5271 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:30:14.651  5271  5271 I AndroidRuntime: Using default boot image
+10-08 11:30:14.651  5271  5271 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:30:14.732  5271  5271 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:30:15.914  5271  5271 D AndroidRuntime: Shutting down VM
+10-08 11:30:19.116  3461  3461 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:30:19.178  5302  5302 I RavenTest: away r01
+10-08 11:30:22.483  3461  3461 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:30:22.483  3461  3461 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:30:22.488  3461  3461 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:30:26.384  5349  5349 I RavenTest: back r01
+10-08 11:30:29.473  5357  5357 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:30:29.476  5357  5357 I AndroidRuntime: Using default boot image
+10-08 11:30:29.476  5357  5357 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:30:29.557  5357  5357 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:30:30.590  5357  5357 D AndroidRuntime: Shutting down VM
+10-08 11:30:31.516  3461  3461 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-08 11:30:31.526  3461  3461 I Raven   : screen: page unlocks the orientation
+10-08 11:30:31.993  3461  3461 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:30:40.292  5406  5406 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:30:40.295  5406  5406 I AndroidRuntime: Using default boot image
+10-08 11:30:40.295  5406  5406 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:30:40.375  5406  5406 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:30:41.474  5406  5406 D AndroidRuntime: Shutting down VM
+10-08 11:30:42.421  3461  3461 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:30:45.426  5428  5428 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:30:45.429  5428  5428 I AndroidRuntime: Using default boot image
+10-08 11:30:45.429  5428  5428 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:30:45.507  5428  5428 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:30:46.536  5428  5428 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@9a16; boundsInParent: Rect(0, 0 - 320, 514); boundsInScreen: Rect(0, 102 - 320, 616); boundsInWindow: Rect(0, 102 - 320, 616); packageName: app.raven.browser; className: android.webkit.WebView; text: Raven long page; error: null; maxTextLength: -1; stateDescription: null; contentDescription: ; tooltipText: null; containerTitle: ; viewIdResName: ; uniqueId: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: true; granularScrollingSupported: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_CLEAR_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_NEXT_HTML_ELEMENT - null, AccessibilityAction: ACTION_PREVIOUS_HTML_ELEMENT - null, AccessibilityAction: ACTION_SCROLL_FORWARD - null, AccessibilityAction: ACTION_SCROLL_BACKWARD - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]; isTextSelectable: false
+10-08 11:30:46.550  5428  5428 D AndroidRuntime: Shutting down VM
+10-08 11:30:48.492  5448  5448 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:30:48.494  5448  5448 I AndroidRuntime: Using default boot image
+10-08 11:30:48.494  5448  5448 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:30:48.572  5448  5448 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:30:49.607  5448  5448 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@9a24; boundsInParent: Rect(0, 0 - 320, 514); boundsInScreen: Rect(0, 102 - 320, 616); boundsInWindow: Rect(0, 102 - 320, 616); packageName: app.raven.browser; className: android.webkit.WebView; text: Raven long page; error: null; maxTextLength: -1; stateDescription: null; contentDescription: ; tooltipText: null; containerTitle: ; viewIdResName: ; uniqueId: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: true; granularScrollingSupported: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_CLEAR_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_NEXT_HTML_ELEMENT - null, AccessibilityAction: ACTION_PREVIOUS_HTML_ELEMENT - null, AccessibilityAction: ACTION_SCROLL_FORWARD - null, AccessibilityAction: ACTION_SCROLL_BACKWARD - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]; isTextSelectable: false
+10-08 11:30:49.622  5448  5448 D AndroidRuntime: Shutting down VM
+10-08 11:30:53.562  5470  5470 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:30:53.565  5470  5470 I AndroidRuntime: Using default boot image
+10-08 11:30:53.565  5470  5470 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:30:53.643  5470  5470 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:30:54.696  5470  5470 D AndroidRuntime: Shutting down VM
+10-08 11:30:55.604  3461  3461 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:30:58.576  3461  3461 I Raven   : warm up: 10.0.2.2
+10-08 11:30:59.207  3461  3461 I WebExtension: releasePendingMessages: extension=helper@raven.browser nativeApp=raven session=org.mozilla.geckoview.GeckoSession@e715ea6
+10-08 11:30:59.226  3461  3497 I GeckoSession: zerdatime 195946 - chrome startup finished
+10-08 11:30:59.234  3461  3461 D GeckoSession: handleMessage GeckoView:PageStart uri=about:blank
+10-08 11:30:59.234  3461  3461 D GeckoSession: handleMessage GeckoView:LocationChange uri=about:blank
+10-08 11:30:59.234  3461  3461 D GeckoSession: handleMessage GeckoView:PageStop uri=null
+10-08 11:30:59.235  3461  3461 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:30:59.242  3461  3461 I Raven   : screen: page unlocks the orientation
+10-08 11:30:59.256  3461  3461 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:30:59.256  3461  3461 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:30:59.256  3461  3461 D GeckoSession: handleMessage GeckoView:PageStart uri=http://10.0.2.2:8000/jar.html
+10-08 11:30:59.257  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:59.257  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:59.272  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:59.272  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:59.304  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:59.305  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:59.305  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:59.306  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:59.751  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:59.751  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:59.751  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:59.751  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:59.755  3461  3461 D GeckoSession: handleMessage GeckoView:LocationChange uri=http://10.0.2.2:8000/jar.html
+10-08 11:30:59.755  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:59.755  3461  3461 D GeckoSession: handleMessage GeckoView:SecurityChanged uri=null
+10-08 11:30:59.765  3461  3461 D WebExtension: handleMessage GeckoView:WebExtension:Connect
+10-08 11:30:59.770  3461  3461 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:30:59.770  3461  3461 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:30:59.771  3461  3461 D GeckoSession: handleMessage GeckoView:PageStop uri=null
+10-08 11:30:59.807  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:59.809  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:59.809  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:30:59.809  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:05.275  5518  5518 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:31:05.278  5518  5518 I AndroidRuntime: Using default boot image
+10-08 11:31:05.278  5518  5518 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:31:05.358  5518  5518 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:31:06.390  5518  5518 D AndroidRuntime: Shutting down VM
+10-08 11:31:07.308  5533  5533 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:31:07.311  5533  5533 I AndroidRuntime: Using default boot image
+10-08 11:31:07.311  5533  5533 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:31:07.390  5533  5533 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:31:08.420  5533  5533 D AndroidRuntime: Shutting down VM
+10-08 11:31:09.363  3461  3461 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:31:12.368  5554  5554 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:31:12.371  5554  5554 I AndroidRuntime: Using default boot image
+10-08 11:31:12.371  5554  5554 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:31:12.452  5554  5554 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:31:13.485  5554  5554 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@9a4f; boundsInParent: Rect(0, 0 - 320, 514); boundsInScreen: Rect(0, 102 - 320, 616); boundsInWindow: Rect(0, 102 - 320, 616); packageName: app.raven.browser; className: android.webkit.WebView; text: Raven cookie jar test; error: null; maxTextLength: -1; stateDescription: null; contentDescription: ; tooltipText: null; containerTitle: ; viewIdResName: ; uniqueId: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; granularScrollingSupported: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_CLEAR_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_NEXT_HTML_ELEMENT - null, AccessibilityAction: ACTION_PREVIOUS_HTML_ELEMENT - null, AccessibilityAction: ACTION_SCROLL_FORWARD - null, AccessibilityAction: ACTION_SCROLL_BACKWARD - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]; isTextSelectable: false
+10-08 11:31:13.501  5554  5554 D AndroidRuntime: Shutting down VM
+10-08 11:31:15.463  5608  5608 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:31:15.466  5608  5608 I AndroidRuntime: Using default boot image
+10-08 11:31:15.466  5608  5608 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:31:15.546  5608  5608 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:31:16.588  5608  5608 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@9a59; boundsInParent: Rect(0, 0 - 320, 514); boundsInScreen: Rect(0, 102 - 320, 616); boundsInWindow: Rect(0, 102 - 320, 616); packageName: app.raven.browser; className: android.webkit.WebView; text: Raven cookie jar test; error: null; maxTextLength: -1; stateDescription: null; contentDescription: ; tooltipText: null; containerTitle: ; viewIdResName: ; uniqueId: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; granularScrollingSupported: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_CLEAR_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_NEXT_HTML_ELEMENT - null, AccessibilityAction: ACTION_PREVIOUS_HTML_ELEMENT - null, AccessibilityAction: ACTION_SCROLL_FORWARD - null, AccessibilityAction: ACTION_SCROLL_BACKWARD - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]; isTextSelectable: false
+10-08 11:31:16.603  5608  5608 D AndroidRuntime: Shutting down VM
+10-08 11:31:20.546  5643  5643 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:31:20.549  5643  5643 I AndroidRuntime: Using default boot image
+10-08 11:31:20.549  5643  5643 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:31:20.631  5643  5643 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:31:21.665  5643  5643 D AndroidRuntime: Shutting down VM
+10-08 11:31:22.572  3461  3461 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:31:26.225  3461  3461 I WebExtension: releasePendingMessages: extension=helper@raven.browser nativeApp=raven session=org.mozilla.geckoview.GeckoSession@cfdccc8
+10-08 11:31:26.244  3461  3497 I GeckoSession: zerdatime 222963 - chrome startup finished
+10-08 11:31:26.251  3461  3461 D GeckoSession: handleMessage GeckoView:PageStart uri=about:blank
+10-08 11:31:26.251  3461  3461 D GeckoSession: handleMessage GeckoView:LocationChange uri=about:blank
+10-08 11:31:26.251  3461  3461 D GeckoSession: handleMessage GeckoView:PageStop uri=null
+10-08 11:31:26.251  3461  3461 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:31:26.276  3461  3461 I Raven   : screen: page unlocks the orientation
+10-08 11:31:26.276  3461  3461 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:31:26.276  3461  3461 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:31:26.276  3461  3461 D GeckoSession: handleMessage GeckoView:PageStart uri=http://10.0.2.2:8000/jar.html
+10-08 11:31:26.294  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:26.295  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:26.295  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:26.295  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:26.315  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:26.316  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:26.317  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:26.318  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:26.776  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:26.777  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:26.777  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:26.777  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:26.781  3461  3461 D GeckoSession: handleMessage GeckoView:LocationChange uri=http://10.0.2.2:8000/jar.html
+10-08 11:31:26.782  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:26.782  3461  3461 D GeckoSession: handleMessage GeckoView:SecurityChanged uri=null
+10-08 11:31:26.796  3461  3461 D WebExtension: handleMessage GeckoView:WebExtension:Connect
+10-08 11:31:26.797  3461  3461 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:31:26.798  3461  3461 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:31:26.798  3461  3461 D GeckoSession: handleMessage GeckoView:PageStop uri=null
+10-08 11:31:26.829  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:26.829  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:26.829  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:26.829  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:32.298  5675  5675 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:31:32.301  5675  5675 I AndroidRuntime: Using default boot image
+10-08 11:31:32.301  5675  5675 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:31:32.381  5675  5675 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:31:33.424  5675  5675 D AndroidRuntime: Shutting down VM
+10-08 11:31:34.342  5692  5692 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:31:34.344  5692  5692 I AndroidRuntime: Using default boot image
+10-08 11:31:34.344  5692  5692 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:31:34.424  5692  5692 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:31:35.459  5692  5692 D AndroidRuntime: Shutting down VM
+10-08 11:31:36.396  3461  3461 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:31:39.410  5713  5713 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:31:39.413  5713  5713 I AndroidRuntime: Using default boot image
+10-08 11:31:39.413  5713  5713 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:31:39.492  5713  5713 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:31:40.353   670   704 I ActivityManager: Start proc 5727:com.google.android.apps.photos/u0a159 for content provider {com.google.android.apps.photos/com.google.android.apps.photos.cloudpicker.CloudMediaProviderWrapper}
+10-08 11:31:40.353   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:31:40.528  5713  5713 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@9a78; boundsInParent: Rect(0, 0 - 320, 514); boundsInScreen: Rect(0, 102 - 320, 616); boundsInWindow: Rect(0, 102 - 320, 616); packageName: app.raven.browser; className: android.webkit.WebView; text: Raven cookie jar test; error: null; maxTextLength: -1; stateDescription: null; contentDescription: ; tooltipText: null; containerTitle: ; viewIdResName: ; uniqueId: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; granularScrollingSupported: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_CLEAR_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_NEXT_HTML_ELEMENT - null, AccessibilityAction: ACTION_PREVIOUS_HTML_ELEMENT - null, AccessibilityAction: ACTION_SCROLL_FORWARD - null, AccessibilityAction: ACTION_SCROLL_BACKWARD - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]; isTextSelectable: false
+10-08 11:31:40.537  5713  5713 D AndroidRuntime: Shutting down VM
+10-08 11:31:41.609  1382  1382 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-08 11:31:41.610  1382  1382 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-08 11:31:42.482  5786  5786 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:31:42.485  5786  5786 I AndroidRuntime: Using default boot image
+10-08 11:31:42.485  5786  5786 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:31:42.567  5786  5786 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:31:43.611  5786  5786 D AndroidRuntime: Shutting down VM
+10-08 11:31:47.558  5808  5808 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:31:47.561  5808  5808 I AndroidRuntime: Using default boot image
+10-08 11:31:47.561  5808  5808 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:31:47.638  5808  5808 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:31:48.675  5808  5808 D AndroidRuntime: Shutting down VM
+10-08 11:31:49.575  3461  3461 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:31:52.474  3461  3461 I Raven   : warm up: 10.0.2.2
+10-08 11:31:53.088  3461  3461 I WebExtension: releasePendingMessages: extension=helper@raven.browser nativeApp=raven session=org.mozilla.geckoview.GeckoSession@2591c6d
+10-08 11:31:53.112  3461  3497 I GeckoSession: zerdatime 249832 - chrome startup finished
+10-08 11:31:53.117  3461  3461 D GeckoSession: handleMessage GeckoView:PageStart uri=about:blank
+10-08 11:31:53.117  3461  3461 D GeckoSession: handleMessage GeckoView:LocationChange uri=about:blank
+10-08 11:31:53.117  3461  3461 D GeckoSession: handleMessage GeckoView:PageStop uri=null
+10-08 11:31:53.118  3461  3461 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:31:53.132  3461  3461 I Raven   : screen: page unlocks the orientation
+10-08 11:31:53.142  3461  3461 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:31:53.142  3461  3461 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:31:53.142  3461  3461 D GeckoSession: handleMessage GeckoView:PageStart uri=http://10.0.2.2:8000/jar.html
+10-08 11:31:53.142  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:53.142  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:53.142  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:53.143  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:53.163  3461  3461 D GeckoSession: handleMessage GeckoView:LocationChange uri=http://10.0.2.2:8000/jar.html
+10-08 11:31:53.163  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:53.164  3461  3461 D GeckoSession: handleMessage GeckoView:SecurityChanged uri=null
+10-08 11:31:53.170  3461  3461 D WebExtension: handleMessage GeckoView:WebExtension:Connect
+10-08 11:31:53.177  3461  3461 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:31:53.182  3461  3461 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:31:53.182  3461  3461 D GeckoSession: handleMessage GeckoView:PageStop uri=null
+10-08 11:31:53.196  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:53.196  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:53.196  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:53.196  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:53.244  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:53.245  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:53.246  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:53.246  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:31:59.166  5845  5845 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:31:59.169  5845  5845 I AndroidRuntime: Using default boot image
+10-08 11:31:59.169  5845  5845 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:31:59.247  5845  5845 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:32:00.279  5845  5845 D AndroidRuntime: Shutting down VM
+10-08 11:32:01.201  5860  5860 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:32:01.204  5860  5860 I AndroidRuntime: Using default boot image
+10-08 11:32:01.204  5860  5860 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:32:01.288  5860  5860 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:32:02.321  5860  5860 D AndroidRuntime: Shutting down VM
+10-08 11:32:03.265  3461  3461 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:32:06.272  5881  5881 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:32:06.275  5881  5881 I AndroidRuntime: Using default boot image
+10-08 11:32:06.275  5881  5881 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:32:06.354  5881  5881 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:32:07.387  5881  5881 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@9aae; boundsInParent: Rect(0, 0 - 320, 514); boundsInScreen: Rect(0, 102 - 320, 616); boundsInWindow: Rect(0, 102 - 320, 616); packageName: app.raven.browser; className: android.webkit.WebView; text: Raven cookie jar test; error: null; maxTextLength: -1; stateDescription: null; contentDescription: ; tooltipText: null; containerTitle: ; viewIdResName: ; uniqueId: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; granularScrollingSupported: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_CLEAR_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_NEXT_HTML_ELEMENT - null, AccessibilityAction: ACTION_PREVIOUS_HTML_ELEMENT - null, AccessibilityAction: ACTION_SCROLL_FORWARD - null, AccessibilityAction: ACTION_SCROLL_BACKWARD - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]; isTextSelectable: false
+10-08 11:32:07.406  5881  5881 D AndroidRuntime: Shutting down VM
+10-08 11:32:09.346  5901  5901 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:32:09.349  5901  5901 I AndroidRuntime: Using default boot image
+10-08 11:32:09.349  5901  5901 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:32:09.427  5901  5901 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:32:10.473  5901  5901 D AndroidRuntime: Shutting down VM
+10-08 11:32:14.416  5922  5922 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:32:14.419  5922  5922 I AndroidRuntime: Using default boot image
+10-08 11:32:14.419  5922  5922 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:32:14.498  5922  5922 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:32:15.539  5922  5922 D AndroidRuntime: Shutting down VM
+10-08 11:32:16.439  3461  3461 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:32:20.078  3461  3461 I WebExtension: releasePendingMessages: extension=helper@raven.browser nativeApp=raven session=org.mozilla.geckoview.GeckoSession@f21b15c
+10-08 11:32:20.099  3461  3497 I GeckoSession: zerdatime 276818 - chrome startup finished
+10-08 11:32:20.104  3461  3461 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:32:20.104  3461  3461 D GeckoSession: handleMessage GeckoView:PageStart uri=about:blank
+10-08 11:32:20.104  3461  3461 D GeckoSession: handleMessage GeckoView:LocationChange uri=about:blank
+10-08 11:32:20.104  3461  3461 D GeckoSession: handleMessage GeckoView:PageStop uri=null
+10-08 11:32:20.112  3461  3461 I Raven   : screen: page unlocks the orientation
+10-08 11:32:20.127  3461  3461 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:32:20.128  3461  3461 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:32:20.128  3461  3461 D GeckoSession: handleMessage GeckoView:PageStart uri=http://10.0.2.2:8000/long.html
+10-08 11:32:20.141  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:32:20.141  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:32:20.141  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:32:20.141  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:32:20.166  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:32:20.166  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:32:20.174  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:32:20.174  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:32:20.630  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:32:20.630  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:32:20.630  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:32:20.630  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:32:20.636  3461  3461 D GeckoSession: handleMessage GeckoView:LocationChange uri=http://10.0.2.2:8000/long.html
+10-08 11:32:20.637  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:32:20.637  3461  3461 D GeckoSession: handleMessage GeckoView:SecurityChanged uri=null
+10-08 11:32:20.644  3461  3461 D WebExtension: handleMessage GeckoView:WebExtension:Connect
+10-08 11:32:20.646  3461  3461 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:32:20.649  3461  3461 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:32:20.649  3461  3461 D GeckoSession: handleMessage GeckoView:PageStop uri=null
+10-08 11:32:20.682  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:32:20.682  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:32:20.683  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:32:20.683  3461  3461 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:32:26.151  5958  5958 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:32:26.154  5958  5958 I AndroidRuntime: Using default boot image
+10-08 11:32:26.154  5958  5958 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:32:26.233  5958  5958 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:32:27.331  5958  5958 D AndroidRuntime: Shutting down VM
+10-08 11:32:28.220  5976  5976 I RavenTest: away r02
+10-08 11:32:28.412   670   703 I ActivityManager: Killing 1903:android.process.acore/u0a96 (adj 905): Sync transaction while frozen
+10-08 11:32:28.437   670  2171 I ActivityManager: Process android.process.acore (pid 1903) early provider death
+10-08 11:32:30.650  3461  3461 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:32:31.459  3461  3461 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:32:31.462  3461  3461 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:32:31.473  3461  3461 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:32:35.441  3461  3497 E GeckoConsole: [JavaScript Error: "TypeError: can't access property "WindowEventDispatcher", win is null" {file: "resource://gre/modules/GeckoViewSessionStore.sys.mjs" line: 149}]
+10-08 11:32:35.441  3461  3497 E GeckoConsole: onTabStateUpdate@resource://gre/modules/GeckoViewSessionStore.sys.mjs:149:5
+10-08 11:32:35.441  3461  3497 E GeckoConsole: updateSessionStoreFromTabListener@resource://gre/modules/GeckoViewSessionStore.sys.mjs:241:10
+10-08 11:32:35.444  3461  3497 E GeckoConsole: [JavaScript Error: "TypeError: can't access property "WindowEventDispatcher", win is null" {file: "resource://gre/modules/GeckoViewSessionStore.sys.mjs" line: 149}]
+10-08 11:32:35.444  3461  3497 E GeckoConsole: onTabStateUpdate@resource://gre/modules/GeckoViewSessionStore.sys.mjs:149:5
+10-08 11:32:35.444  3461  3497 E GeckoConsole: updateSessionStoreFromTabListener@resource://gre/modules/GeckoViewSessionStore.sys.mjs:241:10
+10-08 11:32:35.447  3461  3497 E GeckoConsole: [JavaScript Error: "TypeError: can't access property "WindowEventDispatcher", win is null" {file: "resource://gre/modules/GeckoViewSessionStore.sys.mjs" line: 149}]
+10-08 11:32:35.447  3461  3497 E GeckoConsole: onTabStateUpdate@resource://gre/modules/GeckoViewSessionStore.sys.mjs:149:5
+10-08 11:32:35.447  3461  3497 E GeckoConsole: updateSessionStoreFromTabListener@resource://gre/modules/GeckoViewSessionStore.sys.mjs:241:10
+10-08 11:32:35.448  3461  3497 E GeckoConsole: [JavaScript Error: "TypeError: can't access property "WindowEventDispatcher", win is null" {file: "resource://gre/modules/GeckoViewSessionStore.sys.mjs" line: 149}]
+10-08 11:32:35.448  3461  3497 E GeckoConsole: onTabStateUpdate@resource://gre/modules/GeckoViewSessionStore.sys.mjs:149:5
+10-08 11:32:35.448  3461  3497 E GeckoConsole: updateSessionStoreFromTabListener@resource://gre/modules/GeckoViewSessionStore.sys.mjs:241:10
+10-08 11:32:38.458  6021  6021 I RavenTest: back r02
+10-08 11:32:41.548  6032  6032 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:32:41.551  6032  6032 I AndroidRuntime: Using default boot image
+10-08 11:32:41.551  6032  6032 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:32:41.630  6032  6032 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:32:42.660  6032  6032 D AndroidRuntime: Shutting down VM
+10-08 11:32:44.533  3461  3461 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-08 11:32:44.534  3461  3461 I Raven   : screen: page unlocks the orientation
+10-08 11:32:44.556  3461  3461 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:32:52.450  6080  6080 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:32:52.453  6080  6080 I AndroidRuntime: Using default boot image
+10-08 11:32:52.453  6080  6080 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:32:52.540  6080  6080 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:32:53.629  6080  6080 D AndroidRuntime: Shutting down VM
+10-08 11:32:54.805  3461  3461 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:32:57.696  3461  3461 I Raven   : screen: page unlocks the orientation
+10-08 11:32:59.725  6118  6118 I RavenTest: away r03
+10-08 11:33:02.985  3461  3461 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:33:02.990  3461  3461 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:33:03.004  3461  3461 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:33:06.923  6139  6139 I RavenTest: back r03
+10-08 11:33:10.010  6148  6148 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:33:10.013  6148  6148 I AndroidRuntime: Using default boot image
+10-08 11:33:10.013  6148  6148 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:33:10.094  6148  6148 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:33:11.129  6148  6148 D AndroidRuntime: Shutting down VM
+10-08 11:33:12.064  3461  3461 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-08 11:33:12.064  3461  3461 I Raven   : screen: page unlocks the orientation
+10-08 11:33:12.121  3461  3461 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:33:20.834  6195  6195 I RavenTest: away r04
+10-08 11:33:24.120  3461  3461 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:33:24.130  3461  3461 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:33:24.146  3461  3461 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:33:28.055  6235  6235 I RavenTest: back r04
+10-08 11:33:31.145  6244  6244 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:33:31.148  6244  6244 I AndroidRuntime: Using default boot image
+10-08 11:33:31.148  6244  6244 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:33:31.227  6244  6244 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:33:32.272  6244  6244 D AndroidRuntime: Shutting down VM
+10-08 11:33:33.235  3461  3461 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-08 11:33:33.238  3461  3461 I Raven   : screen: page unlocks the orientation
+10-08 11:33:33.279  3461  3461 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:33:42.003  6289  6289 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:33:42.005  6289  6289 I AndroidRuntime: Using default boot image
+10-08 11:33:42.006  6289  6289 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:33:42.093  6289  6289 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:33:43.181  6289  6289 D AndroidRuntime: Shutting down VM
+10-08 11:33:44.119  3461  3461 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:33:45.976  1382  1382 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-08 11:33:45.977  1382  1382 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-08 11:33:47.096  6337  6337 I RavenTest: away r05
+10-08 11:33:50.359  3461  3461 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:33:50.359  3461  3461 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:33:50.399  3461  3461 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:33:54.296  6361  6361 I RavenTest: back r05
+10-08 11:33:57.389  6369  6369 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:33:57.392  6369  6369 I AndroidRuntime: Using default boot image
+10-08 11:33:57.392  6369  6369 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:33:57.473  6369  6369 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:33:58.506  6369  6369 D AndroidRuntime: Shutting down VM
+10-08 11:33:59.531  3461  3461 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-08 11:33:59.538  3461  3461 I Raven   : screen: page unlocks the orientation
+10-08 11:33:59.546  3461  3461 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:33:59.616  3461  3461 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:34:08.313  3461  3461 I Raven   : screen: page unlocks the orientation
+10-08 11:34:10.328  6428  6428 I RavenTest: away r06
+10-08 11:34:13.632  3461  3461 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:34:13.632  3461  3461 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:34:13.644  3461  3461 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:34:17.541   670  2822 I ActivityManager: Killing 4904:app.raven.browser:tab_disable_art_image_16/u0a216 (adj 900): kill background
+10-08 11:34:17.542   670  2822 I ActivityManager: Killing 3940:app.raven.browser:tab_disable_art_image_18/u0a216 (adj 700): kill background
+10-08 11:34:17.544   670  2822 I ActivityManager: Killing 3461:app.raven.browser/u0a216 (adj 700): kill background
+10-08 11:34:17.547   670  2822 I ActivityManager: Killing 3499:app.raven.browser:crashhelper_disable_art_image_/u0a216 (adj 0): kill background
+10-08 11:34:17.547   670  2822 I ActivityManager: Killing 3928:app.raven.browser:gpu_disable_art_image_/u0a216 (adj 0): kill background
+10-08 11:34:17.575   670  1958 I MediaSessionStack: removeSession | record: app.raven.browser/Raven/6 (userId=0)
+10-08 11:34:17.576   670  1958 D MediaSessionService: destroySessionLocked: record=app.raven.browser/Raven/6 (userId=0)
+10-08 11:34:20.600  6456  6456 I RavenTest: back r06
+10-08 11:34:23.699  6464  6464 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:34:23.702  6464  6464 I AndroidRuntime: Using default boot image
+10-08 11:34:23.702  6464  6464 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:34:23.787  6464  6464 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:34:24.829  6464  6464 D AndroidRuntime: Shutting down VM
+10-08 11:34:25.720   670   704 I ActivityManager: Start proc 6486:app.raven.browser/u0a216 for next-top-activity {app.raven.browser/app.raven.browser.MainActivity}
+10-08 11:34:25.721   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:34:25.780   670   704 I ActivityManager: Start proc 6505:app.raven.browser:crashhelper_disable_art_image_/u0a216 for service {app.raven.browser/org.mozilla.gecko.crashhelper.CrashHelper}
+10-08 11:34:25.780   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:34:25.807   670  1958 I MediaSessionStack: addSession to bottom of stack | record: app.raven.browser/Raven/7 (userId=0)
+10-08 11:34:26.216   670   704 I ActivityManager: Start proc 6564:app.raven.browser:gpu_disable_art_image_/u0a216 for service {app.raven.browser/org.mozilla.gecko.process.GeckoChildProcessServices$gpu}
+10-08 11:34:26.216   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:34:26.947  6486  6486 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-08 11:34:26.949  6486  6486 I Raven   : fullscreen: none
+10-08 11:34:26.994  6486  6486 D WebExtension: handleMessage GeckoView:WebExtension:OnReady
+10-08 11:34:27.019  6486  6486 I WebExtension: releasePendingMessages: extension=helper@raven.browser nativeApp=raven session=org.mozilla.geckoview.GeckoSession@f4344d
+10-08 11:34:27.025  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:34:27.026  6486  6486 D WebExtension: handleMessage GeckoView:WebExtension:OnReady
+10-08 11:34:27.053   670   704 I ActivityManager: Start proc 6611:app.raven.browser:tab_disable_art_image_27/u0a216 for service {app.raven.browser/org.mozilla.gecko.process.GeckoChildProcessServices$tab27}
+10-08 11:34:27.053   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:34:27.106  6486  6504 I GeckoSession: zerdatime 403826 - chrome startup finished
+10-08 11:34:27.126  6486  6486 D GeckoSession: handleMessage GeckoView:PageStart uri=about:blank
+10-08 11:34:27.128  6486  6486 D GeckoSession: handleMessage GeckoView:LocationChange uri=about:blank
+10-08 11:34:27.129  6486  6486 D GeckoSession: handleMessage GeckoView:PageStop uri=null
+10-08 11:34:27.130  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:34:27.130  6486  6486 D WebExtension: handleMessage GeckoView:WebExtension:OnDisabling
+10-08 11:34:27.177   670   704 I ActivityManager: Start proc 6645:app.raven.browser:tab_disable_art_image_34/u0a216 for service {app.raven.browser/org.mozilla.gecko.process.GeckoChildProcessServices$tab34}
+10-08 11:34:27.178   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:34:27.233  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:34:27.235  6486  6486 D WebExtension: handleMessage GeckoView:WebExtension:OnDisabled
+10-08 11:34:27.235  6486  6486 D WebExtension: handleMessage GeckoView:WebExtension:OnEnabling
+10-08 11:34:27.238  6486  6486 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:34:27.238  6486  6486 D GeckoSession: handleMessage GeckoView:PageStart uri=http://10.0.2.2:8000/long.html
+10-08 11:34:27.239  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:34:27.280  6486  6486 D WebExtension: handleMessage GeckoView:WebExtension:OnEnabled
+10-08 11:34:27.281  6486  6486 D WebExtension: handleMessage GeckoView:WebExtension:OnReady
+10-08 11:34:27.536  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:34:27.536  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:34:27.540  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:34:27.541  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:34:27.541  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:34:27.738  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:34:27.738  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:34:27.738  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:34:27.745  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:34:27.745  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:34:27.745  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:34:27.745  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:34:27.762  6486  6486 D GeckoSession: handleMessage GeckoView:LocationChange uri=http://10.0.2.2:8000/long.html
+10-08 11:34:27.762  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:34:27.762  6486  6486 D GeckoSession: handleMessage GeckoView:SecurityChanged uri=null
+10-08 11:34:27.781  6486  6486 D WebExtension: handleMessage GeckoView:WebExtension:Connect
+10-08 11:34:27.784  6486  6486 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:34:27.791  6486  6486 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:34:27.793  6486  6486 D GeckoSession: handleMessage GeckoView:PageStop uri=null
+10-08 11:34:27.824  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:34:27.825  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:34:27.826  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:34:27.826  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:34:37.791  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:34:54.580  6758  6758 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:34:54.582  6758  6758 I AndroidRuntime: Using default boot image
+10-08 11:34:54.583  6758  6758 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:34:54.662  6758  6758 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:34:55.766  6758  6758 D AndroidRuntime: Shutting down VM
+10-08 11:34:56.937  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:34:59.715  6779  6779 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:34:59.718  6779  6779 I AndroidRuntime: Using default boot image
+10-08 11:34:59.718  6779  6779 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:34:59.797  6779  6779 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:35:00.767   670   704 I ActivityManager: Start proc 6797:android.process.acore/u0a96 for content provider {com.android.providers.contacts/com.android.providers.contacts.VoicemailContentProvider}
+10-08 11:35:00.767   670   704 I ActivityManager: ProcessObserver broadcast disabled
+10-08 11:35:00.843  6779  6779 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@93a1; boundsInParent: Rect(0, 0 - 320, 514); boundsInScreen: Rect(0, 102 - 320, 616); boundsInWindow: Rect(0, 102 - 320, 616); packageName: app.raven.browser; className: android.webkit.WebView; text: Raven long page; error: null; maxTextLength: -1; stateDescription: null; contentDescription: ; tooltipText: null; containerTitle: ; viewIdResName: ; uniqueId: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: true; granularScrollingSupported: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_NEXT_HTML_ELEMENT - null, AccessibilityAction: ACTION_PREVIOUS_HTML_ELEMENT - null, AccessibilityAction: ACTION_SCROLL_FORWARD - null, AccessibilityAction: ACTION_SCROLL_BACKWARD - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]; isTextSelectable: false
+10-08 11:35:00.878  6779  6779 D AndroidRuntime: Shutting down VM
+10-08 11:35:02.822  6827  6827 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:35:02.825  6827  6827 I AndroidRuntime: Using default boot image
+10-08 11:35:02.826  6827  6827 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:35:02.903  6827  6827 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:35:03.944  6827  6827 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@93ac; boundsInParent: Rect(0, 0 - 320, 514); boundsInScreen: Rect(0, 102 - 320, 616); boundsInWindow: Rect(0, 102 - 320, 616); packageName: app.raven.browser; className: android.webkit.WebView; text: Raven long page; error: null; maxTextLength: -1; stateDescription: null; contentDescription: ; tooltipText: null; containerTitle: ; viewIdResName: ; uniqueId: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: true; granularScrollingSupported: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_NEXT_HTML_ELEMENT - null, AccessibilityAction: ACTION_PREVIOUS_HTML_ELEMENT - null, AccessibilityAction: ACTION_SCROLL_FORWARD - null, AccessibilityAction: ACTION_SCROLL_BACKWARD - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]; isTextSelectable: false
+10-08 11:35:03.969  6827  6827 D AndroidRuntime: Shutting down VM
+10-08 11:35:08.898  6859  6859 I RavenTest: away r07
+10-08 11:35:12.196  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:35:12.197  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:35:16.152  6884  6884 I RavenTest: back r07
+10-08 11:35:19.240  6892  6892 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:35:19.243  6892  6892 I AndroidRuntime: Using default boot image
+10-08 11:35:19.243  6892  6892 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:35:19.321  6892  6892 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:35:20.354  6892  6892 D AndroidRuntime: Shutting down VM
+10-08 11:35:21.306  6486  6486 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-08 11:35:21.310  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:35:30.163  6937  6937 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:35:30.167  6937  6937 I AndroidRuntime: Using default boot image
+10-08 11:35:30.167  6937  6937 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:35:30.245  6937  6937 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:35:31.303  6937  6937 D AndroidRuntime: Shutting down VM
+10-08 11:35:35.245  6957  6957 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:35:35.248  6957  6957 I AndroidRuntime: Using default boot image
+10-08 11:35:35.248  6957  6957 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:35:35.325  6957  6957 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:35:36.423  6957  6957 D AndroidRuntime: Shutting down VM
+10-08 11:35:38.365  6977  6977 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:35:38.367  6977  6977 I AndroidRuntime: Using default boot image
+10-08 11:35:38.367  6977  6977 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:35:38.446  6977  6977 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:35:39.532  6977  6977 D AndroidRuntime: Shutting down VM
+10-08 11:35:43.475  6997  6997 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:35:43.478  6997  6997 I AndroidRuntime: Using default boot image
+10-08 11:35:43.478  6997  6997 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:35:43.557  6997  6997 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:35:44.595  6997  6997 D AndroidRuntime: Shutting down VM
+10-08 11:35:48.487  6486  6486 I Raven   : warm up: 10.0.2.2
+10-08 11:35:49.088  6486  6486 I WebExtension: releasePendingMessages: extension=helper@raven.browser nativeApp=raven session=org.mozilla.geckoview.GeckoSession@62daa5b
+10-08 11:35:49.115  6486  6504 I GeckoSession: zerdatime 485834 - chrome startup finished
+10-08 11:35:49.123  6486  6486 D GeckoSession: handleMessage GeckoView:PageStart uri=about:blank
+10-08 11:35:49.123  6486  6486 D GeckoSession: handleMessage GeckoView:LocationChange uri=about:blank
+10-08 11:35:49.123  6486  6486 D GeckoSession: handleMessage GeckoView:PageStop uri=null
+10-08 11:35:49.125  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:35:49.142  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:35:49.152  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:35:49.153  6486  6486 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:35:49.153  6486  6486 D GeckoSession: handleMessage GeckoView:PageStart uri=http://10.0.2.2:8000/long.html
+10-08 11:35:49.164  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:35:49.164  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:35:49.164  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:35:49.164  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:35:49.645  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:35:49.646  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:35:49.646  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:35:49.646  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:35:49.652  6486  6486 D GeckoSession: handleMessage GeckoView:LocationChange uri=http://10.0.2.2:8000/long.html
+10-08 11:35:49.653  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:35:49.653  6486  6486 D GeckoSession: handleMessage GeckoView:SecurityChanged uri=null
+10-08 11:35:49.657  6486  6486 D WebExtension: handleMessage GeckoView:WebExtension:Connect
+10-08 11:35:49.664  6486  6486 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:35:49.666  6486  6486 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:35:49.667  6486  6486 D GeckoSession: handleMessage GeckoView:PageStop uri=null
+10-08 11:35:49.702  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:35:49.702  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:35:49.702  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:35:49.702  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:35:55.166  7044  7044 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:35:55.170  7044  7044 I AndroidRuntime: Using default boot image
+10-08 11:35:55.170  7044  7044 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:35:55.249  7044  7044 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:35:56.339  7044  7044 D AndroidRuntime: Shutting down VM
+10-08 11:35:57.254  7059  7059 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:35:57.257  7059  7059 I AndroidRuntime: Using default boot image
+10-08 11:35:57.257  7059  7059 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:35:57.335  7059  7059 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:35:58.426  7059  7059 D AndroidRuntime: Shutting down VM
+10-08 11:35:59.659  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:36:01.374  7080  7080 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:36:01.377  7080  7080 I AndroidRuntime: Using default boot image
+10-08 11:36:01.377  7080  7080 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:36:01.457  7080  7080 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:36:02.588  7080  7080 D AndroidRuntime: Shutting down VM
+10-08 11:36:03.505  7098  7098 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:36:03.507  7098  7098 I AndroidRuntime: Using default boot image
+10-08 11:36:03.507  7098  7098 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:36:03.585  7098  7098 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:36:04.679  7098  7098 D AndroidRuntime: Shutting down VM
+10-08 11:36:05.646  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:36:05.646  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:36:05.647  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:36:09.623  7123  7123 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:36:09.626  7123  7123 I AndroidRuntime: Using default boot image
+10-08 11:36:09.626  7123  7123 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:36:09.704  7123  7123 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:36:10.811  7123  7123 D AndroidRuntime: Shutting down VM
+10-08 11:36:14.752  7143  7143 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:36:14.755  7143  7143 I AndroidRuntime: Using default boot image
+10-08 11:36:14.755  7143  7143 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:36:14.835  7143  7143 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:36:15.855  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:36:15.978  7143  7143 D AndroidRuntime: Shutting down VM
+10-08 11:36:17.924  7164  7164 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:36:17.926  7164  7164 I AndroidRuntime: Using default boot image
+10-08 11:36:17.926  7164  7164 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:36:18.005  7164  7164 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:36:19.151  7164  7164 D AndroidRuntime: Shutting down VM
+10-08 11:36:23.092  7184  7184 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:36:23.095  7184  7184 I AndroidRuntime: Using default boot image
+10-08 11:36:23.095  7184  7184 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:36:23.174  7184  7184 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:36:24.271  7184  7184 D AndroidRuntime: Shutting down VM
+10-08 11:36:28.022  6486  6486 I Raven   : warm up: 10.0.2.2
+10-08 11:36:28.630  6486  6486 I WebExtension: releasePendingMessages: extension=helper@raven.browser nativeApp=raven session=org.mozilla.geckoview.GeckoSession@cbe34bf
+10-08 11:36:28.647  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:36:28.677  6486  6504 I GeckoSession: zerdatime 525396 - chrome startup finished
+10-08 11:36:28.694  6486  6486 D GeckoSession: handleMessage GeckoView:PageStart uri=about:blank
+10-08 11:36:28.694  6486  6486 D GeckoSession: handleMessage GeckoView:LocationChange uri=about:blank
+10-08 11:36:28.694  6486  6486 D GeckoSession: handleMessage GeckoView:PageStop uri=null
+10-08 11:36:28.695  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:36:28.695  6486  6486 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:36:28.695  6486  6486 D GeckoSession: handleMessage GeckoView:PageStart uri=http://10.0.2.2:8000/jar.html
+10-08 11:36:28.711  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:36:28.712  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:36:28.712  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:36:28.713  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:36:28.772  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:36:28.773  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:36:28.773  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:36:28.773  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:36:29.245  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:36:29.245  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:36:29.245  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:36:29.245  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:36:29.245  6486  6486 D GeckoSession: handleMessage GeckoView:LocationChange uri=http://10.0.2.2:8000/jar.html
+10-08 11:36:29.246  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:36:29.248  6486  6486 D GeckoSession: handleMessage GeckoView:SecurityChanged uri=null
+10-08 11:36:29.264  6486  6486 D WebExtension: handleMessage GeckoView:WebExtension:Connect
+10-08 11:36:29.285  6486  6486 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:36:29.285  6486  6486 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:36:29.285  6486  6486 D GeckoSession: handleMessage GeckoView:PageStop uri=null
+10-08 11:36:29.444  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:36:29.444  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:36:29.444  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:36:29.444  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:36:34.707  7221  7221 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:36:34.710  7221  7221 I AndroidRuntime: Using default boot image
+10-08 11:36:34.710  7221  7221 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:36:34.790  7221  7221 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:36:35.891  7221  7221 D AndroidRuntime: Shutting down VM
+10-08 11:36:36.773  7238  7238 I RavenTest: away r08
+10-08 11:36:39.267  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:36:40.028  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:36:40.028  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:36:40.028  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:36:40.056  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:36:40.056  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:36:43.971  7259  7259 I RavenTest: back r08
+10-08 11:36:47.062  7267  7267 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:36:47.065  7267  7267 I AndroidRuntime: Using default boot image
+10-08 11:36:47.065  7267  7267 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:36:47.145  7267  7267 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:36:48.184  7267  7267 D AndroidRuntime: Shutting down VM
+10-08 11:36:49.134  6486  6486 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-08 11:36:49.134  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:36:49.136  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:36:49.164  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:36:57.997  7311  7311 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:36:58.000  7311  7311 I AndroidRuntime: Using default boot image
+10-08 11:36:58.000  7311  7311 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:36:58.079  7311  7311 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:36:59.173  7311  7311 D AndroidRuntime: Shutting down VM
+10-08 11:37:00.083  7334  7334 I RavenTest: away r09
+10-08 11:37:03.377  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:37:03.382  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:37:03.382  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:37:03.399  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:37:03.399  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:37:07.284  7353  7353 I RavenTest: back r09
+10-08 11:37:10.375  7361  7361 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:37:10.378  7361  7361 I AndroidRuntime: Using default boot image
+10-08 11:37:10.378  7361  7361 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:37:10.459  7361  7361 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:37:11.491  7361  7361 D AndroidRuntime: Shutting down VM
+10-08 11:37:12.439  6486  6486 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-08 11:37:12.439  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:37:12.444  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:37:12.462  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:37:21.437  7412  7412 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:37:21.441  7412  7412 I AndroidRuntime: Using default boot image
+10-08 11:37:21.441  7412  7412 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:37:21.520  7412  7412 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:37:22.617  7412  7412 D AndroidRuntime: Shutting down VM
+10-08 11:37:23.536  7427  7427 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:37:23.539  7427  7427 I AndroidRuntime: Using default boot image
+10-08 11:37:23.539  7427  7427 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:37:23.618  7427  7427 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:37:24.709  7427  7427 D AndroidRuntime: Shutting down VM
+10-08 11:37:25.625  7442  7442 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:37:25.628  7442  7442 I AndroidRuntime: Using default boot image
+10-08 11:37:25.628  7442  7442 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:37:25.706  7442  7442 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:37:26.800  7442  7442 D AndroidRuntime: Shutting down VM
+10-08 11:37:28.743  7463  7463 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:37:28.746  7463  7463 I AndroidRuntime: Using default boot image
+10-08 11:37:28.746  7463  7463 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:37:28.824  7463  7463 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:37:29.921  7463  7463 D AndroidRuntime: Shutting down VM
+10-08 11:37:30.793  6486  6486 I Raven   : helper: mute to 1 port(s)
+10-08 11:37:30.793  6486  6486 I Raven   : helper: pause to 1 port(s)
+10-08 11:37:30.805  6486  6486 I Raven   : helper: page did mute on 0 player(s), 0 still playing
+10-08 11:37:30.805  6486  6486 I Raven   : helper: page did pause on 0 player(s), 0 still playing
+10-08 11:37:30.805  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:37:30.806  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:37:32.863  7483  7483 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:37:32.866  7483  7483 I AndroidRuntime: Using default boot image
+10-08 11:37:32.866  7483  7483 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:37:32.944  7483  7483 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:37:33.983  7483  7483 D AndroidRuntime: Shutting down VM
+10-08 11:37:36.924  7504  7504 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:37:36.927  7504  7504 I AndroidRuntime: Using default boot image
+10-08 11:37:36.927  7504  7504 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:37:37.004  7504  7504 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:37:38.098  7504  7504 D AndroidRuntime: Shutting down VM
+10-08 11:37:39.017  7519  7519 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:37:39.020  7519  7519 I AndroidRuntime: Using default boot image
+10-08 11:37:39.020  7519  7519 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:37:39.100  7519  7519 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:37:40.199  7519  7519 D AndroidRuntime: Shutting down VM
+10-08 11:37:43.142  7545  7545 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:37:43.145  7545  7545 I AndroidRuntime: Using default boot image
+10-08 11:37:43.145  7545  7545 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:37:43.226  7545  7545 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:37:44.280  7545  7545 D AndroidRuntime: Shutting down VM
+10-08 11:37:45.186  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:37:45.187  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:37:45.188  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:37:45.189  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:37:45.267  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:37:51.195  7568  7568 I RavenTest: away r10
+10-08 11:37:54.438  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:37:54.438  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:37:54.445  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:37:54.445  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:37:54.451  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:37:54.451  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:37:58.390  7612  7612 I RavenTest: back r10
+10-08 11:38:01.486  7620  7620 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:38:01.489  7620  7620 I AndroidRuntime: Using default boot image
+10-08 11:38:01.489  7620  7620 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:38:01.570  7620  7620 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:38:02.606  7620  7620 D AndroidRuntime: Shutting down VM
+10-08 11:38:03.565  6486  6486 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-08 11:38:03.573  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:38:03.573  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:38:12.446  7665  7665 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:38:12.449  7665  7665 I AndroidRuntime: Using default boot image
+10-08 11:38:12.449  7665  7665 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:38:12.528  7665  7665 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:38:13.630  7665  7665 D AndroidRuntime: Shutting down VM
+10-08 11:38:14.552  7692  7692 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:38:14.555  7692  7692 I AndroidRuntime: Using default boot image
+10-08 11:38:14.555  7692  7692 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:38:14.635  7692  7692 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:38:15.737  7692  7692 D AndroidRuntime: Shutting down VM
+10-08 11:38:16.647  7716  7716 I RavenTest: away r11
+10-08 11:38:19.905  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:38:19.918  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:38:19.918  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:38:19.918  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:38:19.927  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:38:19.927  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:38:23.841  7740  7740 I RavenTest: back r11
+10-08 11:38:26.932  7749  7749 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:38:26.935  7749  7749 I AndroidRuntime: Using default boot image
+10-08 11:38:26.935  7749  7749 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:38:27.013  7749  7749 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:38:28.053  7749  7749 D AndroidRuntime: Shutting down VM
+10-08 11:38:28.992  6486  6486 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-08 11:38:28.995  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:38:28.995  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:38:37.876  7800  7800 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:38:37.880  7800  7800 I AndroidRuntime: Using default boot image
+10-08 11:38:37.880  7800  7800 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:38:37.960  7800  7800 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:38:39.060  7800  7800 D AndroidRuntime: Shutting down VM
+10-08 11:38:39.991  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:38:39.991  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:38:39.991  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:38:39.991  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:38:42.005  7821  7821 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:38:42.008  7821  7821 I AndroidRuntime: Using default boot image
+10-08 11:38:42.008  7821  7821 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:38:42.086  7821  7821 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:38:43.175  7821  7821 D AndroidRuntime: Shutting down VM
+10-08 11:38:44.090  7836  7836 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:38:44.093  7836  7836 I AndroidRuntime: Using default boot image
+10-08 11:38:44.093  7836  7836 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:38:44.169  7836  7836 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:38:45.224  7836  7836 D AndroidRuntime: Shutting down VM
+10-08 11:38:46.095  6486  6486 I Raven   : helper: mute to 1 port(s)
+10-08 11:38:46.096  6486  6486 I Raven   : helper: mute to 1 port(s)
+10-08 11:38:46.096  6486  6486 I Raven   : helper: pause to 1 port(s)
+10-08 11:38:46.117  6486  6486 I Raven   : helper: page did mute on 0 player(s), 0 still playing
+10-08 11:38:46.117  6486  6486 I Raven   : helper: page did mute on 0 player(s), 0 still playing
+10-08 11:38:46.117  6486  6486 I Raven   : helper: page did pause on 0 player(s), 0 still playing
+10-08 11:38:46.117  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:38:46.119  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:38:46.119  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:38:46.119  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:38:46.119  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:38:46.139  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:38:49.165  7862  7862 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:38:49.168  7862  7862 I AndroidRuntime: Using default boot image
+10-08 11:38:49.168  7862  7862 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:38:49.246  7862  7862 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:38:50.281  7862  7862 D AndroidRuntime: Shutting down VM
+10-08 11:38:51.226  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:38:54.230  7883  7883 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:38:54.232  7883  7883 I AndroidRuntime: Using default boot image
+10-08 11:38:54.232  7883  7883 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:38:54.312  7883  7883 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:38:55.349  7883  7883 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@15bff; boundsInParent: Rect(0, 0 - 320, 514); boundsInScreen: Rect(0, 102 - 320, 616); boundsInWindow: Rect(0, 102 - 320, 616); packageName: app.raven.browser; className: android.webkit.WebView; text: Raven cookie jar test; error: null; maxTextLength: -1; stateDescription: null; contentDescription: ; tooltipText: null; containerTitle: ; viewIdResName: ; uniqueId: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; granularScrollingSupported: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_NEXT_HTML_ELEMENT - null, AccessibilityAction: ACTION_PREVIOUS_HTML_ELEMENT - null, AccessibilityAction: ACTION_SCROLL_FORWARD - null, AccessibilityAction: ACTION_SCROLL_BACKWARD - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]; isTextSelectable: false
+10-08 11:38:55.361  7883  7883 D AndroidRuntime: Shutting down VM
+10-08 11:38:57.305  7903  7903 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:38:57.308  7903  7903 I AndroidRuntime: Using default boot image
+10-08 11:38:57.308  7903  7903 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:38:57.386  7903  7903 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:38:58.426  7903  7903 D AndroidRuntime: Shutting down VM
+10-08 11:39:02.373  7924  7924 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:39:02.376  7924  7924 I AndroidRuntime: Using default boot image
+10-08 11:39:02.376  7924  7924 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:39:02.454  7924  7924 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:39:03.498  7924  7924 D AndroidRuntime: Shutting down VM
+10-08 11:39:07.359  6486  6486 I Raven   : warm up: 10.0.2.2
+10-08 11:39:07.973  6486  6486 I WebExtension: releasePendingMessages: extension=helper@raven.browser nativeApp=raven session=org.mozilla.geckoview.GeckoSession@b7d2b71
+10-08 11:39:07.990  6486  6504 I GeckoSession: zerdatime 684710 - chrome startup finished
+10-08 11:39:08.005  6486  6486 D GeckoSession: handleMessage GeckoView:PageStart uri=about:blank
+10-08 11:39:08.005  6486  6486 D GeckoSession: handleMessage GeckoView:LocationChange uri=about:blank
+10-08 11:39:08.005  6486  6486 D GeckoSession: handleMessage GeckoView:PageStop uri=null
+10-08 11:39:08.005  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:39:08.005  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:39:08.009  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:39:08.009  6486  6486 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:39:08.009  6486  6486 D GeckoSession: handleMessage GeckoView:PageStart uri=http://10.0.2.2:8000/long.html
+10-08 11:39:08.009  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:39:08.009  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:39:08.010  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:39:08.011  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:39:08.522  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:39:08.522  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:39:08.522  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:39:08.523  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:39:08.527  6486  6486 D GeckoSession: handleMessage GeckoView:LocationChange uri=http://10.0.2.2:8000/long.html
+10-08 11:39:08.527  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:39:08.527  6486  6486 D GeckoSession: handleMessage GeckoView:SecurityChanged uri=null
+10-08 11:39:08.536  6486  6486 D WebExtension: handleMessage GeckoView:WebExtension:Connect
+10-08 11:39:08.543  6486  6486 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:39:08.543  6486  6486 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:39:08.544  6486  6486 D GeckoSession: handleMessage GeckoView:PageStop uri=null
+10-08 11:39:08.580  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:39:08.580  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:39:08.582  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:39:08.582  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:39:14.042  7969  7969 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:39:14.045  7969  7969 I AndroidRuntime: Using default boot image
+10-08 11:39:14.045  7969  7969 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:39:14.123  7969  7969 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:39:15.224  7969  7969 D AndroidRuntime: Shutting down VM
+10-08 11:39:16.137  7984  7984 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:39:16.139  7984  7984 I AndroidRuntime: Using default boot image
+10-08 11:39:16.139  7984  7984 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:39:16.219  7984  7984 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:39:17.313  7984  7984 D AndroidRuntime: Shutting down VM
+10-08 11:39:18.539  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:39:20.259  8006  8006 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:39:20.263  8006  8006 I AndroidRuntime: Using default boot image
+10-08 11:39:20.263  8006  8006 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:39:20.343  8006  8006 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:39:21.429  8006  8006 D AndroidRuntime: Shutting down VM
+10-08 11:39:22.350  8021  8021 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:39:22.353  8021  8021 I AndroidRuntime: Using default boot image
+10-08 11:39:22.353  8021  8021 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:39:22.434  8021  8021 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:39:23.491  8021  8021 D AndroidRuntime: Shutting down VM
+10-08 11:39:24.458  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:39:27.402  8044  8044 I RavenTest: away r12
+10-08 11:39:30.681  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:39:30.684  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:39:30.697  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:39:34.606  8067  8067 I RavenTest: back r12
+10-08 11:39:37.695  8075  8075 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:39:37.698  8075  8075 I AndroidRuntime: Using default boot image
+10-08 11:39:37.698  8075  8075 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:39:37.775  8075  8075 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:39:38.808  8075  8075 D AndroidRuntime: Shutting down VM
+10-08 11:39:39.735  6486  6486 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-08 11:39:39.735  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:39:39.862  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:39:48.722  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:39:49.985  8127  8127 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:39:49.988  8127  8127 I AndroidRuntime: Using default boot image
+10-08 11:39:49.988  8127  8127 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:39:50.066  8127  8127 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:39:51.160  8127  8127 D AndroidRuntime: Shutting down VM
+10-08 11:39:55.075  8143  8143 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:39:55.078  8143  8143 I AndroidRuntime: Using default boot image
+10-08 11:39:55.078  8143  8143 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:39:55.156  8143  8143 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:39:56.261  8143  8143 D AndroidRuntime: Shutting down VM
+10-08 11:40:00.183  8158  8158 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:40:00.185  8158  8158 I AndroidRuntime: Using default boot image
+10-08 11:40:00.185  8158  8158 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:40:00.263  8158  8158 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:40:01.357  8158  8158 D AndroidRuntime: Shutting down VM
+10-08 11:40:08.284  8173  8173 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:40:08.287  8173  8173 I AndroidRuntime: Using default boot image
+10-08 11:40:08.287  8173  8173 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:40:08.363  8173  8173 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:40:09.463  8173  8173 D AndroidRuntime: Shutting down VM
+10-08 11:40:13.382  8188  8188 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:40:13.385  8188  8188 I AndroidRuntime: Using default boot image
+10-08 11:40:13.385  8188  8188 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:40:13.462  8188  8188 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:40:14.557  8188  8188 D AndroidRuntime: Shutting down VM
+10-08 11:40:18.473  8203  8203 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:40:18.476  8203  8203 I AndroidRuntime: Using default boot image
+10-08 11:40:18.476  8203  8203 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:40:18.555  8203  8203 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:40:19.655  8203  8203 D AndroidRuntime: Shutting down VM
+10-08 11:40:26.577  8218  8218 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:40:26.580  8218  8218 I AndroidRuntime: Using default boot image
+10-08 11:40:26.580  8218  8218 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:40:26.659  8218  8218 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:40:27.765  8218  8218 D AndroidRuntime: Shutting down VM
+10-08 11:40:31.683  8233  8233 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:40:31.686  8233  8233 I AndroidRuntime: Using default boot image
+10-08 11:40:31.686  8233  8233 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:40:31.765  8233  8233 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:40:32.863  8233  8233 D AndroidRuntime: Shutting down VM
+10-08 11:40:36.784  8248  8248 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:40:36.787  8248  8248 I AndroidRuntime: Using default boot image
+10-08 11:40:36.787  8248  8248 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:40:36.864  8248  8248 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:40:37.961  8248  8248 D AndroidRuntime: Shutting down VM
+10-08 11:40:47.882  8263  8263 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:40:47.885  8263  8263 I AndroidRuntime: Using default boot image
+10-08 11:40:47.885  8263  8263 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:40:47.963  8263  8263 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:40:49.057  8263  8263 D AndroidRuntime: Shutting down VM
+10-08 11:40:49.973  8278  8278 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:40:49.976  8278  8278 I AndroidRuntime: Using default boot image
+10-08 11:40:49.976  8278  8278 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:40:50.055  8278  8278 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:40:51.141  8278  8278 D AndroidRuntime: Shutting down VM
+10-08 11:40:55.060  8293  8293 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:40:55.063  8293  8293 I AndroidRuntime: Using default boot image
+10-08 11:40:55.063  8293  8293 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:40:55.142  8293  8293 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:40:56.239  8293  8293 D AndroidRuntime: Shutting down VM
+10-08 11:41:00.161  8308  8308 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:41:00.164  8308  8308 I AndroidRuntime: Using default boot image
+10-08 11:41:00.164  8308  8308 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:41:00.245  8308  8308 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:41:01.342  8308  8308 D AndroidRuntime: Shutting down VM
+10-08 11:41:07.266  8323  8323 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:41:07.269  8323  8323 I AndroidRuntime: Using default boot image
+10-08 11:41:07.269  8323  8323 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:41:07.347  8323  8323 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:41:08.446  8323  8323 D AndroidRuntime: Shutting down VM
+10-08 11:41:12.364  8338  8338 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:41:12.367  8338  8338 I AndroidRuntime: Using default boot image
+10-08 11:41:12.367  8338  8338 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:41:12.446  8338  8338 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:41:13.536  8338  8338 D AndroidRuntime: Shutting down VM
+10-08 11:41:17.452  8353  8353 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:41:17.455  8353  8353 I AndroidRuntime: Using default boot image
+10-08 11:41:17.455  8353  8353 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:41:17.532  8353  8353 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:41:18.624  8353  8353 D AndroidRuntime: Shutting down VM
+10-08 11:41:27.636  8374  8374 I RavenTest: away r13
+10-08 11:41:30.877  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:41:30.878  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:41:30.893  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:41:34.830  8394  8394 I RavenTest: back r13
+10-08 11:41:37.920  8402  8402 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:41:37.923  8402  8402 I AndroidRuntime: Using default boot image
+10-08 11:41:37.923  8402  8402 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:41:38.003  8402  8402 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:41:39.037  8402  8402 D AndroidRuntime: Shutting down VM
+10-08 11:41:39.991  6486  6486 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-08 11:41:40.000  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:41:40.097  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:41:49.041  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:41:51.975  8452  8452 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:41:51.978  8452  8452 I AndroidRuntime: Using default boot image
+10-08 11:41:51.978  8452  8452 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:41:52.079  8452  8452 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:41:53.127  8452  8452 D AndroidRuntime: Shutting down VM
+10-08 11:41:54.051  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:41:57.118  8472  8472 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:41:57.121  8472  8472 I AndroidRuntime: Using default boot image
+10-08 11:41:57.121  8472  8472 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:41:57.236  8472  8472 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:41:58.284  8472  8472 D AndroidRuntime: Shutting down VM
+10-08 11:42:00.279  8492  8492 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:42:00.282  8492  8492 I AndroidRuntime: Using default boot image
+10-08 11:42:00.282  8492  8492 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:42:00.380  8492  8492 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:42:01.439  8492  8492 D AndroidRuntime: Shutting down VM
+10-08 11:42:05.433  8512  8512 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:42:05.438  8512  8512 I AndroidRuntime: Using default boot image
+10-08 11:42:05.438  8512  8512 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:42:05.532  8512  8512 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:42:06.585  8512  8512 D AndroidRuntime: Shutting down VM
+10-08 11:42:07.507  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:42:10.389  6486  6486 I Raven   : warm up: 10.0.2.2
+10-08 11:42:10.991  6486  6486 I WebExtension: releasePendingMessages: extension=helper@raven.browser nativeApp=raven session=org.mozilla.geckoview.GeckoSession@fdf741b
+10-08 11:42:11.012  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:42:11.015  6486  6504 I GeckoSession: zerdatime 867734 - chrome startup finished
+10-08 11:42:11.032  6486  6486 D GeckoSession: handleMessage GeckoView:PageStart uri=about:blank
+10-08 11:42:11.032  6486  6486 D GeckoSession: handleMessage GeckoView:LocationChange uri=about:blank
+10-08 11:42:11.032  6486  6486 D GeckoSession: handleMessage GeckoView:PageStop uri=null
+10-08 11:42:11.033  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:42:11.033  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:42:11.034  6486  6486 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:42:11.035  6486  6486 D GeckoSession: handleMessage GeckoView:PageStart uri=http://10.0.2.2:8000/long.html
+10-08 11:42:11.035  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:42:11.035  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:42:11.035  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:42:11.035  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:42:11.081  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:42:11.081  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:42:11.081  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:42:11.081  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:42:11.546  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:42:11.546  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:42:11.547  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:42:11.547  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:42:11.551  6486  6486 D GeckoSession: handleMessage GeckoView:LocationChange uri=http://10.0.2.2:8000/long.html
+10-08 11:42:11.552  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:42:11.552  6486  6486 D GeckoSession: handleMessage GeckoView:SecurityChanged uri=null
+10-08 11:42:11.562  6486  6486 D WebExtension: handleMessage GeckoView:WebExtension:Connect
+10-08 11:42:11.563  6486  6486 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:42:11.565  6486  6486 D GeckoSession: handleMessage GeckoView:ProgressChanged uri=null
+10-08 11:42:11.568  6486  6486 D GeckoSession: handleMessage GeckoView:PageStop uri=null
+10-08 11:42:11.597  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:42:11.598  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:42:11.598  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:42:11.598  6486  6486 D WebExtension: handleMessage GeckoView:BrowserAction:Update
+10-08 11:42:17.063  8560  8560 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:42:17.066  8560  8560 I AndroidRuntime: Using default boot image
+10-08 11:42:17.066  8560  8560 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:42:17.145  8560  8560 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:42:18.245  8560  8560 D AndroidRuntime: Shutting down VM
+10-08 11:42:20.230  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:42:20.242  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:42:20.244  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:42:22.257  8596  8596 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:42:22.259  8596  8596 I AndroidRuntime: Using default boot image
+10-08 11:42:22.259  8596  8596 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:42:22.339  8596  8596 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:42:23.367  8596  8596 D AndroidRuntime: Shutting down VM
+10-08 11:42:24.325  6486  6486 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-08 11:42:24.328  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:42:24.430  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:42:27.391  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:42:27.394  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:42:27.408  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:42:29.400  8638  8638 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:42:29.403  8638  8638 I AndroidRuntime: Using default boot image
+10-08 11:42:29.403  8638  8638 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:42:29.481  8638  8638 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:42:30.513  8638  8638 D AndroidRuntime: Shutting down VM
+10-08 11:42:31.456  6486  6486 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-08 11:42:31.461  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:42:31.578  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:42:34.509  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:42:34.522  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:42:34.523  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:42:36.538  8682  8682 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:42:36.541  8682  8682 I AndroidRuntime: Using default boot image
+10-08 11:42:36.542  8682  8682 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:42:36.621  8682  8682 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:42:37.652  8682  8682 D AndroidRuntime: Shutting down VM
+10-08 11:42:38.599  6486  6486 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-08 11:42:38.606  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:42:38.713  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:42:41.649  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:42:41.649  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:42:41.657  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:42:43.680  8722  8722 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:42:43.683  8722  8722 I AndroidRuntime: Using default boot image
+10-08 11:42:43.683  8722  8722 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:42:43.761  8722  8722 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:42:44.795  8722  8722 D AndroidRuntime: Shutting down VM
+10-08 11:42:45.717  6486  6486 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-08 11:42:45.719  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:42:45.841  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:42:48.791  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:42:48.791  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:42:48.795  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
+10-08 11:42:50.829  8764  8764 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+10-08 11:42:50.832  8764  8764 I AndroidRuntime: Using default boot image
+10-08 11:42:50.832  8764  8764 I AndroidRuntime: Leaving lock profiling enabled
+10-08 11:42:50.910  8764  8764 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+10-08 11:42:51.941  8764  8764 D AndroidRuntime: Shutting down VM
+10-08 11:42:52.891  6486  6486 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-08 11:42:52.892  6486  6486 I Raven   : screen: page unlocks the orientation
+10-08 11:42:52.992  6486  6486 D GeckoSession: handleMessage: GeckoView:DismissClipboardPermissionRequest
+10-08 11:43:02.917  6486  6486 D GeckoSession: handleMessage GeckoView:StateUpdated uri=null
