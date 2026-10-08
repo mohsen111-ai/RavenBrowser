@@ -107,15 +107,18 @@ fun BrowserScreen(c: Container, ui: UiState) {
             .navigationBarsPadding()
             .imePadding(),
     ) {
-        if (!ui.fullscreen && tab != null) Bars(c, ui, tab, tabs.size)
+        // A video (or page) fullscreen in any tab, even a half of split screen or the floating tab, fills the whole
+        // screen: no bars, no split, nothing else. Back (or the video) returns it to where it was.
+        val fsId by c.tabs.fullscreenId.collectAsState()
+        val fsTab = tabs.firstOrNull { it.id == fsId }
+        val split by c.tabs.split.collectAsState()
+        val top = split?.let { s -> tabs.firstOrNull { it.id == s.top } }
+        val bottom = split?.let { s -> tabs.firstOrNull { it.id == s.bottom } }
+        if (fsTab == null && tab != null) Bars(c, ui, tab, tabs.size)
         Box(Modifier.weight(1f).fillMaxWidth()) {
-            // Split screen: two tabs, the bar belonging to the half you touched last. A video going fullscreen in
-            // a half fills the whole screen, and the split comes back when it leaves fullscreen.
-            val split by c.tabs.split.collectAsState()
-            val top = split?.let { s -> tabs.firstOrNull { it.id == s.top } }
-            val bottom = split?.let { s -> tabs.firstOrNull { it.id == s.bottom } }
-            val fullscreen = tab?.fullscreen?.collectAsState()?.value == true
-            if (tab != null && top != null && bottom != null && !fullscreen) {
+            if (fsTab != null) {
+                TabPage(c, ui, fsTab, primary = true)
+            } else if (tab != null && top != null && bottom != null) {
                 SplitArea(c, ui, top, bottom, tab.id)
             } else if (tab != null) {
                 TabPage(c, ui, tab, primary = true)
@@ -160,6 +163,19 @@ internal fun PageView(tab: BrowserTab, ui: UiState, primary: Boolean, floating: 
     val asleep by tab.asleep.collectAsState()
     val opened by tab.opened.collectAsState()
     val key = "$url $asleep $opened"
+    // Coming back from another app: if the page view lost its page meanwhile (that shows as a black screen), put it back.
+    val owner = androidx.lifecycle.compose.LocalLifecycleOwner.current
+    val shownView = remember { arrayOfNulls<GeckoView>(1) }
+    androidx.compose.runtime.DisposableEffect(owner, tab) {
+        val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
+            if (event == androidx.lifecycle.Lifecycle.Event.ON_START) {
+                val view = shownView[0]
+                if (view != null && view.isAttachedToWindow && tab.session.isOpen && view.session !== tab.session) Displays.show(tab.session, view)
+            }
+        }
+        owner.lifecycle.addObserver(observer)
+        onDispose { owner.lifecycle.removeObserver(observer) }
+    }
     AndroidView(
         factory = { ctx ->
             GeckoView(ctx).also {
@@ -174,6 +190,7 @@ internal fun PageView(tab: BrowserTab, ui: UiState, primary: Boolean, floating: 
         update = { view ->
             // Re-runs when the tab, its address, its sleep state or its session changes (a session can open later).
             @Suppress("UNUSED_VARIABLE") val k = key
+            shownView[0] = view
             if (primary) ui.geckoView = view
             val s = tab.session
             if (s.isOpen) Displays.showWhenSettled(s, view)

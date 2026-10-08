@@ -109,11 +109,13 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
 
         // Fullscreen video: no bars, Android's or ours. Read from the tab, so it also holds for a screen
         // Android rebuilt while you were in another app.
-        val fullscreen = tab?.fullscreen?.collectAsState()?.value == true
+        val fsId by c.tabs.fullscreenId.collectAsState()
+        val fsTab = tabs.firstOrNull { it.id == fsId }
+        val fullscreen = fsTab != null
         // Like Firefox and Chrome: a wide video in fullscreen turns the screen to landscape (either way round,
         // following the phone), and the screen is free to turn again once fullscreen ends.
         // A page's own lock (a game, a video player) wins; otherwise the screen turns freely.
-        val wideVideo = tab?.wideVideo?.collectAsState()?.value
+        val wideVideo = fsTab?.wideVideo?.collectAsState()?.value
         val pageLock by c.engine.orientationLock.collectAsState()
         val shown by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
         val inFront = shown.isAtLeast(Lifecycle.State.STARTED)
@@ -133,9 +135,10 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
             activity.requestedOrientation = want
         }
         // Picture-in-picture: a fullscreen video that's playing shrinks into a small window when you leave Raven.
-        val videoSize = tab?.videoSize?.collectAsState()?.value
-        LaunchedEffect(fullscreen, playing, videoSize, prefs.pictureInPicture) {
-            (activity as? app.raven.browser.MainActivity)?.updatePip(prefs.pictureInPicture && fullscreen && playing, videoSize, playing)
+        val videoSize = fsTab?.videoSize?.collectAsState()?.value
+        val fsPlaying = fsTab?.playing?.collectAsState()?.value == true
+        LaunchedEffect(fullscreen, fsPlaying, videoSize, prefs.pictureInPicture) {
+            (activity as? app.raven.browser.MainActivity)?.updatePip(prefs.pictureInPicture && fullscreen && fsPlaying, videoSize, fsPlaying)
         }
         LaunchedEffect(fullscreen) {
             ui.fullscreen = fullscreen
@@ -249,7 +252,7 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
                 ui.sheet != null -> ui.sheet = null
                 ui.findOpen -> { ui.findOpen = false; t?.session?.finder?.clear() }
                 ui.editing -> ui.editing = false
-                ui.fullscreen && t != null -> t.session.exitFullScreen()
+                ui.fullscreen && fsTab != null -> fsTab.session.exitFullScreen()
                 ui.screen != Screen.Browser -> ui.screen = Screen.Browser
                 // Home showed the new tab page over a page: Back returns to that page.
                 t != null && t.ntpOverlay.value && t.overlayFromHome -> t.leaveHome()

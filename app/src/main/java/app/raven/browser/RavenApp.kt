@@ -117,7 +117,10 @@ class RavenApp : Application() {
         super.onCreate()
         CrashLog.install(this)
         // Gecko's helper processes also start this class; only the main process runs the browser.
-        if (processName() == packageName) container = Container(this)
+        if (processName() == packageName) {
+            CrashLog.noteLastExit(this)
+            container = Container(this)
+        }
     }
 
     @Suppress("DEPRECATION")
@@ -145,6 +148,56 @@ object CrashLog {
         }
     }
 
-    fun read(app: Application): String? = File(app.filesDir, "last-crash.txt").takeIf { it.exists() }?.readText()
-    fun clear(app: Application) = File(app.filesDir, "last-crash.txt").delete()
+    /**
+     * Android remembers why Raven's last process ended. A crash inside the engine, being killed for memory or a
+     * frozen screen leave no Kotlin stack trace, so write down what Android says, for the same crash report.
+     */
+    fun noteLastExit(app: Application) {
+        if (Build.VERSION.SDK_INT < 30) return
+        runCatching {
+            val am = app.getSystemService(android.app.ActivityManager::class.java)
+            val exits = am.getHistoricalProcessExitReasons(app.packageName, 0, 8)
+                .filter { it.processName == app.packageName }
+            val seen = app.getSharedPreferences("exits", 0)
+            val last = exits.firstOrNull { it.timestamp > seen.getLong("seen", 0) && it.reason !in IGNORED_EXITS }
+            seen.edit().putLong("seen", exits.maxOfOrNull { it.timestamp } ?: 0).apply()
+            if (last == null) return
+            val reason = when (last.reason) {
+                android.app.ApplicationExitInfo.REASON_CRASH -> "crash"
+                android.app.ApplicationExitInfo.REASON_CRASH_NATIVE -> "crash in native code"
+                android.app.ApplicationExitInfo.REASON_ANR -> "not responding (ANR)"
+                android.app.ApplicationExitInfo.REASON_LOW_MEMORY -> "killed for low memory"
+                android.app.ApplicationExitInfo.REASON_SIGNALED -> "killed by signal ${last.status}"
+                android.app.ApplicationExitInfo.REASON_EXCESSIVE_RESOURCE_USAGE -> "used too many resources"
+                android.app.ApplicationExitInfo.REASON_INITIALIZATION_FAILURE -> "failed to start"
+                android.app.ApplicationExitInfo.REASON_DEPENDENCY_DIED -> "a service it needs died"
+                else -> "reason ${last.reason}"
+            }
+            val trace = if (last.reason == android.app.ApplicationExitInfo.REASON_ANR || last.reason == android.app.ApplicationExitInfo.REASON_CRASH_NATIVE)
+                runCatching { last.traceInputStream?.bufferedReader()?.use { it.readText().take(6000) } }.getOrNull().orEmpty()
+            else ""
+            File(app.filesDir, "last-exit.txt").writeText(
+                "Raven ${BuildConfig.VERSION_NAME}, Android ${Build.VERSION.RELEASE}\n" +
+                    "Last time Raven ended: $reason\nAt: ${java.util.Date(last.timestamp)}\n" +
+                    "Android's note: ${last.description}\nMemory (RSS): ${last.rss / 1024} MB, PSS: ${last.pss / 1024} MB\n" +
+                    "It was ${if (last.importance <= android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE) "on screen" else "in the background"}\n$trace",
+            )
+        }
+    }
+
+    private val IGNORED_EXITS = setOf(
+        android.app.ApplicationExitInfo.REASON_EXIT_SELF,
+        android.app.ApplicationExitInfo.REASON_USER_REQUESTED,
+        android.app.ApplicationExitInfo.REASON_USER_STOPPED,
+        android.app.ApplicationExitInfo.REASON_PERMISSION_CHANGE,
+    )
+
+    fun read(app: Application): String? =
+        listOf("last-crash.txt", "last-exit.txt").mapNotNull { n -> File(app.filesDir, n).takeIf { it.exists() }?.readText() }
+            .takeIf { it.isNotEmpty() }?.joinToString("\n\n")
+
+    fun clear(app: Application) {
+        File(app.filesDir, "last-crash.txt").delete()
+        File(app.filesDir, "last-exit.txt").delete()
+    }
 }
