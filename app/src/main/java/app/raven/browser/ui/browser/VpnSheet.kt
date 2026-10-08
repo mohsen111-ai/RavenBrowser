@@ -12,6 +12,7 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -71,17 +72,23 @@ fun VpnSheet(c: Container, ui: UiState) {
 
     fun say(text: String) { c.engine.messages.tryEmit(text) }
     fun start(id: String) = c.scope.launch {
-        c.ravenVpn.turnOn(id).onFailure { say("Couldn't turn the VPN on. Check the file, or try another location.") }
+        c.ravenVpn.choose(id).onFailure { say("Couldn't turn the VPN on. Check the file, or try another location.") }
     }
-    // The first time, Android asks whether Raven may run a VPN.
+    // The first time, Android asks whether Raven may run a VPN; then what was waiting for it goes ahead.
+    var then by remember { mutableStateOf<(() -> Unit)?>(null) }
     val allow = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { r ->
-        val id = waiting
+        val next = then
+        then = null
         waiting = null
-        if (r.resultCode == Activity.RESULT_OK && id != null) start(id) else if (id != null) say("Android didn't allow Raven's VPN")
+        if (r.resultCode == Activity.RESULT_OK) next?.invoke() else if (next != null) say("Android didn't allow Raven's VPN")
+    }
+    fun allowed(next: () -> Unit) {
+        val ask = VpnService.prepare(context)
+        if (ask != null) { then = next; allow.launch(ask) } else next()
     }
     fun connect(id: String) {
-        val ask = VpnService.prepare(context)
-        if (ask != null) { waiting = id; allow.launch(ask) } else start(id)
+        waiting = id
+        allowed { start(id) }
     }
     val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         if (uri != null) c.scope.launch {
@@ -111,7 +118,7 @@ fun VpnSheet(c: Container, ui: UiState) {
                 }
                 Toggle(on, { want ->
                     when {
-                        !want -> c.scope.launch { c.ravenVpn.turnOff() }
+                        !want -> c.scope.launch { c.ravenVpn.choose(null) }
                         places.isEmpty() -> pick.launch(arrayOf("*/*"))
                         else -> connect(c.ravenVpn.last?.takeIf { id -> places.any { it.id == id } } ?: places.first().id)
                     }
@@ -119,7 +126,32 @@ fun VpnSheet(c: Container, ui: UiState) {
             }
 
             places.forEach { p ->
-                PlaceRow(p, p.id == active, enabled = !busy, onTap = { if (p.id == active) c.scope.launch { c.ravenVpn.turnOff() } else connect(p.id) }, onMore = { editing = p })
+                PlaceRow(p, p.id == active, enabled = !busy, onTap = { if (p.id == active) c.scope.launch { c.ravenVpn.choose(null) } else connect(p.id) }, onMore = { editing = p })
+            }
+
+            // VPN per site: the site on screen can have its own country (or no VPN); the others follow the switch.
+            val tab = c.tabs.selected
+            val host = tab?.takeIf { !it.isNewTabPage && it.url.value.startsWith("http") }?.host?.takeIf { it.isNotBlank() }
+            val rules by c.ravenVpn.rules.collectAsState()
+            if (places.isNotEmpty() && host != null) {
+                SiteRow(app.raven.browser.engine.RavenVpn.siteOf(host), c.ravenVpn.ruleFor(host), places) { place ->
+                    c.ravenVpn.setRule(host, place)
+                    val apply = { c.scope.launch { if (!c.ravenVpn.applyFor(host)) say("Couldn't switch the VPN for this site") }; Unit }
+                    if (place != null && place != app.raven.browser.engine.RavenVpn.DIRECT) allowed(apply) else apply()
+                }
+            }
+            if (rules.isNotEmpty()) {
+                Text("SITES WITH THEIR OWN COUNTRY", style = MaterialTheme.typography.labelSmall, color = Space.Text2, modifier = Modifier.padding(start = 6.dp, top = 4.dp))
+                Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(22.dp)).background(Space.Surface2)) {
+                    rules.entries.sortedBy { it.key }.forEach { (site, place) ->
+                        val p = places.firstOrNull { it.id == place }
+                        Row(Modifier.fillMaxWidth().height(52.dp).padding(start = 16.dp, end = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Text(site, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            Text(if (place == app.raven.browser.engine.RavenVpn.DIRECT) "No VPN" else p?.let { "${it.flag} ${it.label}" } ?: "Gone", style = MaterialTheme.typography.bodySmall, color = Space.Text2)
+                            IconButton(Icons.Close, "Stop giving $site its own country", { c.ravenVpn.setRule(site, null) }, size = 44.dp, iconSize = 15.dp, tint = Space.Text2)
+                        }
+                    }
+                }
             }
 
             Row(
@@ -144,7 +176,8 @@ fun VpnSheet(c: Container, ui: UiState) {
                 )
                 Text(
                     "Only Raven goes through this VPN; other apps keep your normal connection. Android runs one VPN at a time, so " +
-                        "turning this on pauses the Proton VPN app's connection.",
+                        "turning this on pauses the Proton VPN app's connection. A site with its own country switches Raven's VPN " +
+                        "while it's on screen; tabs in the background share it meanwhile.",
                     style = MaterialTheme.typography.bodySmall, color = Space.Text3,
                 )
             }
@@ -195,5 +228,36 @@ fun PlaceRow(p: VpnPlace, on: Boolean, enabled: Boolean, onTap: () -> Unit, onMo
             Text(if (on) "Connected" else p.name, style = MaterialTheme.typography.bodySmall, color = if (on) Green else Space.Text3, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
         IconButton(Icons.Menu, "Rename or remove ${p.label}", onMore, size = 44.dp, iconSize = 18.dp, tint = Space.Text2)
+    }
+}
+
+/** The site on screen, and where it goes: following the switch, a country of its own, or no VPN. */
+@Composable
+private fun SiteRow(site: String, rule: String?, places: List<VpnPlace>, onPick: (String?) -> Unit) {
+    var open by remember { mutableStateOf(false) }
+    val now = when (rule) {
+        null -> "Follows the switch"
+        app.raven.browser.engine.RavenVpn.DIRECT -> "No VPN"
+        else -> places.firstOrNull { it.id == rule }?.let { "${it.flag} ${it.label}" } ?: "Follows the switch"
+    }
+    Box {
+        Row(
+            Modifier.fillMaxWidth().height(62.dp).clip(CircleShape).background(Space.Surface2).border(1.dp, Space.Hairline, CircleShape)
+                .clickable(onClickLabel = "Choose a country for $site") { open = true }.padding(start = 18.dp, end = 14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(Modifier.weight(1f)) {
+                Text("This site: $site", style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(now, style = MaterialTheme.typography.bodySmall, color = Space.Text2)
+            }
+            Icon(Icons.ChevronDown, null, size = 18.dp, tint = Space.Text2)
+        }
+        androidx.compose.material3.DropdownMenu(open, { open = false }, containerColor = Space.Surface2, shape = RoundedCornerShape(20.dp)) {
+            androidx.compose.material3.DropdownMenuItem(text = { Text("Follow the switch") }, onClick = { open = false; onPick(null) })
+            places.forEach { p ->
+                androidx.compose.material3.DropdownMenuItem(text = { Text("${p.flag} ${p.label}") }, onClick = { open = false; onPick(p.id) })
+            }
+            androidx.compose.material3.DropdownMenuItem(text = { Text("No VPN") }, onClick = { open = false; onPick(app.raven.browser.engine.RavenVpn.DIRECT) })
+        }
     }
 }

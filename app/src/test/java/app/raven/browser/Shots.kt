@@ -34,10 +34,12 @@ import app.raven.browser.ui.browser.MenuContent
 import app.raven.browser.ui.browser.FloatEdgeIcon
 import app.raven.browser.ui.browser.FloatFrame
 import app.raven.browser.ui.browser.HalfChrome
+import app.raven.browser.ui.browser.HalfBarContent
 import app.raven.browser.ui.browser.SplitLayout
 import app.raven.browser.engine.TabManager
 import app.raven.browser.ui.browser.MenuTileSpec
 import app.raven.browser.ui.browser.PrivateLocked
+import app.raven.browser.ui.browser.AppLocked
 import app.raven.browser.ui.browser.RoundAction
 import app.raven.browser.ui.components.Card
 import app.raven.browser.ui.components.Divider
@@ -60,6 +62,7 @@ import app.raven.browser.ui.tabs.Hand
 import app.raven.browser.ui.tabs.TabCardInfo
 import app.raven.browser.ui.tabs.TabsLayout
 import app.raven.browser.ui.tabs.TabSide
+import app.raven.browser.ui.tabs.ProfileChip
 import app.raven.browser.ui.tabs.FlocksGrid
 import app.raven.browser.ui.tabs.FlockInfo
 import app.raven.browser.ui.sky.Wallpapers
@@ -213,6 +216,31 @@ open class Shots {
         compose.onRoot().captureRoboImage("$dir/tabs_${if (private) "private" else "everyday"}.png")
     }
 
+    /** The Tabs screen with three profiles: the chips at the top, and each card ringed in its profile's colour. */
+    @Test fun tabsProfiles() {
+        val img = image(Wallpapers.byId("flight"))
+        val work = Color(0xFFE8A86A)
+        val cards = listOf(
+            TabCardInfo("1", "Inbox · Work mail", "Proton", false, false, false, page(0xFF1B2433.toInt(), true), profileColor = work),
+            TabCardInfo("2", "GitHub · Pull requests", "GitHub", false, false, false, page(0xFF24292F.toInt(), true), profileColor = work),
+            TabCardInfo("3", "Calendar · This week", "Calendar", false, true, false, page(0xFF3A3F4A.toInt(), false), profileColor = work),
+        )
+        compose.setContent {
+            RavenTheme(0, false, true) {
+                TabsLayout(
+                    backdrop = img, side = TabSide.Everyday, normalCount = 3, privateCount = 0, flockCount = 0,
+                    subtitle = "3 open", onCloseAll = {}, onSide = {}, newLabel = "New tab", onNewTab = {}, onDone = {},
+                    profiles = listOf(
+                        ProfileChip("", "Personal", Color(0xFFC7CCD8), 5, false),
+                        ProfileChip("w", "Work", work, 3, true),
+                        ProfileChip("i", "Instagram 2", Color(0xFFE58FA8), 1, false),
+                    ),
+                ) { Hand(cards, Space.accents[0], onOpen = {}, onClose = {}) }
+            }
+        }
+        compose.onRoot().captureRoboImage("$dir/tabs_profiles.png")
+    }
+
     @Test fun tabsEveryday() = tabs(false)
     @Test fun tabsPrivate() = tabs(true)
 
@@ -269,7 +297,7 @@ open class Shots {
                     Card {
                         WallpaperPicker(true, "moonrise", listOf("none", "snow"), thumbs, onRotate = {}, onTap = {})
                         Divider()
-                        ListRow("Moving sky", detail = "Stars twinkle and the moon breathes on the home screen", trailing = { Toggle(true, {}, "Moving sky") })
+                        ListRow("Live wallpapers", detail = "The live ones move, stars twinkle and the moon breathes, only while the home screen shows. Still with Reduce motion or Battery Saver.", trailing = { Toggle(true, {}, "Live wallpapers") })
                     }
                 }
             }
@@ -289,6 +317,33 @@ open class Shots {
     @Test fun locked() {
         compose.setContent { RavenTheme(0, false, true) { PrivateLocked(onUnlock = {}, onLeave = {}) } }
         compose.onRoot().captureRoboImage("$dir/locked.png")
+    }
+
+    /** Pull down to refresh: halfway, far enough to reload, reloading, and in a private tab. */
+    @Test fun pullCircle() {
+        val states = listOf(
+            app.raven.browser.ui.browser.PullState().apply { dragging = true; progress = 0.5f },
+            app.raven.browser.ui.browser.PullState().apply { dragging = true; progress = 1.1f; armed = true },
+            app.raven.browser.ui.browser.PullState().apply { refreshing = true },
+            app.raven.browser.ui.browser.PullState().apply { dragging = true; progress = 0.8f },
+        )
+        compose.setContent {
+            RavenTheme(0, false, true) {
+                androidx.compose.foundation.layout.Row(Modifier.fillMaxWidth().height(140.dp)) {
+                    states.forEachIndexed { i, st ->
+                        Box(Modifier.weight(1f).fillMaxSize().background(if (i == 3) Color(0xFF1B1730) else Color(0xFFF7F3EC))) {
+                            app.raven.browser.ui.browser.PullIndicator(st, private = i == 3, clearTop = { 0f }, modifier = Modifier.align(Alignment.TopCenter))
+                        }
+                    }
+                }
+            }
+        }
+        compose.onRoot().captureRoboImage("$dir/pull.png")
+    }
+
+    @Test fun appLocked() {
+        compose.setContent { RavenTheme(0, false, true) { AppLocked(onUnlock = {}) } }
+        compose.onRoot().captureRoboImage("$dir/app_locked.png")
     }
 
     @Test fun bookmarks() {
@@ -415,19 +470,49 @@ open class Shots {
         compose.onRoot().captureRoboImage("$dir/float_parked.png")
     }
 
+    @Composable
+    private fun HalfOver(active: Boolean, muted: Boolean, side: Boolean, address: String, title: String) {
+        Box(Modifier.fillMaxSize()) {
+            Column(Modifier.fillMaxSize()) {
+                HalfBarContent(
+                    private = false, address = address, url = "https://$address", secure = true, loading = false, progress = 1f,
+                    hasPage = true, muted = muted, sound = TabManager.SplitSound.TOP, sideBySide = side, tabCount = 6,
+                    onAddress = {}, onSiteInfo = {}, onSound = {}, onReload = {}, onTabs = {}, onMenu = {},
+                )
+                FakePage(0xFF0F0F0F, true, title)
+            }
+            HalfChrome(active)
+        }
+    }
+
     @Test fun split() {
         compose.setContent {
             RavenTheme(0, false, true) {
                 Column(Modifier.fillMaxSize().background(Space.Ground)) {
-                    Bar(null, text = "youtube.com", tabs = 6)
                     SplitLayout(0.5f, {}, {},
-                        first = { side -> Box(Modifier.fillMaxSize()) { FakePage(0xFF0F0F0F, true, "Ravens solve a puzzle box"); HalfChrome(true, false, TabManager.SplitSound.TOP, side) {} } },
-                        second = { side -> Box(Modifier.fillMaxSize()) { FakePage(0xFF0F0F0F, true, "Northern lights over Tromsø"); HalfChrome(false, true, TabManager.SplitSound.TOP, side) {} } },
+                        first = { side -> HalfOver(true, false, side, "youtube.com", "Ravens solve a puzzle box") },
+                        second = { side -> HalfOver(false, true, side, "en.wikipedia.org", "Northern lights over Tromsø") },
                     )
                 }
             }
         }
         compose.onRoot().captureRoboImage("$dir/split.png")
+    }
+
+    /** Split screen with the phone turned: the halves side by side. */
+    @Config(qualifiers = "w844dp-h390dp-xhdpi")
+    @Test fun splitSideBySide() {
+        compose.setContent {
+            RavenTheme(0, false, true) {
+                Column(Modifier.fillMaxSize().background(Space.Ground)) {
+                    SplitLayout(0.5f, {}, {},
+                        first = { side -> HalfOver(false, false, side, "youtube.com", "Ravens solve a puzzle box") },
+                        second = { side -> HalfOver(true, false, side, "en.wikipedia.org", "Northern lights over Tromsø") },
+                    )
+                }
+            }
+        }
+        compose.onRoot().captureRoboImage("$dir/split_side.png")
     }
 }
 

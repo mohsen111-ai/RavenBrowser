@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
@@ -30,10 +31,13 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import app.raven.browser.ui.components.Toggle
 import app.raven.browser.ui.sky.Wallpaper
 import app.raven.browser.ui.sky.Wallpapers
+import app.raven.browser.ui.sky.drawLive
 import app.raven.browser.ui.theme.Icon
 import app.raven.browser.ui.theme.Icons
 import app.raven.browser.ui.theme.Raven
@@ -80,10 +84,26 @@ fun WallpaperPicker(
                                 stateDescription = if (rotate) (if (included) "In the rotation" else "Left out") else if (on) "Chosen" else ""
                             },
                     ) {
-                        thumbs[w.id]?.let {
-                            Image(
-                                it, null, contentScale = ContentScale.Crop,
-                                modifier = Modifier.fillMaxSize().graphicsLayer { alpha = if (rotate && !included) 0.3f else 1f },
+                        val dim = if (rotate && !included) 0.3f else 1f
+                        val thumb = thumbs[w.id]
+                        if (thumb != null) {
+                            Image(thumb, null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize().graphicsLayer { alpha = dim })
+                            // A live one shows its still moment (the fire burning, the candle lit) on its tile.
+                            w.live?.let { live ->
+                                val canvas = androidx.compose.runtime.remember { app.raven.browser.ui.sky.LiveCanvas() }
+                                androidx.compose.foundation.Canvas(Modifier.fillMaxSize().graphicsLayer { alpha = dim }) {
+                                    drawLive(live, app.raven.browser.ui.sky.SkyMap(size.width, size.height), live.still, canvas)
+                                }
+                            }
+                        } else if (w.res == null) {
+                            // Plain night: no picture, so a few stars and its name, to show it's there.
+                            PlainNightTile(Modifier.fillMaxSize().graphicsLayer { alpha = dim })
+                        }
+                        if (w.live != null) {
+                            Text(
+                                "LIVE", fontSize = 8.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.sp, color = Space.Text,
+                                lineHeight = 9.sp,
+                                modifier = Modifier.align(Alignment.BottomStart).padding(5.dp).clip(RoundedCornerShape(5.dp)).background(Color(0xB3070A12)).padding(horizontal = 4.dp, vertical = 2.dp),
                             )
                         }
                         if (rotate && included) {
@@ -97,5 +117,22 @@ fun WallpaperPicker(
                 repeat(6 - row.size) { Spacer(Modifier.weight(1f)) }
             }
         }
+    }
+}
+
+/** The plain night's tile: the bare midnight ground with a few stars and its name. */
+@Composable
+private fun PlainNightTile(modifier: Modifier) {
+    Box(modifier) {
+        androidx.compose.foundation.Canvas(Modifier.fillMaxSize()) {
+            listOf(0.2f to 0.15f, 0.7f to 0.1f, 0.45f to 0.3f, 0.85f to 0.38f, 0.15f to 0.5f, 0.6f to 0.55f, 0.32f to 0.72f).forEachIndexed { i, (x, y) ->
+                drawCircle(Color.White.copy(alpha = if (i % 3 == 0) 0.9f else 0.5f), radius = if (i % 3 == 0) 1.6f else 1f, center = androidx.compose.ui.geometry.Offset(x * size.width, y * size.height))
+            }
+        }
+        Text(
+            "Plain\nnight", fontSize = 9.sp, lineHeight = 10.sp, color = Space.Text2, fontWeight = FontWeight.Medium,
+            modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 6.dp),
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+        )
     }
 }

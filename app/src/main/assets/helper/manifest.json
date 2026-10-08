@@ -1,12 +1,12 @@
 {
   "manifest_version": 2,
   "name": "Raven helper",
-  "description": "Built into Raven: mutes, pauses or shows only the video in a tab when Raven asks (split screen, the floating tab, one tab playing at a time).",
-  "version": "1.0",
+  "description": "Built into Raven: mutes, pauses or shows only the video in a tab when Raven asks (split screen, the floating tab, one tab playing at a time), and turns down cookie popups.",
+  "version": "1.1",
   "browser_specific_settings": { "gecko": { "id": "helper@raven.browser" } },
   "content_scripts": [{
     "matches": ["<all_urls>"],
-    "js": ["media.js"],
+    "js": ["consent.js", "media.js"],
     "run_at": "document_start",
     "all_frames": true,
     "match_about_blank": true

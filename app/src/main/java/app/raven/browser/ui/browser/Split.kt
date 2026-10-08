@@ -39,6 +39,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -52,8 +54,11 @@ import androidx.lifecycle.compose.currentStateAsState
 import app.raven.browser.Container
 import app.raven.browser.engine.BrowserTab
 import app.raven.browser.engine.TabManager.SplitSound
+import app.raven.browser.engine.UrlInput
 import app.raven.browser.ui.Screen
+import app.raven.browser.ui.Sheet
 import app.raven.browser.ui.UiState
+import app.raven.browser.ui.components.IconButton
 import app.raven.browser.ui.components.SitePlanet
 import app.raven.browser.ui.theme.Display
 import app.raven.browser.ui.theme.Icon
@@ -61,12 +66,21 @@ import app.raven.browser.ui.theme.Icons
 import app.raven.browser.ui.theme.Raven
 import app.raven.browser.ui.theme.RavenIcon
 import app.raven.browser.ui.theme.Space
+import kotlin.math.roundToInt
 
-/** Two tabs sharing the screen. The bar belongs to the half you touched last; a speaker on each picks the sound. */
+/** Two tabs sharing the screen, each with its own small bar; the half you touched last is the active one. */
 @Composable
-internal fun SplitArea(c: Container, ui: UiState, top: BrowserTab, bottom: BrowserTab, selectedId: String) {
+internal fun SplitArea(c: Container, ui: UiState, top: BrowserTab, bottom: BrowserTab, selectedId: String, barsHidden: Boolean = false, peek: Boolean = false) {
     val sound by c.tabs.splitSound.collectAsState()
     val onBrowser = ui.screen == Screen.Browser
+    // A half whose video went fullscreen fills the whole screen until it comes back.
+    val topFull by top.fullscreen.collectAsState()
+    val bottomFull by bottom.fullscreen.collectAsState()
+    val full = when {
+        topFull -> SplitFull.FIRST
+        bottomFull -> SplitFull.SECOND
+        else -> SplitFull.NONE
+    }
     // The half that isn't the selected tab stays awake and drawn too (the selected one is looked after in RavenRoot).
     if (top.id != selectedId) KeepShown(top, onBrowser)
     if (bottom.id != selectedId) KeepShown(bottom, onBrowser)
@@ -77,10 +91,14 @@ internal fun SplitArea(c: Container, ui: UiState, top: BrowserTab, bottom: Brows
             ui.splitRatio = 0.5f
             c.tabs.endSplit(if (keepFirst) top.id else bottom.id)
         },
-        first = { sideBySide -> Half(c, ui, top, first = true, sideBySide, top.id == selectedId, sound) },
-        second = { sideBySide -> Half(c, ui, bottom, first = false, sideBySide, bottom.id == selectedId, sound) },
+        full = full,
+        first = { sideBySide -> Half(c, ui, top, first = true, sideBySide, top.id == selectedId, sound, full != SplitFull.NONE, barsHidden, peek) },
+        second = { sideBySide -> Half(c, ui, bottom, first = false, sideBySide, bottom.id == selectedId, sound, full != SplitFull.NONE, barsHidden, peek) },
     )
 }
+
+/** Which half of split screen fills the screen with its fullscreen video, if any. */
+enum class SplitFull { NONE, FIRST, SECOND }
 
 /** Keeps a tab that's on screen but isn't the selected one running and drawing (or playing, wherever it is). */
 @Composable
@@ -104,6 +122,7 @@ fun SplitLayout(
     ratio: Float,
     onRatio: (Float) -> Unit,
     onEnd: (keepFirst: Boolean) -> Unit,
+    full: SplitFull = SplitFull.NONE,
     first: @Composable (sideBySide: Boolean) -> Unit,
     second: @Composable (sideBySide: Boolean) -> Unit,
 ) {
@@ -130,17 +149,37 @@ fun SplitLayout(
                 },
             )
         }
-        if (sideBySide) {
-            Row(Modifier.fillMaxSize()) {
-                Box(Modifier.weight(r).fillMaxHeight()) { first(true) }
-                handle()
-                Box(Modifier.weight(1f - r).fillMaxHeight()) { second(true) }
+        // One layout for both ways round, with the halves always in the same places: turning the phone (as a wide
+        // video in fullscreen does) or a half going fullscreen must never rebuild a page. With a half fullscreen, it
+        // takes all the room and the other waits at no size.
+        val handlePx = with(LocalDensity.current) { 14.dp.roundToPx() }
+        Layout(
+            content = {
+                Box { first(sideBySide) }
+                Box { if (full == SplitFull.NONE) handle() }
+                Box { second(sideBySide) }
+            },
+            modifier = Modifier.fillMaxSize(),
+        ) { parts, constraints ->
+            val total = if (sideBySide) constraints.maxWidth else constraints.maxHeight
+            val across = if (sideBySide) constraints.maxHeight else constraints.maxWidth
+            val gap = if (full == SplitFull.NONE) handlePx else 0
+            val a = when (full) {
+                SplitFull.NONE -> ((total - gap) * r).roundToInt()
+                SplitFull.FIRST -> total
+                SplitFull.SECOND -> 0
             }
-        } else {
-            Column(Modifier.fillMaxSize()) {
-                Box(Modifier.weight(r).fillMaxWidth()) { first(false) }
-                handle()
-                Box(Modifier.weight(1f - r).fillMaxWidth()) { second(false) }
+            val b = (total - gap - a).coerceAtLeast(0)
+            fun sized(along: Int) = if (sideBySide) Constraints.fixed(along, across) else Constraints.fixed(across, along)
+            val one = parts[0].measure(sized(a))
+            val bar = parts[1].measure(sized(gap))
+            val two = parts[2].measure(sized(b))
+            layout(constraints.maxWidth, constraints.maxHeight) {
+                if (sideBySide) {
+                    one.place(0, 0); bar.place(a, 0); two.place(a + gap, 0)
+                } else {
+                    one.place(0, 0); bar.place(0, a); two.place(0, a + gap)
+                }
             }
         }
     }
@@ -166,14 +205,26 @@ private fun SplitHandle(sideBySide: Boolean, onDrag: (Float) -> Unit, onDragEnd:
     }
 }
 
-/** One half: the tab's page, a thin glow when the bar belongs to it, and its speaker. Touching it makes it the active half. */
+/**
+ * One half: its own small bar (address, sound, reload, tabs, menu) over its page, and a thin glow when it's the
+ * active half. Touching it anywhere makes it the active half. The bar steps aside while you scroll down the page,
+ * and comes back when you scroll up.
+ */
 @Composable
-private fun Half(c: Container, ui: UiState, tab: BrowserTab, first: Boolean, sideBySide: Boolean, active: Boolean, sound: SplitSound) {
+private fun Half(
+    c: Container, ui: UiState, tab: BrowserTab, first: Boolean, sideBySide: Boolean, active: Boolean, sound: SplitSound,
+    fullscreen: Boolean, barsHidden: Boolean, peek: Boolean,
+) {
     val muted by tab.muted.collectAsState()
     // Read here, so the half's name follows its page.
     val title by tab.title.collectAsState()
     val label = title.let { tab.displayTitle }
     val isActive by rememberUpdatedState(active)
+    val scrolledAway by tab.scrolledAway.collectAsState()
+    // Back on the home page (no page to scroll), the half's bar is always there: it's the way to search from it.
+    val overNewTab by tab.ntpOverlay.collectAsState()
+    val pageUrl by tab.url.collectAsState()
+    val onHome = overNewTab || pageUrl.isBlank() || pageUrl == "about:blank"
     val name = when {
         sideBySide && first -> "Left half"
         sideBySide -> "Right half"
@@ -193,50 +244,144 @@ private fun Half(c: Container, ui: UiState, tab: BrowserTab, first: Boolean, sid
             }
             .semantics { contentDescription = "$name: $label" },
     ) {
-        TabPage(c, ui, tab, primary = active)
-        HalfChrome(active, muted, sound, sideBySide, onSound = { c.tabs.setSplitSound(it) })
+        Column(Modifier.fillMaxSize()) {
+            if ((!scrolledAway || onHome) && !fullscreen && !barsHidden) HalfBar(c, ui, tab, muted, sound, sideBySide)
+            Box(Modifier.weight(1f).fillMaxWidth()) { TabPage(c, ui, tab, primary = active) }
+        }
+        // Full screen for pages: the bar comes over the page for a moment after a swipe down from the top.
+        if (barsHidden && peek && !fullscreen) HalfBar(c, ui, tab, muted, sound, sideBySide)
+        if (!fullscreen) HalfChrome(active)
     }
 }
 
-/** What Raven draws over a half: the active glow, the speaker and its choice, and "Muted" when it's quiet. */
+/** A half's own bar, wired to its tab. Anything in it acts on this half (it becomes the active one first). */
 @Composable
-fun HalfChrome(active: Boolean, muted: Boolean, sound: SplitSound, sideBySide: Boolean, onSound: (SplitSound) -> Unit) {
-    Box(Modifier.fillMaxSize()) {
-        if (active) Box(Modifier.matchParentSize().border(2.dp, Raven.accent.copy(alpha = 0.6f)))
-        var choosing by remember { mutableStateOf(false) }
-        Row(
-            Modifier.align(Alignment.TopEnd).padding(10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+private fun HalfBar(c: Container, ui: UiState, tab: BrowserTab, muted: Boolean, sound: SplitSound, sideBySide: Boolean) {
+    val pageUrl by tab.url.collectAsState()
+    val overNewTab by tab.ntpOverlay.collectAsState()
+    val url = if (overNewTab) "" else pageUrl
+    val pageLoading by tab.loading.collectAsState()
+    val progress by tab.progress.collectAsState()
+    val secure by tab.secure.collectAsState()
+    val tabCount = c.tabs.tabs.collectAsState().value.size
+    val engine = c.settings.current.searchEngine
+    fun mine() = c.tabs.select(tab.id)
+    HalfBarContent(
+        private = tab.private,
+        address = UrlInput.searchTerms(url, engine) ?: UrlInput.display(url),
+        url = url,
+        secure = secure,
+        loading = pageLoading && !overNewTab,
+        progress = progress / 100f,
+        hasPage = !tab.isNewTabPage,
+        muted = muted,
+        sound = sound,
+        sideBySide = sideBySide,
+        tabCount = tabCount,
+        ring = profileColor(c, tab),
+        onAddress = { mine(); ui.editText = ""; ui.editing = true },
+        onSiteInfo = { mine(); ui.sheet = Sheet.SiteInfo },
+        onSound = { c.tabs.setSplitSound(it) },
+        onReload = { if (pageLoading) tab.session.stop() else tab.session.reload() },
+        onTabs = { mine(); captureThumbnail(ui, tab) { ui.go(Screen.Tabs) } },
+        onMenu = { mine(); ui.sheet = Sheet.Menu },
+    )
+}
+
+/** What a half's bar shows: the page's address (tap to search or type one), its sound, reload, tabs and the menu. */
+@Composable
+fun HalfBarContent(
+    private: Boolean,
+    address: String,
+    url: String,
+    secure: Boolean?,
+    loading: Boolean,
+    progress: Float,
+    hasPage: Boolean,
+    muted: Boolean,
+    sound: SplitSound,
+    sideBySide: Boolean,
+    tabCount: Int,
+    ring: Color? = null,
+    onAddress: () -> Unit,
+    onSiteInfo: () -> Unit,
+    onSound: (SplitSound) -> Unit,
+    onReload: () -> Unit,
+    onTabs: () -> Unit,
+    onMenu: () -> Unit,
+) {
+    Row(
+        Modifier.fillMaxWidth().height(48.dp).background(if (private) Space.NebulaGround else Space.Strip).padding(horizontal = 6.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
+    ) {
+        Box(
+            Modifier.weight(1f).height(36.dp).clip(CircleShape)
+                .background(if (private) Space.NebulaBar else Space.Surface2)
+                .clickable(onClickLabel = "Search or type an address in this half", onClick = onAddress)
+                .semantics { contentDescription = "Address ${address.ifEmpty { "empty" }}. Tap to search or edit" },
         ) {
-            if (muted) {
+            Row(Modifier.fillMaxSize().padding(start = 4.dp, end = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+                val icon = when {
+                    private && address.isEmpty() -> Icons.Eclipse
+                    address.isEmpty() -> Icons.Search
+                    secure == false && url.startsWith("http:") -> Icons.LockOpen
+                    url.startsWith("https") -> Icons.Lock
+                    else -> Icons.Globe
+                }
+                Box(
+                    Modifier.size(30.dp).clip(CircleShape)
+                        .then(if (hasPage) Modifier.clickable(onClickLabel = "About this site", onClick = onSiteInfo) else Modifier),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(icon, null, size = 14.dp, tint = if (icon == Icons.LockOpen) Space.Solar else if (private) Space.NebulaText else Space.Text2)
+                }
+                Spacer(Modifier.width(4.dp))
                 Text(
-                    "Muted",
-                    fontSize = 11.sp, fontWeight = FontWeight.SemiBold, color = Space.Text,
-                    modifier = Modifier.clip(CircleShape).background(Color(0xB30A0E18)).padding(horizontal = 10.dp, vertical = 5.dp),
+                    address.ifEmpty { if (private) "Search privately" else "Search or type address" },
+                    color = if (address.isEmpty()) Space.Text2 else Space.Text,
+                    style = MaterialTheme.typography.bodySmall,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
-            Box {
-                Box(
-                    Modifier.size(38.dp).clip(CircleShape).background(Color(0xB30A0E18))
-                        .border(1.dp, Color(0x38C7CCD8), CircleShape)
-                        .clickable(onClickLabel = "Choose whose sound you hear") { choosing = true }
-                        .semantics { contentDescription = if (muted) "Sound: muted" else "Sound: on" },
-                    contentAlignment = Alignment.Center,
-                ) { Icon(if (muted) Icons.Mute else Icons.Sound, null, size = 18.dp, tint = if (muted) Space.Text2 else Space.Text) }
-                DropdownMenu(choosing, { choosing = false }, containerColor = Space.Surface2, shape = RoundedCornerShape(20.dp)) {
-                    soundChoices(sideBySide).forEach { (s, label, icon) ->
-                        DropdownMenuItem(
-                            text = { Text(label, fontWeight = if (s == sound) FontWeight.SemiBold else FontWeight.Normal) },
-                            leadingIcon = { Icon(icon, null, size = 18.dp, tint = Space.Text2) },
-                            trailingIcon = { if (s == sound) Icon(Icons.Check, "Chosen", size = 16.dp) },
-                            onClick = { choosing = false; onSound(s) },
-                        )
-                    }
-                }
+            Moonlight(loading, progress, Modifier.fillMaxSize())
+        }
+        SoundButton(muted, sound, sideBySide, onSound)
+        if (hasPage) IconButton(if (loading) Icons.Close else Icons.Reload, if (loading) "Stop loading" else "Reload", onReload, size = 38.dp, iconSize = 17.dp)
+        TabsButton(tabCount, private, 38.dp, ring = ring, onClick = onTabs)
+        IconButton(Icons.Menu, "Menu", onMenu, size = 38.dp, iconSize = 18.dp)
+    }
+}
+
+/** The speaker in a half's bar: shows whether this half is heard, and picks whose sound you hear. */
+@Composable
+private fun SoundButton(muted: Boolean, sound: SplitSound, sideBySide: Boolean, onSound: (SplitSound) -> Unit) {
+    var choosing by remember { mutableStateOf(false) }
+    Box {
+        Box(
+            Modifier.size(38.dp).clip(CircleShape)
+                .clickable(onClickLabel = "Choose whose sound you hear") { choosing = true }
+                .semantics { contentDescription = if (muted) "Sound: muted" else "Sound: on" },
+            contentAlignment = Alignment.Center,
+        ) { Icon(if (muted) Icons.Mute else Icons.Sound, null, size = 17.dp, tint = if (muted) Space.Text3 else Space.Text) }
+        DropdownMenu(choosing && LocalBrowserShown.current, { choosing = false }, containerColor = Space.Surface2, shape = RoundedCornerShape(20.dp)) {
+            soundChoices(sideBySide).forEach { (s, label, icon) ->
+                DropdownMenuItem(
+                    text = { Text(label, fontWeight = if (s == sound) FontWeight.SemiBold else FontWeight.Normal) },
+                    leadingIcon = { Icon(icon, null, size = 18.dp, tint = Space.Text2) },
+                    trailingIcon = { if (s == sound) Icon(Icons.Check, "Chosen", size = 16.dp) },
+                    onClick = { choosing = false; onSound(s) },
+                )
             }
         }
     }
+}
+
+/** What Raven draws over a half: a thin moonlit edge around the active one. */
+@Composable
+fun HalfChrome(active: Boolean) {
+    if (active) Box(Modifier.fillMaxSize().border(2.dp, Raven.accent.copy(alpha = 0.6f)))
 }
 
 private fun soundChoices(sideBySide: Boolean): List<Triple<SplitSound, String, RavenIcon>> = listOf(

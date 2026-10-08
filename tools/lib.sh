@@ -53,3 +53,15 @@ else:
     print("-")
 PY
 }
+# Settings: most settings have a page of their own now, below the fold on a small phone; the search box finds them.
+# Opens Settings, searches for $1 and opens the result starting with $2.
+setting() {
+  menu "Settings" && sleep 3 || return 1
+  tap "Search settings" && sleep 1 && $A shell input text "'$1'" && sleep 2
+  $A shell input keyevent 4; sleep 1
+  # Nothing found: out of Settings again, so the next step starts from the browser.
+  tap "^$2" || { $A shell input keyevent 4; sleep 1; front; return 1; }
+  sleep 2
+}
+# Leaves Settings from one of its pages: Back to the main page, Back out, and Raven in front.
+leave_settings() { $A shell input keyevent 4; sleep 1; $A shell input keyevent 4; sleep 2; front; }

@@ -24,6 +24,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -55,6 +57,8 @@ import app.raven.browser.ui.screens.SettingsScreen
 import app.raven.browser.ui.tabs.TabsScreen
 import app.raven.browser.ui.theme.RavenTheme
 import app.raven.browser.ui.theme.Space
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -63,7 +67,19 @@ import kotlinx.coroutines.launch
 fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
     val prefs by c.settings.prefs.collectAsState()
     val context = LocalContext.current
-    val batterySaver = remember { context.getSystemService(PowerManager::class.java).isPowerSaveMode }
+    // Followed as it changes (turning Battery Saver on stills the live wallpapers at once).
+    val power = remember { context.getSystemService(PowerManager::class.java) }
+    var batterySaver by remember { mutableStateOf(power.isPowerSaveMode) }
+    androidx.compose.runtime.DisposableEffect(power) {
+        val receiver = object : android.content.BroadcastReceiver() {
+            override fun onReceive(ctx: android.content.Context, intent: android.content.Intent) { batterySaver = power.isPowerSaveMode }
+        }
+        androidx.core.content.ContextCompat.registerReceiver(
+            context, receiver, android.content.IntentFilter(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED),
+            androidx.core.content.ContextCompat.RECEIVER_NOT_EXPORTED,
+        )
+        onDispose { context.unregisterReceiver(receiver) }
+    }
     val reduceMotion = when (prefs.reduceMotion) { Motion.ALWAYS -> true; Motion.NEVER -> false; Motion.AUTO -> batterySaver }
     RavenTheme(prefs.accent, prefs.trueBlack, reduceMotion) {
         if (!prefs.onboardingDone) {
@@ -102,24 +118,48 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
         // In another app the page rests too, unless it's playing something.
         val visible by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
         val started = visible.isAtLeast(Lifecycle.State.STARTED)
-        LaunchedEffect(onBrowser, playing, overNewTab, tab?.id, started) {
+        val resumed = visible.isAtLeast(Lifecycle.State.RESUMED)
+        LaunchedEffect(onBrowser, playing, overNewTab, tab?.id, started, resumed) {
             val session = tab?.session ?: return@LaunchedEffect
+            // Back from another app, the page view switches its page on by itself as its surface comes back: say
+            // again what Raven wants once that's done (a page under the Tabs screen or Settings stays resting).
+            if (resumed) { withFrameNanos { }; withFrameNanos { } }
             if (session.isOpen) session.setActive((started && onBrowser && !overNewTab) || playing)
         }
 
-        // Fullscreen video: no bars, Android's or ours. Read from the tab, so it also holds for a screen
-        // Android rebuilt while you were in another app.
-        val fullscreen = tab?.fullscreen?.collectAsState()?.value == true
+        // Fullscreen video: no bars, Android's or ours. Read from the tab, so it also holds for a screen Android
+        // rebuilt while you were in another app. Any tab on screen can go fullscreen: the one the bar belongs to, a
+        // half of split screen, or the floating tab; its video then fills the whole phone screen.
+        val split by c.tabs.split.collectAsState()
+        val floatingId by c.tabs.floatingId.collectAsState()
+        val parked by c.tabs.floatParked.collectAsState()
+        val onScreen = listOfNotNull(
+            tab,
+            split?.let { s -> tabs.firstOrNull { it.id == s.top } },
+            split?.let { s -> tabs.firstOrNull { it.id == s.bottom } },
+            floatingId?.takeIf { !parked }?.let { id -> tabs.firstOrNull { it.id == id } },
+        ).distinct()
+        // Starts from what's true now, so a screen Android rebuilt is laid out for the fullscreen video at once.
+        val fullTab by remember(onScreen.map { it.id }) {
+            if (onScreen.isEmpty()) flowOf(null)
+            else combine(onScreen.map { t -> t.fullscreen.map { on -> if (on) t else null } }) { all -> all.firstOrNull { it != null } }
+        }.collectAsState(onScreen.firstOrNull { it.fullscreen.value })
+        val fullscreen = fullTab != null
+        val fullPlaying = fullTab?.playing?.collectAsState()?.value == true
         // Like Firefox and Chrome: a wide video in fullscreen turns the screen to landscape (either way round,
         // following the phone), and the screen is free to turn again once fullscreen ends.
         // A page's own lock (a game, a video player) wins; otherwise the screen turns freely.
-        val wideVideo = tab?.wideVideo?.collectAsState()?.value
+        val wideVideo = fullTab?.wideVideo?.collectAsState()?.value
         val pageLock by c.engine.orientationLock.collectAsState()
         val shown by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
         val inFront = shown.isAtLeast(Lifecycle.State.STARTED)
         // Leaving fullscreen ends the page's lock too, as the Screen Orientation standard says. The engine
         // doesn't always say so itself (after picture-in-picture it didn't, and the screen stayed sideways).
-        LaunchedEffect(fullscreen) { if (!fullscreen) c.engine.orientationLock.value = null }
+        var wasFull by remember { mutableStateOf(fullscreen) }
+        LaunchedEffect(fullscreen) {
+            if (wasFull && !fullscreen) c.engine.orientationLock.value = null
+            wasFull = fullscreen
+        }
         // With the rotation lock on, the direction the screen had before the video (if Android left it turned).
         val rotationHold = rememberRotationHold(activity, fullscreen)
         LaunchedEffect(pageLock, fullscreen, wideVideo, inFront, rotationHold) {
@@ -132,15 +172,24 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
             android.util.Log.i("Raven", "screen: fullscreen=$fullscreen wide=$wideVideo pageLock=$pageLock hold=$rotationHold -> $want (was ${activity.requestedOrientation})")
             activity.requestedOrientation = want
         }
-        // Picture-in-picture: a fullscreen video that's playing shrinks into a small window when you leave Raven.
-        val videoSize = tab?.videoSize?.collectAsState()?.value
-        LaunchedEffect(fullscreen, playing, videoSize, prefs.pictureInPicture) {
-            (activity as? app.raven.browser.MainActivity)?.updatePip(prefs.pictureInPicture && fullscreen && playing, videoSize, playing)
+        // Picture-in-picture: a fullscreen video that's playing shrinks into a small window when you leave Raven
+        // (never while Raven is locked).
+        val videoSize = fullTab?.videoSize?.collectAsState()?.value
+        val appLocked by c.appLocked.collectAsState()
+        LaunchedEffect(fullscreen, fullPlaying, videoSize, prefs.pictureInPicture, appLocked) {
+            (activity as? app.raven.browser.MainActivity)?.updatePip(prefs.pictureInPicture && fullscreen && fullPlaying && !appLocked, videoSize, fullPlaying)
         }
-        LaunchedEffect(fullscreen) {
+        LaunchedEffect(fullTab?.id) {
             ui.fullscreen = fullscreen
+            ui.fullscreenTabId = fullTab?.id
+            android.util.Log.i("Raven", "fullscreen: ${fullTab?.id?.take(6) ?: "none"}${if (fullTab != null && fullTab?.id == floatingId) " (floating tab)" else if (fullTab != null && fullTab?.id != tab?.id) " (other half)" else ""}")
+        }
+        // The phone's own bars go too, for a fullscreen video and for full screen pages (a swipe from the edge shows
+        // them for a moment, over the page).
+        val hideSystemBars = fullscreen || (ui.fullPage && ui.screen == Screen.Browser)
+        LaunchedEffect(hideSystemBars) {
             val controller = WindowCompat.getInsetsController(activity.window, activity.window.decorView)
-            if (fullscreen) {
+            if (hideSystemBars) {
                 controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
                 controller.hide(WindowInsetsCompat.Type.systemBars())
             } else {
@@ -160,16 +209,22 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
         }
         val main = activity as? app.raven.browser.MainActivity
         val privateOnScreen = tab?.private == true && ui.screen == Screen.Browser
-        val resumed = visible.isAtLeast(Lifecycle.State.RESUMED)
-        LaunchedEffect(locked, privateOnScreen, resumed) {
-            if (locked && privateOnScreen && resumed) main?.unlockPrivate()
+        // (While all of Raven is locked, its own question comes first and opens these too.)
+        LaunchedEffect(locked, privateOnScreen, resumed, appLocked) {
+            // Asked once Raven has drawn its lock screen, not over a screen still coming back.
+            if (locked && privateOnScreen && resumed && !appLocked) { withFrameNanos { }; withFrameNanos { }; main?.unlockPrivate() }
         }
         // With the lock on, private tabs stay out of screenshots and the recent apps view.
         val secret = prefs.lockPrivateTabs && ((tab?.private == true && ui.screen == Screen.Browser) || (ui.screen == Screen.Tabs && ui.privateSideShown))
-        LaunchedEffect(secret) {
+        LaunchedEffect(secret, prefs.appLock) {
             if (secret) activity.window.addFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE)
             else activity.window.clearFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE)
-            if (android.os.Build.VERSION.SDK_INT >= 33) activity.setRecentsScreenshotEnabled(!secret)
+            // With the lock for all of Raven on, the recent apps view never shows what's open (screenshots still work).
+            if (android.os.Build.VERSION.SDK_INT >= 33) activity.setRecentsScreenshotEnabled(!secret && !prefs.appLock)
+        }
+        // The lock for all of Raven: back in front while locked, it asks for a fingerprint or the screen lock at once.
+        LaunchedEffect(appLocked, resumed) {
+            if (appLocked && resumed) { withFrameNanos { }; withFrameNanos { }; main?.unlockApp() }
         }
 
         LaunchedEffect(Unit) {
@@ -186,13 +241,34 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
                         else launch { ui.snackbar.showSnackbar("No app on this phone can open that link") }
                     }
                     is TabEvent.ContextMenu -> ui.sheet = Sheet.LongPress(e.tabId, e.element)
+                    is TabEvent.OfferApp -> launch {
+                        val r = ui.snackbar.showSnackbar("Open in ${e.app}?", actionLabel = "Open", duration = androidx.compose.material3.SnackbarDuration.Short)
+                        if (r == androidx.compose.material3.SnackbarResult.ActionPerformed) runCatching { activity.startActivity(e.intent) }
+                    }
+                    // "Tab closed · Undo": the newest close replaces the last one's bar; when the bar goes, so do the tabs.
+                    is TabEvent.Closed -> launch {
+                        ui.snackbar.currentSnackbarData?.dismiss()
+                        val r = ui.snackbar.showSnackbar(
+                            if (e.count == 1) "Tab closed" else "${e.count} tabs closed",
+                            actionLabel = "Undo",
+                            duration = androidx.compose.material3.SnackbarDuration.Short,
+                        )
+                        if (r == androidx.compose.material3.SnackbarResult.ActionPerformed) c.tabs.undoClose(e.batch) else c.tabs.finishClosed(e.batch)
+                    }
                 }
             }
         }
 
+        // Locked, nothing in a window of its own (a sheet, a page's question, a dialog) stays over the lock.
+        LaunchedEffect(appLocked) {
+            if (appLocked) { ui.sheet = null; ui.folderFor = null; ui.editing = false; ui.findOpen = false }
+        }
         Box(Modifier.fillMaxSize().background(Space.Ground)) {
             // The browser stays composed underneath other screens so the page keeps its place.
-            BrowserScreen(c, ui)
+            val homeShown = ui.screen == Screen.Browser && !appLocked && !(locked && tab?.private == true) && !ui.pip
+            androidx.compose.runtime.CompositionLocalProvider(app.raven.browser.ui.browser.LocalBrowserShown provides homeShown) {
+                BrowserScreen(c, ui)
+            }
             if (locked && tab?.private == true && ui.screen == Screen.Browser && !ui.pip) {
                 app.raven.browser.ui.browser.PrivateLocked(
                     onUnlock = { main?.unlockPrivate() },
@@ -203,11 +279,15 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
                     },
                 )
             }
-            Screens(c, ui)
-            // The floating tab floats over every screen in Raven (not over other apps, and not in picture-in-picture).
-            if (!ui.pip) app.raven.browser.ui.browser.FloatingTab(c, ui)
+            // (Locked, the screens wait underneath: their dialogs would show over the lock.)
+            if (!appLocked) Screens(c, ui)
+            // The floating tab floats over every screen in Raven (not over other apps, and not in picture-in-picture,
+            // unless it's the floating tab's own video that's playing there).
+            if (!ui.pip || (fullTab != null && fullTab?.id == floatingId)) app.raven.browser.ui.browser.FloatingTab(c, ui)
 
-            when (val s = ui.sheet) {
+            // Over the private tabs' lock too, no sheet or page question shows.
+            val covered = appLocked || (locked && tab?.private == true && ui.screen == Screen.Browser)
+            if (!covered) when (val s = ui.sheet) {
                 Sheet.Menu -> tab?.let { MenuSheet(c, ui, it) }
                 Sheet.SiteInfo -> tab?.let { SiteInfoSheet(c, ui, it) }
                 Sheet.Supernova -> SupernovaSheet(c, ui)
@@ -217,11 +297,14 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
                 is Sheet.LongPress -> LongPressSheet(c, ui, s)
                 null -> Unit
             }
-            popup?.let { UboSheet(c, it, tab) }
-            install?.let { InstallSheet(c, it) }
-            PromptHost(c)
+            if (!covered) {
+                popup?.let { UboSheet(c, it, tab) }
+                install?.let { InstallSheet(c, it) }
+                PromptHost(c)
+            }
 
-            if (!ui.pip) SnackbarHost(ui.snackbar, Modifier.align(Alignment.BottomCenter).navigationBarsPadding().padding(16.dp)) { data ->
+            // On the Tabs screen it sits above the New tab button, so a quick tap there never lands on Undo.
+            if (!ui.pip) SnackbarHost(ui.snackbar, Modifier.align(Alignment.BottomCenter).navigationBarsPadding().padding(16.dp).padding(bottom = if (ui.screen == Screen.Tabs) 72.dp else 0.dp)) { data ->
                 // Moonlight pill; an action (Undo, Folder) sits at its end.
                 Snackbar(
                     data,
@@ -232,6 +315,8 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
                     actionContentColor = Space.OnAccent,
                 )
             }
+            // Locked: the lock covers everything, the floating tab and any sheet too.
+            if (appLocked && !ui.pip) app.raven.browser.ui.browser.AppLocked(onUnlock = { main?.unlockApp() })
             ui.folderFor?.let { url ->
                 var folders by androidx.compose.runtime.remember(url) { androidx.compose.runtime.mutableStateOf<List<String>>(emptyList()) }
                 LaunchedEffect(url) { folders = c.db.bookmarkFolders().map { it.first } }
@@ -245,11 +330,13 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
         BackHandler(enabled = true) {
             val t = tab
             when {
+                c.appLocked.value -> activity.moveTaskToBack(true)
                 ui.folderFor != null -> ui.folderFor = null
                 ui.sheet != null -> ui.sheet = null
                 ui.findOpen -> { ui.findOpen = false; t?.session?.finder?.clear() }
                 ui.editing -> ui.editing = false
-                ui.fullscreen && t != null -> t.session.exitFullScreen()
+                // A video fullscreen (here, in a half or in the floating tab): back to where it was.
+                ui.fullscreen -> (fullTab ?: t)?.session?.exitFullScreen()
                 ui.screen != Screen.Browser -> ui.screen = Screen.Browser
                 // Home showed the new tab page over a page: Back returns to that page.
                 t != null && t.ntpOverlay.value && t.overlayFromHome -> t.leaveHome()
@@ -281,7 +368,7 @@ private fun Screens(c: Container, ui: UiState) {
                 Screen.Tabs -> TabsScreen(c, ui)
                 Screen.Downloads -> DownloadsScreen(c, ui, back)
                 Screen.History -> HistoryScreen(c, ui, back)
-                Screen.Settings -> SettingsScreen(c, back)
+                Screen.Settings -> SettingsScreen(c, ui, back)
                 Screen.Addons -> AddonsScreen(c, ui, back)
                 Screen.Bookmarks -> app.raven.browser.ui.screens.BookmarksScreen(c, ui, back)
                 Screen.Browser -> Unit

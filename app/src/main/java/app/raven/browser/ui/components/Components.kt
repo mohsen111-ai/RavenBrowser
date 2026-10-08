@@ -384,6 +384,7 @@ fun ListRow(
     chevron: Boolean = false,
     onClick: (() -> Unit)? = null,
     trailing: (@Composable () -> Unit)? = null,
+    leading: (@Composable () -> Unit)? = null,
 ) {
     Row(
         modifier
@@ -395,6 +396,10 @@ fun ListRow(
     ) {
         if (icon != null) {
             Icon(icon, null, size = 20.dp, tint = iconTint)
+            Spacer(Modifier.width(14.dp))
+        }
+        if (leading != null) {
+            Box(Modifier.size(20.dp), contentAlignment = Alignment.Center) { leading() }
             Spacer(Modifier.width(14.dp))
         }
         Column(Modifier.weight(1f)) {

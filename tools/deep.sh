@@ -54,10 +54,10 @@ $A shell am force-stop $APP; sleep 3; front; sleep 15; shot d10_after_restart
 tap "open tabs"; sleep 3; shot d11_tabs_after_restart; back
 
 # A setting that needs a restart: site isolation for every site, then Restart.
-menu "Settings"; sleep 3; tap "Site isolation"; sleep 2; tap "Every site"; sleep 2; shot d12_restart_banner
+setting "isolation" "Site isolation"; tap "Every site"; sleep 2; shot d12_restart_banner
 tap "=Restart"; sleep 25; shot d13_after_settings_restart
 $A shell ps -A -o RSS,NAME | grep -i raven > $OUT/d_processes_all_sites.txt 2>&1
-menu "Settings"; sleep 3; tap "Site isolation"; sleep 2; tap "Sites you log into"; sleep 2; tap "=Restart"; sleep 25
+setting "isolation" "Site isolation"; tap "Sites you log into"; sleep 2; tap "=Restart"; sleep 25
 
 # Another add-on from addons.mozilla.org.
 go "https://addons.mozilla.org/android/addon/darkreader/"; sleep 20; shot d14_amo_page

@@ -9,7 +9,7 @@ import java.util.WeakHashMap
 
 /**
  * Raven's own built-in helper (assets/helper): a small script in every page that mutes, unmutes or pauses that
- * page's audio and video, or shows only its video, when Raven asks. The engine itself only listens to the tab that
+ * page's audio and video, or shows only its video, when Raven asks, and turns down cookie popups (consent.js). The engine itself only listens to the tab that
  * played sound last (a pause sent to an earlier tab is ignored), and split screen needs one half quiet while both
  * play; the helper reaches each tab directly.
  */
@@ -22,6 +22,9 @@ class Helper(private val runtime: GeckoRuntime) {
 
     /** The floating tab's page answered "Video only": whether it found a video, and its width and height. */
     var onVideoOnly: ((GeckoSession, Boolean, Int, Int) -> Unit)? = null
+
+    /** Cookie popups are turned down (Settings): each page is told as it starts. */
+    @Volatile var consent = true
 
     fun install(onReady: () -> Unit) {
         runtime.webExtensionController.ensureBuiltIn(URL, ID).accept({ ext ->
@@ -46,6 +49,8 @@ class Helper(private val runtime: GeckoRuntime) {
                             "videoOnly" -> onVideoOnly?.invoke(session, m.optBoolean("ok"), m.optInt("w"), m.optInt("h"))
                             // The page's answer to pause or mute: how many players it reached (for the emulator tests).
                             "done" -> Log.i("Raven", "helper: page did ${m.optString("cmd")} on ${m.optInt("players")} player(s), ${m.optInt("playing")} still playing")
+                            // What the page did with a cookie popup (for the emulator tests).
+                            "consent" -> Log.i("Raven", "cookie popup: ${m.optString("action")} (${m.optString("cmp")})")
                         }
                     }
 
@@ -54,6 +59,7 @@ class Helper(private val runtime: GeckoRuntime) {
                     }
                 })
                 if (muted[session] == true) send(port, JSONObject().put("cmd", "mute").put("on", true))
+                if (consent) send(port, JSONObject().put("cmd", "consent").put("on", true))
             }
         }, "raven")
     }

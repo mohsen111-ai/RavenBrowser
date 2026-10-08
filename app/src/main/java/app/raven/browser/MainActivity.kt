@@ -14,6 +14,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Process
+import android.os.SystemClock
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
@@ -44,24 +45,58 @@ class MainActivity : FragmentActivity() {
         c.tabs.selectionDelegateFactory = { RavenSelectionDelegate(this) }
         c.tabs.refreshSelectionDelegates()
         prompt  // created now, while the screen is being made
+        if (savedInstanceState != null) settleRebuiltScreen()
         setContent { RavenRoot(c, ui, this) }
         if (savedInstanceState == null) handle(intent)
+    }
+
+    /**
+     * Android threw the screen away while Raven was in another app and is building a new one. If a video was
+     * fullscreen, or pages are shown in full screen, the new screen starts that way: the bars hidden and the screen
+     * turned before the first frame, so the page isn't given one size and then another while it comes back (the
+     * engine can stall on that, leaving the screen black).
+     */
+    private fun settleRebuiltScreen() {
+        val c = container
+        val onScreen = c.tabs.onScreenIds()
+        val full = c.tabs.tabs.value.firstOrNull { it.id in onScreen && it.fullscreen.value }
+        val tab = c.tabs.selected
+        val page = tab != null && !tab.ntpOverlay.value && tab.url.value.isNotBlank() && tab.url.value != "about:blank"
+        ui.fullscreen = full != null
+        ui.fullscreenTabId = full?.id
+        ui.fullPage = full == null && c.settings.current.fullPage && (page || c.tabs.split.value != null)
+        if (full != null || ui.fullPage) {
+            androidx.core.view.WindowCompat.getInsetsController(window, window.decorView).apply {
+                systemBarsBehavior = androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                hide(androidx.core.view.WindowInsetsCompat.Type.systemBars())
+            }
+        }
+        if (full?.wideVideo?.value == true) requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
     }
 
     // A new wallpaper and greeting each time Raven is opened again, even if Android threw this screen away meanwhile.
     override fun onStart() {
         super.onStart()
         val c = container
+        // Pages the phone stopped while Raven was away load again.
+        c.tabs.onAppShown()
         if (c.wasAway) {
             c.wasAway = false
             c.sky.next()
             c.greetings.next()
         }
+        // The lock for all of Raven: back after long enough away, it asks first.
+        val p = c.settings.current
+        if (p.appLock && c.leftAt > 0 && SystemClock.elapsedRealtime() - c.leftAt >= p.lockAfterMinutes * 60_000L) c.appLocked.value = true
+        c.leftAt = 0
     }
 
     override fun onStop() {
         super.onStop()
+        container.tabs.onAppHidden()
         if (!isChangingConfigurations) container.wasAway = true
+        // Leaving for the phone's own lock screen (to unlock Raven) isn't leaving Raven.
+        if (!isChangingConfigurations && !asking) container.leftAt = SystemClock.elapsedRealtime()
     }
 
     // The activity handles rotation and dark-mode changes itself (see the manifest), so pass them on
@@ -121,6 +156,18 @@ class MainActivity : FragmentActivity() {
                     .build(),
             )
         }.onFailure { asking = false }
+    }
+
+    /**
+     * Opens Raven when its lock is on. Private tabs that are locked too open with the same fingerprint: one question
+     * opens everything you're looking at.
+     */
+    fun unlockApp() {
+        if (!container.appLocked.value) return
+        authenticate("Unlock Raven") {
+            container.appLocked.value = false
+            container.privateLocked.value = false
+        }
     }
 
     /** Opens the private tabs (asking first if they're locked), then runs [then]. */
@@ -183,7 +230,8 @@ class MainActivity : FragmentActivity() {
             ui.findOpen = false
         } else if (lifecycle.currentState == Lifecycle.State.CREATED) {
             // The little window was closed (not opened back up into Raven): the video stops, as in Chrome.
-            container.tabs.selected?.media?.pause()
+            val c = container
+            (ui.fullscreenTabId?.let { id -> c.tabs.tabs.value.firstOrNull { it.id == id } } ?: c.tabs.selected)?.media?.pause()
         }
     }
 

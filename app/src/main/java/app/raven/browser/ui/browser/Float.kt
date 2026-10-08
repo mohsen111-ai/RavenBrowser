@@ -2,6 +2,7 @@ package app.raven.browser.ui.browser
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -31,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -80,7 +82,6 @@ fun FloatingTab(c: Container, ui: UiState) {
     val tab = tabs.firstOrNull { it.id == id } ?: return
     val parked by c.tabs.floatParked.collectAsState()
     val fullscreen by tab.fullscreen.collectAsState()
-    val videoSize by tab.videoSize.collectAsState()
     val muted by tab.muted.collectAsState()
     val url by tab.url.collectAsState()
     val title by tab.title.collectAsState()
@@ -103,32 +104,40 @@ fun FloatingTab(c: Container, ui: UiState) {
         onDispose { c.engine.helper.onVideoOnly = null }
     }
 
-    // The page's own fullscreen (its video player's button) also shows just the video, in the window.
-    val wide = ui.floatVideoOnly || fullscreen
-    val aspect = (if (fullscreen) videoSize?.let { (w, h) -> if (h > 0) w.toFloat() / h else null } else null) ?: ui.floatAspect
+    // The page's own fullscreen (its video player's button) fills the whole phone screen, sideways for a wide video;
+    // Back brings it back into the window. "Video only" shows just the video, in the window.
+    val full = fullscreen
+    val wide = ui.floatVideoOnly
+    val aspect = ui.floatAspect
     // Reads the title, so the window's name follows its page.
     val label = title.let { tab.displayTitle }
     val letter = tab.host.ifBlank { label }.take(1).uppercase()
 
-    BoxWithConstraints(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()) {
+    BoxWithConstraints(Modifier.fillMaxSize().then(if (full) Modifier else Modifier.statusBarsPadding().navigationBarsPadding())) {
         val density = LocalDensity.current
         val dp = density.density
         val areaW = constraints.maxWidth.toFloat()
         val areaH = constraints.maxHeight.toFloat()
         // Usual widths: about half the screen for a page, two thirds for a video; [UiState.floatScale] from the corners.
-        val minW = 168f * dp
-        val w = ((if (wide) areaW * 0.66f else areaW * 0.46f) * ui.floatScale).coerceIn(minW, areaW * 0.96f)
-        val h = (if (wide) w / aspect else w * 5f / 3f).coerceAtMost(areaH * 0.85f)
-        val aw by animateFloatAsState(w, spring(stiffness = 500f), label = "floatW")
-        val ah by animateFloatAsState(h, spring(stiffness = 500f), label = "floatH")
+        // (In a window narrower than that, such as picture-in-picture, the window takes what there is.)
+        val maxW = areaW * 0.96f
+        val minW = minOf(168f * dp, maxW)
+        val w = if (full) areaW else ((if (wide) areaW * 0.66f else areaW * 0.46f) * ui.floatScale).coerceIn(minW, maxW)
+        val h = if (full) areaH else (if (wide) w / aspect else w * 5f / 3f).coerceAtMost(areaH * 0.85f)
+        // Into and out of fullscreen at once: the page is resized once, not on every frame of an animation.
+        var wasFull by remember { mutableStateOf(full) }
+        val jump = full || wasFull
+        SideEffect { wasFull = full }
+        val aw by animateFloatAsState(w, if (jump) snap() else spring(stiffness = 500f), label = "floatW")
+        val ah by animateFloatAsState(h, if (jump) snap() else spring(stiffness = 500f), label = "floatH")
         var dragging by remember { mutableStateOf(false) }
         val defaultX = areaW - aw - 12f * dp
         val defaultY = 72f * dp
         val rawX = if (ui.floatX.isNaN()) defaultX else ui.floatX
         val rawY = if (ui.floatY.isNaN()) defaultY else ui.floatY
         // While a finger moves it, it may go past the edges; otherwise it stays on screen.
-        val x = if (dragging) rawX else rawX.coerceIn(0f, (areaW - aw).coerceAtLeast(0f))
-        val y = if (dragging) rawY else rawY.coerceIn(0f, (areaH - ah).coerceAtLeast(0f))
+        val x = if (full) 0f else if (dragging) rawX else rawX.coerceIn(0f, (areaW - aw).coerceAtLeast(0f))
+        val y = if (full) 0f else if (dragging) rawY else rawY.coerceIn(0f, (areaH - ah).coerceAtLeast(0f))
 
         fun move(d: Offset) {
             dragging = true
@@ -143,7 +152,7 @@ fun FloatingTab(c: Container, ui: UiState) {
             // Pushed more than a third past the side: it parks there as an icon.
             if (leftOut > aw * 0.34f || rightOut > aw * 0.34f) {
                 ui.floatParkLeft = leftOut > rightOut
-                ui.floatParkY = (ui.floatY + ah / 2f - 28f * dp).coerceIn(0f, areaH - 56f * dp)
+                ui.floatParkY = (ui.floatY + ah / 2f - 28f * dp).coerceIn(0f, (areaH - 56f * dp).coerceAtLeast(0f))
                 ui.floatX = if (ui.floatParkLeft) 12f * dp else areaW - aw - 12f * dp
                 c.tabs.parkFloat(true)
             } else {
@@ -155,7 +164,7 @@ fun FloatingTab(c: Container, ui: UiState) {
             val before = w
             ui.floatScale = (ui.floatScale + dScale).coerceIn(0.6f, 2.0f)
             if (fromLeft) {
-                val after = ((if (wide) areaW * 0.66f else areaW * 0.46f) * ui.floatScale).coerceIn(minW, areaW * 0.96f)
+                val after = ((if (wide) areaW * 0.66f else areaW * 0.46f) * ui.floatScale).coerceIn(minW, maxW)
                 ui.floatX = (if (ui.floatX.isNaN()) defaultX else ui.floatX) - (after - before)
             }
         }
@@ -166,15 +175,17 @@ fun FloatingTab(c: Container, ui: UiState) {
                 letter, label, left = ui.floatParkLeft,
                 modifier = Modifier.offset { IntOffset(if (ui.floatParkLeft) (-28f * dp).roundToInt() else (areaW - 28f * dp).roundToInt(), parkY.roundToInt()) },
                 onOpen = { c.tabs.parkFloat(false) },
-                onDrag = { dy -> ui.floatParkY = (parkY + dy).coerceIn(0f, areaH - 56f * dp) },
+                onDrag = { dy -> ui.floatParkY = (parkY + dy).coerceIn(0f, (areaH - 56f * dp).coerceAtLeast(0f)) },
             )
         } else {
             var controls by remember { mutableStateOf(false) }
             LaunchedEffect(controls) { if (controls) { delay(5000); controls = false } }
+            LaunchedEffect(full) { if (full) controls = false }
             FloatFrame(
                 width = with(density) { aw.toDp() },
                 height = with(density) { ah.toDp() },
                 wide = wide,
+                full = full,
                 letter = letter,
                 host = tab.host.ifBlank { label },
                 label = label,
@@ -201,7 +212,8 @@ fun FloatingTab(c: Container, ui: UiState) {
                 onPlayPause = { c.engine.helper.toggle(tab.session) },
                 onClose = { c.tabs.unfloat() },
             ) {
-                PageView(tab, ui, primary = false, floating = true)
+                // (In "Video only" the video covers the page anyway; a reload would only lose it.)
+                PageView(tab, ui, primary = false, floating = true, pullable = !ui.floatVideoOnly)
                 if (tab.isNewTabPage) {
                     Box(Modifier.fillMaxSize().background(Space.Surface), contentAlignment = Alignment.Center) {
                         Text("New tab", color = Space.Text2, fontSize = 13.sp)
@@ -212,7 +224,11 @@ fun FloatingTab(c: Container, ui: UiState) {
     }
 }
 
-/** The floating window itself: its bar (for a page), the page, its buttons and resize corners. */
+/**
+ * The floating window itself: its bar (for a page), the page, its buttons and resize corners. [full]: the page's
+ * own fullscreen, filling the phone screen, with nothing of the window around it. The page always sits in the same
+ * place whatever the window shows, so it's never rebuilt: a rebuilt page view lost the page's fullscreen at once.
+ */
 @Composable
 fun FloatFrame(
     width: Dp,
@@ -224,6 +240,7 @@ fun FloatFrame(
     controls: Boolean,
     muted: Boolean,
     modifier: Modifier = Modifier,
+    full: Boolean = false,
     onMove: (Offset) -> Unit,
     onMoveEnd: () -> Unit,
     onTap: () -> Unit,
@@ -244,13 +261,16 @@ fun FloatFrame(
         .pointerInput(Unit) { detectDragGestures(onDragEnd = { moveEnd() }, onDragCancel = { moveEnd() }) { change, d -> change.consume(); moveBy(d) } }
         .pointerInput(Unit) { detectTapGestures(onTap = { tap() }) }
     Box(
-        modifier.size(width, height).shadow(18.dp, shape).clip(shape).background(Color(0xFF0F1113))
-            .border(1.dp, Color(0x4DC7CCD8), shape)
-            .semantics { contentDescription = "Floating tab: $label" },
+        modifier.size(width, height)
+            .then(
+                if (full) Modifier.background(Color.Black)
+                else Modifier.shadow(18.dp, shape).clip(shape).background(Color(0xFF0F1113)).border(1.dp, Color(0x4DC7CCD8), shape),
+            )
+            .semantics { contentDescription = if (full) "Floating tab, fullscreen: $label" else "Floating tab: $label" },
     ) {
-        if (!wide) {
-            Column(Modifier.fillMaxSize()) {
-                // The bar: moves the window; a tap shows its buttons.
+        Column(Modifier.fillMaxSize()) {
+            // The bar: moves the window; a tap shows its buttons. Only for a page in the window.
+            if (!wide && !full) {
                 Row(
                     Modifier.fillMaxWidth().height(30.dp).background(Space.Surface).then(dragToMove)
                         .semantics { contentDescription = "Move the floating tab"; onClick("Show its buttons") { tap(); true } }
@@ -265,9 +285,13 @@ fun FloatFrame(
                     Box(Modifier.width(28.dp).height(3.dp).clip(CircleShape).background(Color(0xFF3A4256)))
                     Spacer(Modifier.weight(0.4f))
                 }
-                Box(Modifier.weight(1f).fillMaxWidth()) {
-                    page()
-                    Fade(controls) {
+            }
+            Box(Modifier.weight(1f).fillMaxWidth()) {
+                page()
+                when {
+                    // Fullscreen: the page's own video player takes every touch.
+                    full -> Unit
+                    !wide -> Fade(controls) {
                         Box(Modifier.fillMaxSize().background(Color(0x59070A12)), contentAlignment = Alignment.Center) {
                             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                                 RoundGlass(Icons.Expand, "Full size", onFullSize)
@@ -277,25 +301,25 @@ fun FloatFrame(
                             }
                         }
                     }
-                }
-            }
-        } else {
-            page()
-            // Over a video the page doesn't take touches: the whole window moves, and a tap shows its buttons.
-            Box(Modifier.fillMaxSize().then(dragToMove).semantics { contentDescription = "Move the floating video"; onClick("Show its buttons") { tap(); true } })
-            Fade(controls) {
-                Box(Modifier.fillMaxSize().background(Color(0x33070A12)).padding(8.dp)) {
-                    RoundGlass(Icons.ToPage, "Back to the page", onToPage, Modifier.align(Alignment.TopStart))
-                    RoundGlass(Icons.Close, "Close the floating tab", onClose, Modifier.align(Alignment.TopEnd))
-                    RoundGlass(Icons.Pause, "Play or pause", onPlayPause, Modifier.align(Alignment.Center), size = 42.dp)
-                    RoundGlass(if (muted) Icons.Mute else Icons.Sound, if (muted) "Sound on" else "Mute", onSound, Modifier.align(Alignment.BottomStart))
-                    RoundGlass(Icons.Expand, "Full size", onFullSize, Modifier.align(Alignment.BottomEnd))
+                    else -> {
+                        // Over a video the page doesn't take touches: the whole window moves, and a tap shows its buttons.
+                        Box(Modifier.fillMaxSize().then(dragToMove).semantics { contentDescription = "Move the floating video"; onClick("Show its buttons") { tap(); true } })
+                        Fade(controls) {
+                            Box(Modifier.fillMaxSize().background(Color(0x33070A12)).padding(8.dp)) {
+                                RoundGlass(Icons.ToPage, "Back to the page", onToPage, Modifier.align(Alignment.TopStart))
+                                RoundGlass(Icons.Close, "Close the floating tab", onClose, Modifier.align(Alignment.TopEnd))
+                                RoundGlass(Icons.Pause, "Play or pause", onPlayPause, Modifier.align(Alignment.Center), size = 42.dp)
+                                RoundGlass(if (muted) Icons.Mute else Icons.Sound, if (muted) "Sound on" else "Mute", onSound, Modifier.align(Alignment.BottomStart))
+                                RoundGlass(Icons.Expand, "Full size", onFullSize, Modifier.align(Alignment.BottomEnd))
+                            }
+                        }
+                    }
                 }
             }
         }
         // Over the page (which would otherwise take the touch), and away while the buttons show, so a button on a
         // corner gets its tap.
-        if (!controls) {
+        if (!controls && !full) {
             ResizeCorner(Modifier.align(Alignment.BottomStart), fromLeft = true, onResize)
             ResizeCorner(Modifier.align(Alignment.BottomEnd), fromLeft = false, onResize)
         }

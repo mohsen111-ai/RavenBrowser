@@ -76,15 +76,15 @@ log "Work's tile: $(desc "Flock Work") (expect ', 1 tab')"
 tap "^Tabs · "; sleep 1; back
 
 # 5. Wallpapers in Settings: turn the rotation off and pick Snow; the home screen shows it.
-menu "Settings"; sleep 3
+setting "wallpaper" "Wallpapers"
 seek "New wallpaper each time"; sleep 1; shot r16_wallpaper_settings
 tap "!=New wallpaper each time"; sleep 1
 seek "=Snow"; tap "=Snow"; sleep 2; shot r17_snow_chosen
-back; newtab; sleep 4; shot r18_home_snow
+leave_settings; newtab; sleep 4; shot r18_home_snow
 log "home after choosing Snow: $(desc "Wallpaper: ") (expect Snow)"
 $A shell input keyevent 3; sleep 2; front; sleep 3
 log "and after coming back: $(desc "Wallpaper: ") (expect Snow: the rotation is off)"
-menu "Settings"; sleep 3; seek "New wallpaper each time"; tap "!=New wallpaper each time"; sleep 1; back
+setting "wallpaper" "Wallpapers"; seek "New wallpaper each time"; tap "!=New wallpaper each time"; sleep 1; leave_settings
 
 # 6. The menu's squares, the VPN square (no VPN on the emulator), and Translate on a French page.
 tap "Menu"; sleep 2; shot r21_menu
@@ -194,7 +194,7 @@ tap "!=Play"; sleep 4; shot r39_both_playing
 log "both halves play at once: $(count "state: playing") playing (expect 2)"
 tap "^Sound: on"; sleep 2; shot r40_sound_choice
 tap "=Top only"; sleep 3; shot r41_top_only
-log "top only: $(count "state: playing (muted)") muted and still playing (expect 1) | muted label: $(has "=Muted") (expect yes)"
+log "top only: $(count "state: playing (muted)") muted and still playing (expect 1) | a half's speaker shows muted: $(has "^Sound: muted") (expect yes)"
 menu "End split screen"; sleep 4; shot r42_split_ended
 log "split ended: $(has "^Top half: ") (expect no)"
 

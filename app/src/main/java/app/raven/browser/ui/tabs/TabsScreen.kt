@@ -10,6 +10,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -104,8 +106,17 @@ fun TabsScreen(c: Container, ui: UiState) {
     var actionsFor by remember { mutableStateOf<String?>(null) }
     var naming by remember { mutableStateOf<NewFlock?>(null) }
     var renaming by remember { mutableStateOf<String?>(null) }
+    var addingProfile by remember { mutableStateOf(false) }
 
-    val everyday = tabs.filter { !it.private }
+    // Profiles: the everyday side shows one person's tabs at a time, picked with the chips at the top.
+    val profiles by c.profiles.all.collectAsState()
+    val activeProfile by c.tabs.profile.collectAsState()
+    var shownProfile by rememberSaveable { mutableStateOf(activeProfile) }
+    LaunchedEffect(profiles) { if (profiles.none { it.id == shownProfile }) shownProfile = "" }
+    val many = profiles.size > 1
+    fun colorOf(id: String): Color? = if (!many) null else profiles.firstOrNull { it.id == id }?.let { Color(app.raven.browser.data.Profiles.colors[it.color % app.raven.browser.data.Profiles.colors.size]) }
+
+    val everyday = tabs.filter { !it.private && it.profile == shownProfile }
     // Read so the flocks below are worked out again whenever a tab joins or leaves one.
     @Suppress("UNUSED_VARIABLE") val v = flocksVersion
     val flocks = everyday.filter { it.flock.value != null }.groupBy { it.flock.value!! }
@@ -117,7 +128,7 @@ fun TabsScreen(c: Container, ui: UiState) {
         TabSide.Flocks -> openFlock?.let { flocks[it] }.orEmpty()
     }
     val normalCount = everyday.size
-    val privateCount = tabs.size - normalCount
+    val privateCount = tabs.count { it.private }
 
     fun open(tab: BrowserTab) {
         c.tabs.select(tab.id)
@@ -129,7 +140,7 @@ fun TabsScreen(c: Container, ui: UiState) {
         when {
             side == TabSide.Flocks && openFlock == null -> naming = NewFlock(null)
             else -> {
-                val open = { c.tabs.newTab(private = privateSide, flock = openFlock.takeIf { side == TabSide.Flocks }); ui.go(Screen.Browser) }
+                val open = { c.tabs.newTab(private = privateSide, flock = openFlock.takeIf { side == TabSide.Flocks }, profile = shownProfile); ui.go(Screen.Browser) }
                 if (privateSide && main != null) main.unlockPrivate(open) else open()
             }
         }
@@ -166,21 +177,34 @@ fun TabsScreen(c: Container, ui: UiState) {
             else -> "New tab"
         },
         onNewTab = ::newTab,
-        onDone = { ui.go(Screen.Browser) },
+        // Done on another profile's tabs: that person's last tab comes on screen (or a new one, if they have none).
+        onDone = {
+            val current = tabs.firstOrNull { it.id == selectedId }
+            if (!privateSide && current != null && current.profile != shownProfile && !current.private) {
+                val last = everyday.maxByOrNull { it.lastActive }
+                if (last != null) c.tabs.select(last.id) else c.tabs.newTab(select = true, profile = shownProfile)
+            }
+            ui.go(Screen.Browser)
+        },
+        profiles = if (many && !privateSide) profiles.map { p ->
+            ProfileChip(p.id, p.name, colorOf(p.id) ?: Space.Text, tabs.count { !it.private && it.profile == p.id }, p.id == shownProfile)
+        } else emptyList(),
+        onProfile = { id -> shownProfile = id; openFlock = null },
+        onAddProfile = { addingProfile = true },
     ) {
-        val cards = shown.map { it.card(it.id == selectedId) }
+        val cards = shown.map { it.card(it.id == selectedId, colorOf(it.profile).takeIf { _ -> !it.private }) }
         val hand: @Composable () -> Unit = {
-            Hand(cards, edge, onOpen = { id -> shown.firstOrNull { it.id == id }?.let(::open) }, onClose = { c.tabs.close(it) }, onHold = { actionsFor = it })
+            Hand(cards, edge, onOpen = { id -> shown.firstOrNull { it.id == id }?.let(::open) }, onClose = { c.tabs.close(it, undoable = true) }, onHold = { actionsFor = it })
         }
         when {
             privateSide && locked -> app.raven.browser.ui.browser.PrivateLocked(onUnlock = { main?.unlockPrivate() })
             side == TabSide.Flocks && openFlock == null -> FlocksGrid(
-                flocks.map { (name, list) -> FlockInfo(name, list.size, list.take(4).map { t -> t.card(false) }) },
+                flocks.map { (name, list) -> FlockInfo(name, list.size, list.take(4).map { t -> t.card(false, null) }) },
                 onOpen = { openFlock = it },
                 onNew = { naming = NewFlock(null) },
             )
             side == TabSide.Flocks -> Column {
-                FlockHeader(openFlock!!, shown.size, onBack = { openFlock = null }, onRename = { renaming = openFlock }, onUngroup = { c.tabs.ungroup(openFlock!!) }, onClose = { c.tabs.closeFlock(openFlock!!) })
+                FlockHeader(openFlock!!, shown.size, onBack = { openFlock = null }, onRename = { renaming = openFlock }, onUngroup = { c.tabs.ungroup(openFlock!!, shownProfile) }, onClose = { c.tabs.closeFlock(openFlock!!, shownProfile) })
                 Box(Modifier.weight(1f)) { hand() }
             }
             shown.isEmpty() -> EmptyHand(privateSide)
@@ -194,7 +218,7 @@ fun TabsScreen(c: Container, ui: UiState) {
             title = { Text(if (privateSide) "Close all private tabs?" else "Close all tabs?") },
             text = { Text("${shown.size} ${if (shown.size == 1) "tab" else "tabs"} will close.", color = Space.Text2) },
             confirmButton = {
-                TextButton({ confirmCloseAll = false; c.tabs.closeAll(private = privateSide) }) { Text("Close all", color = if (privateSide) Space.Nebula else Raven.accent) }
+                TextButton({ confirmCloseAll = false; c.tabs.closeTabs(shown.map { it.id }.toSet()) }) { Text("Close all", color = if (privateSide) Space.Nebula else Raven.accent) }
             },
             dismissButton = { TextButton({ confirmCloseAll = false }) { Text("Cancel", color = Space.Text2) } },
             containerColor = Space.Surface,
@@ -206,14 +230,14 @@ fun TabsScreen(c: Container, ui: UiState) {
         val id = held.id
         val tab = held
         TabActionsSheet(
-            name = tab.card(tab.id == selectedId).name,
+            name = tab.card(tab.id == selectedId, null).name,
             private = tab.private,
             flock = tab.flock.value,
             flocks = flocks.keys.toList(),
             onDismiss = { actionsFor = null },
             onFlock = { f -> c.tabs.setFlock(listOf(id), f); actionsFor = null },
             onNewFlock = { actionsFor = null; naming = NewFlock(id) },
-            onClose = { c.tabs.close(id); actionsFor = null },
+            onClose = { c.tabs.close(id, undoable = true); actionsFor = null },
             onFloat = if (!tab.private && !tab.hasNoPage) ({ actionsFor = null; if (c.tabs.float(id)) ui.go(Screen.Browser) }) else null,
             // Shares the screen with the tab you were on: that one on top, this one below.
             onSplit = tabs.firstOrNull { it.id == selectedId }?.takeIf { it.id != id && it.private == tab.private }?.let {
@@ -223,19 +247,26 @@ fun TabsScreen(c: Container, ui: UiState) {
     }
     naming?.let { start ->
         NewFlockDialog(
-            tabs = everyday.map { it.id to it.card(false).name },
+            tabs = everyday.map { it.id to it.card(false, null).name },
             preselected = listOfNotNull(start.tabId),
             onDismiss = { naming = null },
         ) { name, ids ->
-            if (ids.isEmpty()) c.tabs.newTab(flock = name, select = false) else c.tabs.setFlock(ids, name)
+            if (ids.isEmpty()) c.tabs.newTab(flock = name, select = false, profile = shownProfile) else c.tabs.setFlock(ids, name)
             sideName = TabSide.Flocks.name
             openFlock = name
             naming = null
         }
     }
+    if (addingProfile) {
+        NameDialog("New profile", "Their own sign-ins, history and tabs. Settings, bookmarks and home sites are shared.", "", "Add", onDismiss = { addingProfile = false }) { name ->
+            val p = c.profiles.add(name)
+            shownProfile = p.id
+            addingProfile = false
+        }
+    }
     renaming?.let { old ->
         RenameFlockDialog(old, onDismiss = { renaming = null }) { new ->
-            c.tabs.renameFlock(old, new)
+            c.tabs.renameFlock(old, new, shownProfile)
             openFlock = new.trim().ifEmpty { old }
             renaming = null
         }
@@ -261,6 +292,9 @@ fun TabsLayout(
     newLabel: String,
     onNewTab: () -> Unit,
     onDone: () -> Unit,
+    profiles: List<ProfileChip> = emptyList(),
+    onProfile: (String) -> Unit = {},
+    onAddProfile: () -> Unit = {},
     hand: @Composable () -> Unit,
 ) {
     val privateSide = side == TabSide.Private
@@ -289,6 +323,21 @@ fun TabsLayout(
                 Side("Tabs · $normalCount", null, side == TabSide.Everyday, false, Modifier.weight(1f)) { onSide(TabSide.Everyday) }
                 Side("Private · $privateCount", Icons.Eclipse, privateSide, true, Modifier.weight(1f)) { onSide(TabSide.Private) }
                 Side("Flocks · $flockCount", null, side == TabSide.Flocks, false, Modifier.weight(1f)) { onSide(TabSide.Flocks) }
+            }
+
+            // Whose tabs: one chip per profile (when there's more than one), and one to add another.
+            if (profiles.isNotEmpty()) {
+                Row(
+                    Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(start = 16.dp, end = 16.dp, bottom = 10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    profiles.forEach { p -> ProfileChipView(p) { onProfile(p.id) } }
+                    Box(
+                        Modifier.height(38.dp).clip(CircleShape).border(1.dp, Color(0x33C7CCD8), CircleShape)
+                            .clickable(onClickLabel = "Add a profile", onClick = onAddProfile).padding(horizontal = 14.dp),
+                        contentAlignment = Alignment.Center,
+                    ) { Icon(Icons.Plus, "Add a profile", size = 16.dp, tint = Space.Text2) }
+                }
             }
 
             Box(Modifier.weight(1f).fillMaxWidth()) { hand() }
@@ -343,6 +392,28 @@ private fun Side(text: String, icon: app.raven.browser.ui.theme.RavenIcon?, on: 
     }
 }
 
+/** A profile on the Tabs screen: its name, colour and how many tabs it has open. */
+class ProfileChip(val id: String, val name: String, val color: Color, val count: Int, val selected: Boolean)
+
+@Composable
+private fun ProfileChipView(p: ProfileChip, onClick: () -> Unit) {
+    Row(
+        Modifier.height(38.dp).clip(CircleShape)
+            .background(if (p.selected) p.color.copy(alpha = 0.16f) else Color(0x0DE9ECF3))
+            .border(1.dp, if (p.selected) p.color.copy(alpha = 0.7f) else Color(0x1FC7CCD8), CircleShape)
+            .clickable(onClick = onClick)
+            .semantics { role = Role.Tab; selected = p.selected; contentDescription = "Profile ${p.name}, ${p.count} tabs" }
+            .padding(start = 12.dp, end = 14.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(Modifier.size(10.dp).clip(CircleShape).background(p.color))
+        Spacer(Modifier.width(8.dp))
+        Text(p.name, style = MaterialTheme.typography.labelLarge, color = if (p.selected) Space.Text else Space.Text2, fontWeight = if (p.selected) FontWeight.Bold else FontWeight.Medium, maxLines = 1)
+        Spacer(Modifier.width(6.dp))
+        Text("${p.count}", style = MaterialTheme.typography.labelMedium, color = Space.Text3)
+    }
+}
+
 /** What a card shows of its tab. */
 class TabCardInfo(
     val id: String,
@@ -353,10 +424,12 @@ class TabCardInfo(
     val resting: Boolean,
     val thumbnail: ImageBitmap?,
     val flock: String? = null,
+    /** Its profile's colour, when there's more than one profile. */
+    val profileColor: Color? = null,
 )
 
 @Composable
-private fun BrowserTab.card(selected: Boolean): TabCardInfo {
+private fun BrowserTab.card(selected: Boolean, profileColor: Color?): TabCardInfo {
     val thumb by thumbnail.collectAsState()
     val asleep by asleep.collectAsState()
     val title by title.collectAsState()
@@ -372,6 +445,7 @@ private fun BrowserTab.card(selected: Boolean): TabCardInfo {
         resting = asleep && !selected,
         thumbnail = thumb.takeIf { !blank },
         flock = flock.collectAsState().value,
+        profileColor = profileColor,
     )
 }
 
@@ -470,7 +544,11 @@ private fun TabCard(tab: TabCardInfo, edge: Color, tilt: Float, onOpen: () -> Un
     ) {
         Column(Modifier.fillMaxSize().padding(start = 8.dp, end = 8.dp, bottom = 8.dp)) {
             Row(Modifier.fillMaxWidth().height(50.dp).padding(start = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                SitePlanet(tab.label, 28.dp, sleeping = resting, private = tab.private)
+                // The profile's colour rings the site, so each tab shows whose it is.
+                SitePlanet(
+                    tab.label, 28.dp, sleeping = resting, private = tab.private,
+                    modifier = tab.profileColor?.let { Modifier.border(2.dp, it, CircleShape) } ?: Modifier,
+                )
                 Spacer(Modifier.width(10.dp))
                 tab.flock?.let { f ->
                     Box(Modifier.padding(end = 8.dp).size(9.dp).clip(CircleShape).background(flockColor(f)).semantics { contentDescription = "In $f" })

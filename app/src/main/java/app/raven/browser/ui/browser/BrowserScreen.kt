@@ -11,6 +11,9 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.displayCutout
+import androidx.compose.foundation.layout.statusBarsIgnoringVisibility
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -36,6 +39,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,6 +48,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import kotlinx.coroutines.flow.first
+import androidx.compose.ui.layout.positionInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
@@ -61,6 +68,8 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.text.TextRange
@@ -107,20 +116,72 @@ fun BrowserScreen(c: Container, ui: UiState) {
             .navigationBarsPadding()
             .imePadding(),
     ) {
-        if (!ui.fullscreen && tab != null) Bars(c, ui, tab, tabs.size)
-        Box(Modifier.weight(1f).fillMaxWidth()) {
-            // Split screen: two tabs, the bar belonging to the half you touched last. A video going fullscreen in
-            // a half fills the whole screen, and the split comes back when it leaves fullscreen.
-            val split by c.tabs.split.collectAsState()
-            val top = split?.let { s -> tabs.firstOrNull { it.id == s.top } }
-            val bottom = split?.let { s -> tabs.firstOrNull { it.id == s.bottom } }
-            val fullscreen = tab?.fullscreen?.collectAsState()?.value == true
-            if (tab != null && top != null && bottom != null && !fullscreen) {
-                SplitArea(c, ui, top, bottom, tab.id)
+        // Split screen: two tabs, each with its own small bar. A video going fullscreen in a half fills the whole
+        // screen, and the split comes back when it leaves fullscreen (the halves stay as they are meanwhile, so the
+        // page isn't rebuilt: that lost the fullscreen).
+        val split by c.tabs.split.collectAsState()
+        val top = split?.let { s -> tabs.firstOrNull { it.id == s.top } }
+        val bottom = split?.let { s -> tabs.firstOrNull { it.id == s.bottom } }
+        val halves = tab != null && top != null && bottom != null
+        // Full screen for pages: every bar hidden until a swipe down from the top brings them back for a moment.
+        // Raven's home keeps its bar (it's where you search from).
+        val prefs by c.settings.prefs.collectAsState()
+        val overNewTab = tab?.ntpOverlay?.collectAsState()?.value == true
+        val url = tab?.url?.collectAsState()?.value.orEmpty()
+        val onHome = overNewTab || url.isBlank() || url == "about:blank"
+        val fullPage = prefs.fullPage && !ui.fullscreen && tab != null && (halves || !onHome)
+        SideEffect { ui.fullPage = fullPage }
+        val typing = ui.editing || ui.findOpen
+        // The moment ends a few seconds after the last swipe, once you're not typing or in a sheet.
+        LaunchedEffect(ui.barsPeek, ui.peekAt, typing, ui.sheet) {
+            if (ui.barsPeek && !typing && ui.sheet == null) {
+                delay(3500)
+                ui.barsPeek = false
+            }
+        }
+        // In split screen the big bar only comes back to type an address or find in the active half.
+        val bigBar = !ui.fullscreen && tab != null && (!halves || typing) && !fullPage
+        if (bigBar) Bars(c, ui, tab, tabs.size)
+        val density = androidx.compose.ui.platform.LocalDensity.current
+        val edge = with(density) { 40.dp.toPx() }
+        val pull = with(density) { 28.dp.toPx() }
+        // Without the big bar, the halves keep clear of the phone's status bar themselves.
+        Box(
+            Modifier.weight(1f).fillMaxWidth()
+                .then(if (halves && !bigBar && !ui.fullscreen && !fullPage) Modifier.statusBarsPadding() else Modifier)
+                // Full screen: a finger that comes down at the top and pulls down brings the bars back. It's only
+                // watched, never taken, so the page still gets it.
+                .pointerInput(fullPage) {
+                    if (!fullPage) return@pointerInput
+                    awaitPointerEventScope {
+                        while (true) {
+                            val down = awaitPointerEvent(PointerEventPass.Initial)
+                            val first = down.changes.firstOrNull() ?: continue
+                            if (down.type != PointerEventType.Press || first.position.y > edge) continue
+                            while (true) {
+                                val e = awaitPointerEvent(PointerEventPass.Initial)
+                                val ch = e.changes.firstOrNull { it.id == first.id } ?: break
+                                if (!ch.pressed) break
+                                if (ch.position.y - first.position.y > pull) { ui.peekBars(); break }
+                            }
+                        }
+                    }
+                },
+        ) {
+            if (halves) {
+                SplitArea(c, ui, top, bottom, tab.id, barsHidden = fullPage, peek = fullPage && ui.barsPeek && !typing)
             } else if (tab != null) {
                 TabPage(c, ui, tab, primary = true)
             }
-            if (ui.editing && tab != null) Suggestions(c, ui, tab)
+            if (ui.editing && tab != null) Suggestions(c, ui, tab, top = if (fullPage) 78.dp else 0.dp)
+            // Full screen: the bar comes over the page for its moment (or while you type), without moving the page.
+            if (tab != null) {
+                androidx.compose.animation.AnimatedVisibility(
+                    fullPage && (typing || (ui.barsPeek && !halves)),
+                    enter = androidx.compose.animation.slideInVertically { -it } + androidx.compose.animation.fadeIn(),
+                    exit = androidx.compose.animation.slideOutVertically { -it } + androidx.compose.animation.fadeOut(),
+                ) { Bars(c, ui, tab, tabs.size) }
+            }
         }
     }
 }
@@ -152,39 +213,97 @@ internal fun TabPage(c: Container, ui: UiState, tab: BrowserTab, primary: Boolea
 /**
  * The engine's view of [tab]'s page. [primary]: the view of the tab on screen (the one the bar belongs to), used
  * for its picture in the Tabs screen. [floating]: drawn in a way that can sit on top of another page and have
- * rounded corners (the floating tab); slightly more work for the phone, so only there.
+ * rounded corners (the floating tab); slightly more work for the phone, so only there. [pullable]: pulling the page
+ * down from its top reloads it.
  */
+@OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 @Composable
-internal fun PageView(tab: BrowserTab, ui: UiState, primary: Boolean, floating: Boolean = false) {
+internal fun PageView(tab: BrowserTab, ui: UiState, primary: Boolean, floating: Boolean = false, pullable: Boolean = true) {
     val url by tab.url.collectAsState()
     val asleep by tab.asleep.collectAsState()
     val opened by tab.opened.collectAsState()
     val key = "$url $asleep $opened"
-    AndroidView(
-        factory = { ctx ->
-            GeckoView(ctx).also {
-                if (floating) it.setViewBackend(GeckoView.BACKEND_TEXTURE_VIEW)
-                // No white flash before a page draws its first frame.
-                it.coverUntilFirstPaint(Space.Ground.toArgb())
-                // The tab, not the view, owns the page: never hand the session back to Android to restore.
-                it.isSaveEnabled = false
+    val made = remember { arrayOfNulls<GeckoView>(1) }
+    // The floating tab's view draws through a texture, which Android doesn't pause when Raven leaves the screen:
+    // the engine went on drawing into it, with nobody showing what it drew, and could stall everything when Raven
+    // came back. So it lets its page go when Raven leaves (sound keeps playing) and shows it again on return.
+    if (floating) {
+        val owner = androidx.lifecycle.compose.LocalLifecycleOwner.current
+        androidx.compose.runtime.DisposableEffect(owner, tab) {
+            val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
+                val view = made[0] ?: return@LifecycleEventObserver
+                when (event) {
+                    androidx.lifecycle.Lifecycle.Event.ON_STOP -> if (view.session === tab.session) Displays.release(tab.session)
+                    androidx.lifecycle.Lifecycle.Event.ON_START -> if (tab.session.isOpen && view.isAttachedToWindow) Displays.showWhenSettled(tab.session, view)
+                    else -> {}
+                }
             }
-        },
-        modifier = Modifier.fillMaxSize(),
-        update = { view ->
-            // Re-runs when the tab, its address, its sleep state or its session changes (a session can open later).
-            @Suppress("UNUSED_VARIABLE") val k = key
-            if (primary) ui.geckoView = view
-            val s = tab.session
-            if (s.isOpen) Displays.showWhenSettled(s, view)
-        },
-        // The screen is going away (Android can throw it away while you're in another app): let the page go,
-        // so the next screen can show it.
-        onRelease = { view ->
-            Displays.releaseView(view)
-            if (ui.geckoView === view) ui.geckoView = null
-        },
-    )
+            owner.lifecycle.addObserver(observer)
+            onDispose { owner.lifecycle.removeObserver(observer) }
+        }
+    }
+
+    // Pull down to refresh. The checks are read as a finger comes down, so following it never rebuilds the page.
+    val pull = remember { PullState() }
+    val current by androidx.compose.runtime.rememberUpdatedState(tab)
+    val canPull by androidx.compose.runtime.rememberUpdatedState(pullable)
+    val density = androidx.compose.ui.platform.LocalDensity.current
+    val edgePx = with(density) { 40.dp.toPx() }  // the full screen peek's edge (BrowserScreen)
+    SideEffect {
+        pull.allowed = {
+            val t = current
+            canPull && t.session.isOpen && !t.fullscreen.value && !ui.fullscreen && !t.isNewTabPage &&
+                !ui.editing && !ui.findOpen && ui.sheet == null
+        }
+        pull.topEdgePx = { if (ui.fullPage && !floating) edgePx else 0f }
+        pull.onRefresh = { current.session.reload() }
+    }
+    // The same view shows whichever tab is in front: another tab's circle isn't this one's.
+    LaunchedEffect(tab.id) { pull.refreshing = false }
+    LaunchedEffect(pull.refreshing) {
+        if (!pull.refreshing) return@LaunchedEffect
+        val t = current
+        // Turning until the page has reloaded (or a moment, if it never starts).
+        kotlinx.coroutines.withTimeoutOrNull(2_000) { t.loading.first { it } }
+            ?.let { kotlinx.coroutines.withTimeoutOrNull(15_000) { t.loading.first { !it } } }
+        pull.refreshing = false
+    }
+    // Clear of the status bar and the camera, even in full screen where the status bar is hidden.
+    val insetTop = maxOf(
+        WindowInsets.statusBarsIgnoringVisibility.getTop(density),
+        WindowInsets.displayCutout.getTop(density),
+    ).toFloat()
+    val pageTop = remember { androidx.compose.runtime.mutableFloatStateOf(0f) }
+
+    Box(Modifier.fillMaxSize().onGloballyPositioned { pageTop.floatValue = it.positionInWindow().y }) {
+        AndroidView(
+            factory = { ctx ->
+                PullGeckoView(ctx, pull).also {
+                    made[0] = it
+                    if (floating) it.setViewBackend(GeckoView.BACKEND_TEXTURE_VIEW)
+                    // No white flash before a page draws its first frame.
+                    it.coverUntilFirstPaint(Space.Ground.toArgb())
+                    // The tab, not the view, owns the page: never hand the session back to Android to restore.
+                    it.isSaveEnabled = false
+                }
+            },
+            modifier = Modifier.fillMaxSize(),
+            update = { view ->
+                // Re-runs when the tab, its address, its sleep state or its session changes (a session can open later).
+                @Suppress("UNUSED_VARIABLE") val k = key
+                if (primary) ui.geckoView = view
+                val s = tab.session
+                if (s.isOpen) Displays.showWhenSettled(s, view)
+            },
+            // The screen is going away (Android can throw it away while you're in another app): let the page go,
+            // so the next screen can show it.
+            onRelease = { view ->
+                Displays.releaseView(view)
+                if (ui.geckoView === view) ui.geckoView = null
+            },
+        )
+        PullIndicator(pull, tab.private, { (insetTop - pageTop.floatValue).coerceAtLeast(0f) }, Modifier.align(Alignment.TopCenter))
+    }
 }
 
 /** Captures the current page for the tab switcher. */
@@ -338,12 +457,13 @@ private fun TopBar(c: Container, ui: UiState, tab: BrowserTab, tabCount: Int) {
         // Hold for a quick new tab or private tab; tap for all of them.
         var quick by remember { mutableStateOf(false) }
         Box {
-            TabsButton(tabCount, private, button, onLongClick = { quick = true }) {
+            TabsButton(tabCount, private, button, onLongClick = { quick = true }, ring = profileColor(c, tab)) {
                 captureThumbnail(ui, tab) { ui.go(Screen.Tabs) }
             }
             val context = LocalContext.current
+            // (A menu is a window of its own: it closes when Raven locks, rather than staying over the lock.)
             androidx.compose.material3.DropdownMenu(
-                quick, { quick = false },
+                quick && LocalBrowserShown.current, { quick = false },
                 containerColor = Space.Surface2, shape = RoundedCornerShape(20.dp),
             ) {
                 androidx.compose.material3.DropdownMenuItem(
@@ -362,6 +482,15 @@ private fun TopBar(c: Container, ui: UiState, tab: BrowserTab, tabCount: Int) {
         }
         IconButton(Icons.Menu, "Menu", { ui.sheet = Sheet.Menu }, size = button)
     }
+}
+
+/** The colour of [tab]'s profile, when there's more than one profile (and it isn't a private tab). */
+@Composable
+internal fun profileColor(c: Container, tab: BrowserTab): Color? {
+    val profiles by c.profiles.all.collectAsState()
+    if (profiles.size < 2 || tab.private) return null
+    val p = profiles.firstOrNull { it.id == tab.profile } ?: return null
+    return Color(app.raven.browser.data.Profiles.colors[p.color % app.raven.browser.data.Profiles.colors.size])
 }
 
 /** The strip the address bar floats in. Over the home screen ([sky]) the bar is glass and the wallpaper shows through. */
@@ -417,8 +546,9 @@ internal fun Moonlight(loading: Boolean, progress: Float, modifier: Modifier) {
 
 @Composable
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
-internal fun TabsButton(count: Int, private: Boolean, size: androidx.compose.ui.unit.Dp, onLongClick: (() -> Unit)? = null, onClick: () -> Unit) {
-    val edge = if (private) Space.Nebula else Raven.accent
+internal fun TabsButton(count: Int, private: Boolean, size: androidx.compose.ui.unit.Dp, onLongClick: (() -> Unit)? = null, ring: Color? = null, onClick: () -> Unit) {
+    // Ringed in the profile's colour when there's more than one profile.
+    val edge = if (private) Space.Nebula else ring ?: Raven.accent
     Box(
         Modifier
             .size(size)
@@ -486,7 +616,7 @@ fun go(c: Container, ui: UiState, tab: BrowserTab, text: String) {
 }
 
 @Composable
-private fun Suggestions(c: Container, ui: UiState, tab: BrowserTab) {
+private fun Suggestions(c: Container, ui: UiState, tab: BrowserTab, top: androidx.compose.ui.unit.Dp = 0.dp) {
     val text = ui.editText
     var results by remember { mutableStateOf<List<Visit>>(emptyList()) }
     var marks by remember { mutableStateOf<List<app.raven.browser.data.Bookmark>>(emptyList()) }
@@ -494,7 +624,7 @@ private fun Suggestions(c: Container, ui: UiState, tab: BrowserTab) {
         // Bookmarks first (private tabs may read them, never history); then history, without repeating them.
         marks = c.db.suggestBookmarks(text)
         val saved = marks.map { it.url }.toSet()
-        results = if (tab.private) emptyList() else c.db.suggest(text).filter { it.url !in saved }
+        results = if (tab.private) emptyList() else c.db.suggest(text, profile = tab.profile).filter { it.url !in saved }
     }
     val engine = c.settings.current.searchEngine
     // While you type, Raven connects to where Go would take you (the site, or the search engine) and to the top
@@ -510,6 +640,7 @@ private fun Suggestions(c: Container, ui: UiState, tab: BrowserTab) {
             .fillMaxSize()
             .background(if (tab.private) Space.NebulaGround else Raven.ground)
             .padding(horizontal = 12.dp),
+        contentPadding = androidx.compose.foundation.layout.PaddingValues(top = top),
     ) {
         val pageUrl = tab.url.value
         if (text.isEmpty() && !tab.isNewTabPage) item { CurrentPageRow(ui, tab, pageUrl, UrlInput.searchTerms(pageUrl, engine)) }

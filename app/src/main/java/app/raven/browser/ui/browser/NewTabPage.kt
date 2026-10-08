@@ -99,11 +99,15 @@ fun siteLabel(hostOrUrl: String): String {
     return names[main] ?: main.replaceFirstChar { it.uppercase() }
 }
 
+/** Whether the browser (and so a home screen in it) can be seen right now, rather than a screen or a lock over it. */
+val LocalBrowserShown = androidx.compose.runtime.compositionLocalOf { true }
+
 /** The home screen's sky, also drawn behind the address bar so the two read as one. */
 @Composable
 fun homeSky(c: Container, private: Boolean): Modifier {
     val prefs by c.settings.prefs.collectAsState()
-    val moving = prefs.movingSky && !Raven.reduceMotion
+    // A live wallpaper moves only while the home screen can be seen (not under Settings, the Tabs screen or a lock).
+    val moving = prefs.movingSky && !Raven.reduceMotion && LocalBrowserShown.current
     return if (private) {
         LaunchedEffect(Unit) { c.sky.loadEclipse() }
         val image by c.sky.eclipse.collectAsState()
@@ -125,7 +129,7 @@ fun NewTabPage(c: Container, ui: UiState, tab: BrowserTab) {
     LaunchedEffect(prefs.pinnedSites, prefs.hiddenSites, historyVersion) {
         val pinned = prefs.pinnedSites.map { PinnedSite(it, siteLabel(it), true) }
         val pinnedHosts = pinned.map { siteLabel(it.url) }.toSet()
-        val top = c.db.topSites(8, prefs.hiddenSites).map { PinnedSite(it.url, siteLabel(it.host), false) }.filter { siteLabel(it.url) !in pinnedHosts }
+        val top = c.db.topSites(8, prefs.hiddenSites, tab.profile).map { PinnedSite(it.url, siteLabel(it.host), false) }.filter { siteLabel(it.url) !in pinnedHosts }
         val fallback = defaultSites.filter { it !in prefs.hiddenSites }.map { PinnedSite("https://$it/", siteLabel(it), false) }
         sites = (pinned + top + fallback).distinctBy { it.label }.take(5)
     }
@@ -134,7 +138,7 @@ fun NewTabPage(c: Container, ui: UiState, tab: BrowserTab) {
     val openTabs by c.tabs.tabs.collectAsState()
     val back = when {
         !tab.hasNoPage -> tab
-        else -> openTabs.filter { it.id != tab.id && !it.private && !it.hasNoPage }.maxByOrNull { it.lastActive }
+        else -> openTabs.filter { it.id != tab.id && !it.private && !it.hasNoPage && it.profile == tab.profile }.maxByOrNull { it.lastActive }
     }
     var menuFor by remember { mutableStateOf<PinnedSite?>(null) }
     var adding by remember { mutableStateOf(false) }

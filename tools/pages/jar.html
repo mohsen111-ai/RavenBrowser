@@ -1,0 +1,13 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>Raven cookie jar test</title>
+<style>body { background: #1b1f2a; color: #eee; font: 24px sans-serif; margin: 16px; } a { color: #9cf; font-size: 60px; }</style>
+<!-- jar.html?set=NAME stores a cookie; jar.html shows what this tab's cookie jar holds. Two profiles must not share it. -->
+<p id="jar"></p>
+<p><a href="jar.html">Look in the jar</a></p>
+<script>
+  const set = new URLSearchParams(location.search).get("set");
+  if (set) document.cookie = "who=" + set + "; max-age=3600; path=/";
+  document.getElementById("jar").textContent = "jar: " + (document.cookie || "empty");
+</script>

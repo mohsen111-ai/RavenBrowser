@@ -31,22 +31,38 @@ enum class Isolation(val label: String, val detail: String) {
 
 enum class Motion(val label: String) { AUTO("With Battery Saver"), ALWAYS("Always"), NEVER("Never") }
 
+/** A link to a site that has its own app on the phone (YouTube, a shop): stay in Raven, ask, or open the app. */
+enum class LinksInApps(val label: String, val detail: String) {
+    NEVER("Never", "Links always open in Raven"),
+    ASK("Ask first", "Raven offers to open the app"),
+    ALWAYS("Always", "Links open straight in the app"),
+}
+
 data class Prefs(
     val onboardingDone: Boolean = false,
     val searchEngine: SearchEngine = SearchEngine.DUCKDUCKGO,
     val searchSuggestions: Boolean = false,
     val strictTracking: Boolean = true,
+    /** Cookie popups: the site's "Reject all" is pressed for you; popups without one are hidden. */
+    val cookiePopups: Boolean = true,
     val httpsOnly: Boolean = true,
     val dns: DnsProvider = DnsProvider.CLOUDFLARE,
     val isolation: Isolation = Isolation.LOGGED_IN,
     val eraseOnClose: Boolean = false,
     val supernovaButton: Boolean = true,
     val lockPrivateTabs: Boolean = false,
+    /** The lock for all of Raven: off until you turn it on. */
+    val appLock: Boolean = false,
+    /** How long Raven may be away before it locks: 0 (at once), 1, 5 or 30 minutes. */
+    val lockAfterMinutes: Int = 5,
     val accent: Int = 0,
     val trueBlack: Boolean = false,
     val reduceMotion: Motion = Motion.AUTO,
     val addressBarTop: Boolean = true,
+    /** Full screen for pages: every bar hidden (Raven's and the phone's) until a swipe down from the top. */
+    val fullPage: Boolean = false,
     val pictureInPicture: Boolean = true,
+    val linksInApps: LinksInApps = LinksInApps.NEVER,
     /** A new wallpaper each time Raven opens (or always [wallpaper] when off); [wallpapersOff] sit the rotation out. */
     val wallpaperRotate: Boolean = true,
     val wallpaper: String = "moonrise",
@@ -84,17 +100,22 @@ class Settings(context: Context) {
             searchEngine = enumOr(sp.getString("searchEngine", null), d.searchEngine),
             searchSuggestions = sp.getBoolean("searchSuggestions", d.searchSuggestions),
             strictTracking = sp.getBoolean("strictTracking", d.strictTracking),
+            cookiePopups = sp.getBoolean("cookiePopups", d.cookiePopups),
             httpsOnly = sp.getBoolean("httpsOnly", d.httpsOnly),
             dns = enumOr(sp.getString("dns", null), d.dns),
             isolation = enumOr(sp.getString("isolation", null), d.isolation),
             eraseOnClose = sp.getBoolean("eraseOnClose", d.eraseOnClose),
             supernovaButton = sp.getBoolean("supernovaButton", d.supernovaButton),
             lockPrivateTabs = sp.getBoolean("lockPrivateTabs", d.lockPrivateTabs),
+            appLock = sp.getBoolean("appLock", d.appLock),
+            lockAfterMinutes = sp.getInt("lockAfterMinutes", d.lockAfterMinutes),
             accent = sp.getInt("accent", d.accent),
             trueBlack = sp.getBoolean("trueBlack", d.trueBlack),
             reduceMotion = enumOr(sp.getString("reduceMotion", null), d.reduceMotion),
             addressBarTop = sp.getBoolean("addressBarTop", d.addressBarTop),
+            fullPage = sp.getBoolean("fullPage", d.fullPage),
             pictureInPicture = sp.getBoolean("pictureInPicture", d.pictureInPicture),
+            linksInApps = enumOr(sp.getString("linksInApps", null), d.linksInApps),
             wallpaperRotate = sp.getBoolean("wallpaperRotate", d.wallpaperRotate),
             wallpaper = sp.getString("wallpaper", null) ?: d.wallpaper,
             wallpapersOff = sp.getString("wallpapersOff", null)?.split('\n')?.filter { it.isNotBlank() } ?: d.wallpapersOff,
@@ -116,17 +137,22 @@ class Settings(context: Context) {
         putString("searchEngine", p.searchEngine.name)
         putBoolean("searchSuggestions", p.searchSuggestions)
         putBoolean("strictTracking", p.strictTracking)
+        putBoolean("cookiePopups", p.cookiePopups)
         putBoolean("httpsOnly", p.httpsOnly)
         putString("dns", p.dns.name)
         putString("isolation", p.isolation.name)
         putBoolean("eraseOnClose", p.eraseOnClose)
         putBoolean("supernovaButton", p.supernovaButton)
         putBoolean("lockPrivateTabs", p.lockPrivateTabs)
+        putBoolean("appLock", p.appLock)
+        putInt("lockAfterMinutes", p.lockAfterMinutes)
         putInt("accent", p.accent)
         putBoolean("trueBlack", p.trueBlack)
         putString("reduceMotion", p.reduceMotion.name)
         putBoolean("addressBarTop", p.addressBarTop)
+        putBoolean("fullPage", p.fullPage)
         putBoolean("pictureInPicture", p.pictureInPicture)
+        putString("linksInApps", p.linksInApps.name)
         putBoolean("wallpaperRotate", p.wallpaperRotate)
         putString("wallpaper", p.wallpaper)
         putString("wallpapersOff", p.wallpapersOff.joinToString("\n"))
@@ -140,6 +166,39 @@ class Settings(context: Context) {
         putString("pinnedSites", p.pinnedSites.joinToString("\n"))
         putString("hiddenSites", p.hiddenSites.joinToString("\n"))
         putLong("addonsLastChecked", p.addonsLastChecked)
+    }
+
+    /** Every setting as it's stored, for a backup. */
+    fun export(): org.json.JSONObject {
+        val o = org.json.JSONObject()
+        sp.all.forEach { (k, v) ->
+            when (v) {
+                is Boolean -> o.put(k, org.json.JSONObject().put("b", v))
+                is Int -> o.put(k, org.json.JSONObject().put("i", v))
+                is Long -> o.put(k, org.json.JSONObject().put("l", v))
+                is String -> o.put(k, org.json.JSONObject().put("s", v))
+            }
+        }
+        return o
+    }
+
+    /** A backup's settings in place of these (Raven restarts afterwards, so every part reads them afresh). */
+    fun import(o: org.json.JSONObject) {
+        sp.edit(commit = true) {
+            clear()
+            o.keys().forEach { k ->
+                val v = o.optJSONObject(k) ?: return@forEach
+                when {
+                    v.has("b") -> putBoolean(k, v.getBoolean("b"))
+                    v.has("i") -> putInt(k, v.getInt("i"))
+                    v.has("l") -> putLong(k, v.getLong("l"))
+                    v.has("s") -> putString(k, v.getString("s"))
+                }
+            }
+            // A restored Raven never shows the welcome screens again.
+            putBoolean("onboardingDone", true)
+        }
+        _prefs.value = load()
     }
 
     private inline fun <reified E : Enum<E>> enumOr(name: String?, default: E): E =

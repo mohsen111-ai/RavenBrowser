@@ -70,7 +70,7 @@ fun PromptHost(c: Container) {
     when (p) {
         is UiPrompt.Page -> PagePrompt(p, ::done)
         is UiPrompt.Permission -> PermissionPrompt(c, p, ::done)
-        is UiPrompt.Media -> MediaPrompt(p, ::done)
+        is UiPrompt.Media -> MediaPrompt(c, p, ::done)
         is UiPrompt.AndroidPermissions -> AndroidPermissionPrompt(p, ::done)
     }
 }
@@ -304,15 +304,17 @@ private fun PermissionPrompt(c: Container, p: UiPrompt.Permission, done: () -> U
     val (what, icon, ask) = permissionInfo(kind)
     if (!ask) return
     var remember by remember { mutableStateOf(true) }
-    fun answer(allow: Boolean) {
+    // [keep]: a tap on Block or Allow is remembered (when ticked); swiping the question away or Back only says
+    // "not now", so the site can ask again later.
+    fun answer(allow: Boolean, keep: Boolean = remember) {
         val value = if (allow) ContentPermission.VALUE_ALLOW else ContentPermission.VALUE_DENY
         p.answer {
-            if (remember) c.engine.runtime.storageController.setPermission(p.permission, value)
+            if (keep) c.engine.runtime.storageController.setPermission(p.permission, value)
             p.result.complete(value)
         }
         done()
     }
-    RavenSheet({ answer(false) }) {
+    RavenSheet({ answer(false, keep = false) }) {
         Row(Modifier.padding(horizontal = 20.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.size(56.dp).clip(CircleShape).background(Raven.accent.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                 Icon(icon, null, tint = Raven.accent, size = 24.dp)
@@ -336,17 +338,25 @@ private fun PermissionPrompt(c: Container, p: UiPrompt.Permission, done: () -> U
 }
 
 @Composable
-private fun MediaPrompt(p: UiPrompt.Media, done: () -> Unit) {
+private fun MediaPrompt(c: Container, p: UiPrompt.Media, done: () -> Unit) {
     val what = when {
         p.video.isNotEmpty() && p.audio.isNotEmpty() -> "use your camera and microphone"
         p.video.isNotEmpty() -> "use your camera"
         else -> "use your microphone"
     }
-    fun answer(allow: Boolean) {
+    // A private tab never remembers; an everyday one can, so the site doesn't ask again (Settings, Site permissions).
+    val private = c.tabs.tabs.collectAsState().value.firstOrNull { it.id == p.tabId }?.private != false
+    var remember by remember { mutableStateOf(false) }
+    // Swiping the question away or Back is "not now", never remembered.
+    fun answer(allow: Boolean, keep: Boolean = remember) {
         p.answer { if (allow) p.callback.grant(p.video.firstOrNull(), p.audio.firstOrNull()) else p.callback.reject() }
+        if (keep && !private) {
+            if (p.video.isNotEmpty()) c.sitePermissions.set(p.host, app.raven.browser.data.SitePermissions.Kind.CAMERA, allow)
+            if (p.audio.isNotEmpty()) c.sitePermissions.set(p.host, app.raven.browser.data.SitePermissions.Kind.MICROPHONE, allow)
+        }
         done()
     }
-    RavenSheet({ answer(false) }) {
+    RavenSheet({ answer(false, keep = false) }) {
         Row(Modifier.padding(horizontal = 20.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.size(56.dp).clip(CircleShape).background(Raven.accent.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                 Icon(if (p.video.isNotEmpty()) Icons.Camera else Icons.Mic, null, tint = Raven.accent, size = 24.dp)
@@ -354,7 +364,11 @@ private fun MediaPrompt(p: UiPrompt.Media, done: () -> Unit) {
             Spacer(Modifier.width(16.dp))
             Text("Let ${p.host} $what?", style = MaterialTheme.typography.titleLarge)
         }
-        Text("Only while this page is open.", style = MaterialTheme.typography.bodySmall, color = Space.Text2, modifier = Modifier.padding(start = 20.dp, top = 14.dp))
+        Text(if (remember) "Raven won't ask this site again. Change it in Settings, Site permissions." else "Only while this page is open.", style = MaterialTheme.typography.bodySmall, color = Space.Text2, modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 14.dp))
+        if (!private) Row(Modifier.fillMaxWidth().clickable { remember = !remember }.padding(horizontal = 8.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+            Checkbox(remember, { remember = it })
+            Text("Remember for ${p.host}", style = MaterialTheme.typography.bodyMedium)
+        }
         Row(Modifier.padding(horizontal = 20.dp, vertical = 16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             PillButton("Block", { answer(false) }, Modifier.weight(1f), style = PillStyle.Outline, height = 52.dp)
             PillButton("Allow", { answer(true) }, Modifier.weight(1f), height = 52.dp)

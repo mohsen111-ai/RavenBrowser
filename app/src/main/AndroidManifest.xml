@@ -22,6 +22,12 @@
     <!-- The VPN square in the menu opens Proton VPN when it's installed. -->
     <queries>
         <package android:name="ch.protonvpn.android" />
+        <!-- Open links in apps (Settings): which apps on the phone open web links, to find a site's own app. -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
     </queries>
 
     <application

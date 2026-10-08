@@ -2,6 +2,7 @@ package app.raven.browser.engine
 
 import android.util.Log
 import android.view.Choreographer
+import androidx.core.view.doOnAttach
 import androidx.core.view.doOnLayout
 import org.mozilla.geckoview.GeckoSession
 import org.mozilla.geckoview.GeckoView
@@ -20,16 +21,19 @@ object Displays {
     /** Shows [session] in [view], first taking it back from any other view that still holds it. */
     fun show(session: GeckoSession, view: GeckoView) {
         if (view.session === session) return
-        holders[session]?.get()?.takeIf { it !== view && it.session === session }?.releaseSession()
+        holders[session]?.get()?.takeIf { it !== view && it.session === session }?.let { letGo(it) }
         view.session?.let { holders.remove(it) }
-        view.releaseSession()
+        letGo(view)
         try {
             view.setSession(session)
             holders[session] = WeakReference(view)
         } catch (e: IllegalStateException) {
             // The session's display is still taken by a view we don't know about: leave the page blank
-            // rather than stopping the app. The next change of tab or page tries again.
+            // rather than stopping the app. Kept in the crash report, as it shouldn't happen.
             Log.w("Raven", "couldn't show the page", e)
+            (view.context.applicationContext as? android.app.Application)?.let { application ->
+                runCatching { app.raven.browser.CrashLog.add(application, "Couldn't show a page (Raven kept going):\n${e.stackTraceToString()}") }
+            }
         }
     }
 
@@ -52,7 +56,13 @@ object Displays {
             frames.postFrameCallback {
                 frames.postFrameCallback {
                     // Gone meanwhile (its screen closed): it must not take the page from the view showing it now.
-                    if (!settled.containsKey(view) || !view.isAttachedToWindow) return@postFrameCallback
+                    if (!settled.containsKey(view)) return@postFrameCallback
+                    // Taken off the screen for a moment: it starts waiting again once it's back, rather than never.
+                    if (!view.isAttachedToWindow) {
+                        settled.remove(view)
+                        view.doOnAttach { pending.remove(view)?.takeIf { it.isOpen }?.let { s -> showWhenSettled(s, view) } }
+                        return@postFrameCallback
+                    }
                     settled[view] = true
                     // Whatever the view is asked to show by now (the tab may have changed meanwhile).
                     (pending.remove(view) ?: session).takeIf { it.isOpen }?.let { show(it, view) }
@@ -65,7 +75,7 @@ object Displays {
 
     /** Before a session closes or sleeps: the view showing it lets it go. */
     fun release(session: GeckoSession) {
-        holders.remove(session)?.get()?.takeIf { it.session === session }?.releaseSession()
+        holders.remove(session)?.get()?.takeIf { it.session === session }?.let { letGo(it) }
     }
 
     /** The view is going away (its screen was closed): it lets go of whatever it shows. */
@@ -73,6 +83,15 @@ object Displays {
         settled.remove(view)
         pending.remove(view)
         view.session?.let { holders.remove(it) }
-        view.releaseSession()
+        letGo(view)
+    }
+
+    /** A view that never got its page's display can't give it back; that mustn't stop the app as it closes. */
+    private fun letGo(view: GeckoView) {
+        try {
+            view.releaseSession()
+        } catch (e: IllegalArgumentException) {
+            Log.w("Raven", "a page view let go of a page it wasn't showing", e)
+        }
     }
 }
