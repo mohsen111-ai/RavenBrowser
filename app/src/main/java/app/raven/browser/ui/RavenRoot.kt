@@ -234,7 +234,17 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
             merge(c.tabs.events, c.engine.messages.map { TabEvent.Message(it) }).collect { e ->
                 when (e) {
                     // Snackbars wait their turn without holding up the events behind them.
-                    is TabEvent.Message -> launch { ui.snackbar.showSnackbar(e.text) }
+                    is TabEvent.Message -> launch {
+                        // A message about a tab or a download can be tapped to go there.
+                        val go: (() -> Unit)? = when {
+                            e.openTab != null -> {
+                                { if (c.tabs.tabs.value.any { it.id == e.openTab }) { c.tabs.select(e.openTab); ui.go(Screen.Browser) } }
+                            }
+                            e.openDownloads -> { { ui.go(Screen.Downloads) } }
+                            else -> null
+                        }
+                        if (go == null) ui.snackbar.showSnackbar(e.text) else ui.snackbar.showSnackbar(TapVisuals(e.text, go))
+                    }
                     is TabEvent.OpenExternal -> try {
                         activity.startActivity(e.intent)
                     } catch (_: ActivityNotFoundException) {
@@ -309,11 +319,11 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
             // On the Tabs screen it sits above the New tab button, so a quick tap there never lands on Undo.
             if (!ui.pip) SnackbarHost(ui.snackbar, Modifier.align(Alignment.BottomCenter).navigationBarsPadding().padding(16.dp).padding(bottom = if (ui.screen == Screen.Tabs) 72.dp else 0.dp)) { data ->
                 // Moonlight pill; an action (Undo, Folder) sits at its end.
-                // "Downloading <file>": a tap on it opens the Downloads page.
-                val toDownloads = data.visuals.message.startsWith("Downloading ")
+                // A message with somewhere to go ("Opened in a new tab", "Downloading ..."): a tap on it goes there.
+                val tap = (data.visuals as? TapVisuals)?.onTap
                 Snackbar(
                     data,
-                    modifier = if (toDownloads) Modifier.clickable { data.dismiss(); ui.go(Screen.Downloads) } else Modifier,
+                    modifier = if (tap != null) Modifier.clickable { data.dismiss(); tap() } else Modifier,
                     shape = androidx.compose.foundation.shape.CircleShape,
                     containerColor = Space.Text,
                     contentColor = Space.OnAccent,
@@ -386,4 +396,11 @@ private fun Screens(c: Container, ui: UiState) {
             }
         }
     }
+}
+
+/** A snackbar message that does something when it's tapped. */
+class TapVisuals(override val message: String, val onTap: () -> Unit) : androidx.compose.material3.SnackbarVisuals {
+    override val actionLabel: String? = null
+    override val withDismissAction: Boolean = false
+    override val duration: androidx.compose.material3.SnackbarDuration = androidx.compose.material3.SnackbarDuration.Short
 }

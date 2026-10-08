@@ -96,16 +96,25 @@ fun DownloadsScreen(c: Container, ui: UiState, onBack: () -> Unit) {
     }
 }
 
-/** Opens a finished file with the app for its type; if no app can, shows the Downloads folder in the file manager. */
-private fun openDownloaded(context: android.content.Context, c: Container, item: DownloadItem) {
-    try {
-        context.startActivity(c.downloads.openIntent(item))
-    } catch (e: Exception) {
-        android.widget.Toast.makeText(context, "No app can open this file. Showing your Downloads folder.", android.widget.Toast.LENGTH_LONG).show()
-        runCatching {
-            context.startActivity(android.content.Intent(android.app.DownloadManager.ACTION_VIEW_DOWNLOADS).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK))
-        }
+/**
+ * A finished file was tapped: the phone's file manager opens on the Downloads folder, where the file is. Tries the
+ * ways file managers answer to, one after another, and only says so if none of them does.
+ */
+private fun showInFiles(context: android.content.Context, item: DownloadItem) {
+    val ways = listOf(
+        // The Downloads folder in the Files app (the document provider's own folder address).
+        android.content.Intent(android.content.Intent.ACTION_VIEW)
+            .setDataAndType(android.net.Uri.parse("content://com.android.externalstorage.documents/document/primary%3ADownload"), "vnd.android.document/directory"),
+        // Android's own Downloads list.
+        android.content.Intent(android.app.DownloadManager.ACTION_VIEW_DOWNLOADS),
+        // The file manager's chooser view of everything.
+        android.content.Intent(android.content.Intent.ACTION_GET_CONTENT).setType("*/*").addCategory(android.content.Intent.CATEGORY_OPENABLE),
+    )
+    for (way in ways) {
+        val started = runCatching { context.startActivity(way.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)) }.isSuccess
+        if (started) return
     }
+    android.widget.Toast.makeText(context, "No file manager found. ${item.name} is in your Downloads folder.", android.widget.Toast.LENGTH_LONG).show()
 }
 
 @Composable
@@ -134,7 +143,7 @@ private fun DownloadRow(c: Container, item: DownloadItem) {
             .clip(RoundedCornerShape(20.dp))
             .background(Space.Surface)
             .border(1.dp, Color(0x0FFFFFFF), RoundedCornerShape(20.dp))
-            .clickable(enabled = item.status == DownloadStatus.DONE) { openDownloaded(context, c, item) }
+            .clickable(enabled = item.status == DownloadStatus.DONE) { showInFiles(context, item) }
             .padding(start = 12.dp, end = 8.dp, top = 12.dp, bottom = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {

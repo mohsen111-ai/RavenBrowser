@@ -96,6 +96,7 @@ class MainActivity : FragmentActivity() {
     override fun onStop() {
         super.onStop()
         container.tabs.onAppHidden()
+        if (!isChangingConfigurations && !isInPictureInPictureMode) container.tabs.leaveFullscreen()
         if (!isChangingConfigurations) container.wasAway = true
         // Leaving for the phone's own lock screen (to unlock Raven) isn't leaving Raven.
         if (!isChangingConfigurations && !asking) container.leftAt = SystemClock.elapsedRealtime()

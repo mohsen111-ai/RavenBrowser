@@ -123,6 +123,15 @@ tap "=Play"; sleep 2; tap "=Fullscreen"; sleep 5; shot r13_a_fullscreen
 p=$(pid); away r13; come_back r13; check r13 "the video, fullscreen or back in its page" "$p"
 $A shell input keyevent 4; sleep 3
 
+# 9b. A paused fullscreen video: no picture-in-picture, so leaving takes it out of fullscreen first, and coming back is
+# an ordinary return (the screen upright, the page there).
+dims() { python3 -c "import struct,sys; print('%dx%d' % struct.unpack('>II', open(sys.argv[1],'rb').read(24)[16:24]))" "$OUT/$1.png"; }
+newtab; sleep 3; open_page "$PAGES/video.html?once"
+tap "=Play"; sleep 2; tap "=Fullscreen"; sleep 5
+$A shell cmd media_session dispatch pause; sleep 2
+p=$(pid); away r13b; come_back r13b; check r13b "paused fullscreen video: the page back, not fullscreen" "$p"
+log "r13b: screen $(dims r13b_c_later) (expect taller than wide) | bars back: $(has "open tabs") (expect yes)"
+
 # 10. Five quick round trips in a row.
 newtab; sleep 3; open_page "$PAGES/long.html"
 for i in 1 2 3 4 5; do

@@ -41,7 +41,8 @@ import java.io.File
 import java.util.UUID
 
 sealed interface TabEvent {
-    class Message(val text: String) : TabEvent
+    /** A short message at the bottom. Tapping it can take you to the tab it's about, or to the Downloads page. */
+    class Message(val text: String, val openTab: String? = null, val openDownloads: Boolean = false) : TabEvent
     class OpenExternal(val intent: Intent, val fallbackUrl: String? = null, val tabId: String? = null) : TabEvent
     class ContextMenu(val tabId: String, val element: ContentDelegate.ContextElement) : TabEvent
     /** A link that has its own app on the phone: "Open in <app>" is offered while the page loads in Raven. */
@@ -113,6 +114,20 @@ class TabManager(
     fun onAppHidden() {
         inFront = false
         saveNow()
+    }
+
+    /**
+     * Raven is leaving the screen without a picture-in-picture window: a fullscreen video steps back to its page first,
+     * so coming back is an ordinary return (no screen turning and no change of size while the engine draws again, which
+     * is where it could stall).
+     */
+    fun leaveFullscreen() {
+        _tabs.value.filter { it.fullscreen.value }.forEach { tab ->
+            if (tab.session.isOpen) runCatching { tab.session.exitFullScreen() }
+            tab.fullscreen.value = false
+            tab.wideVideo.value = null
+            tab.videoSize.value = null
+        }
     }
 
     private val stateFile = File(context.filesDir, "tabs.json")
@@ -952,7 +967,7 @@ class TabManager(
                     response.body?.close()
                     engine.install(response.uri)
                 } else {
-                    downloads.start(response, tab.private)?.let { events.tryEmit(TabEvent.Message("Downloading ${it.name}")) }
+                    downloads.start(response, tab.private)?.let { events.tryEmit(TabEvent.Message("Downloading ${it.name}", openDownloads = true)) }
                 }
                 // A download doesn't replace the page, so show the page's own address again.
                 if (tab.committedUrl.isBlank() && tab.openedByPage && _tabs.value.size > 1) {

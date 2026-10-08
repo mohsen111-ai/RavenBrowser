@@ -222,8 +222,19 @@ dump; python3 tools/find.py "$OUT/ui.xml" "^Downloading " > /dev/null && { xy=$(
 sleep 3; shot u44_downloads_from_pill
 log "tapping the Downloading pill: Downloads page $(has "=Downloads") $(has "sample.bin") (expect yes yes)"
 tap "^sample.bin"; sleep 4; shot u45_opened_file
-log "tapping the finished file: front app $($A shell dumpsys window | grep -m1 mCurrentFocus | grep -c "$APP") (expect 0: another app, the file manager, came to the front)"
+focus=$($A shell dumpsys window | grep -m1 mCurrentFocus)
+case "$focus" in *documentsui*|*DocumentsUI*|*files*) fm=yes;; *) fm=no;; esac
+log "tapping the finished file: file manager in front $fm (expect yes) | $focus"
 $A shell input keyevent 4; sleep 2; front; sleep 2
+
+# 6. "Opened in a new tab": a tap on that message goes to the tab that was opened.
+newtab; sleep 3; open_page "$PAGES/links.html"
+hold "^Raven link target"; sleep 2; shot u46_link_menu
+tap "Open in new tab"; sleep 1
+dump; xy=$(python3 tools/find.py "$OUT/ui.xml" "=Opened in a new tab") && { $A shell input tap $xy; log "tapped the message at $xy"; msg=yes; } || { log "the message was already gone"; msg=no; }
+sleep 4; try_tap "Open the unsecure site anyway" && sleep 5
+shot u47_new_tab_from_message
+log "message shown: $msg (expect yes) | after tapping it, the opened tab is in front: $(has "tab: linked") (expect yes)"
 
 log "new crashes: $(( $(fatals) - f0 ))"
 $A logcat -d > $OUT/logcat-update.txt

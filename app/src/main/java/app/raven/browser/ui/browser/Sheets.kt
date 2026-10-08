@@ -60,6 +60,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import app.raven.browser.BuildConfig
 import app.raven.browser.Container
+import app.raven.browser.engine.TabEvent
 import app.raven.browser.engine.BrowserTab
 import app.raven.browser.engine.InstallRequest
 import app.raven.browser.engine.PopupRequest
@@ -416,8 +417,8 @@ fun LongPressSheet(c: Container, ui: UiState, sheet: Sheet.LongPress) {
         val private = tab?.private == true
         if (link != null) {
             ActionRow(Icons.NewTab, "Open in new tab") {
-                c.tabs.newTab(url = link, private = private, select = false, openerId = tab?.id, profile = tab?.profile ?: c.tabs.profile.value)
-                c.engine.messages.tryEmit("Opened in a new tab")
+                val opened = c.tabs.newTab(url = link, private = private, select = false, openerId = tab?.id, profile = tab?.profile ?: c.tabs.profile.value)
+                c.tabs.events.tryEmit(TabEvent.Message("Opened in a new tab", openTab = opened.id))
                 close()
             }
             // The same link as someone else: in each other profile, signed in as them.
@@ -425,8 +426,8 @@ fun LongPressSheet(c: Container, ui: UiState, sheet: Sheet.LongPress) {
             if (!private && profiles.size > 1) {
                 profiles.filter { it.id != (tab?.profile ?: "") }.forEach { p ->
                     ActionRow(Icons.Person, "Open in ${p.name}", tint = Color(app.raven.browser.data.Profiles.colors[p.color % app.raven.browser.data.Profiles.colors.size])) {
-                        c.tabs.newTab(url = link, select = false, profile = p.id)
-                        c.engine.messages.tryEmit("Opened in ${p.name}")
+                        val opened = c.tabs.newTab(url = link, select = false, profile = p.id)
+                        c.tabs.events.tryEmit(TabEvent.Message("Opened in ${p.name}", openTab = opened.id))
                         close()
                     }
                 }
