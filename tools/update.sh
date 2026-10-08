@@ -77,8 +77,8 @@ menu "End split screen"; sleep 3
 
 # 3. Video fullscreen in a split half, with two videos playing: the video fills only its own half. The other half stays
 # on screen (and keeps playing), the phone's bars stay, the screen doesn't turn; Back puts the half as it was.
-newtab; sleep 3; open_page "$PAGES/video.html?other"
-newtab; sleep 3; open_page "$PAGES/video.html"
+newtab; sleep 3; open_page "$PAGES/video.html?other&once"
+newtab; sleep 3; open_page "$PAGES/video.html?once"
 menu "=Split screen"; sleep 2; tap "Split with Raven video test"; sleep 6
 tap "=Play"; sleep 3; tap "!=Play"; sleep 3
 mark split-fullscreen; tap "=Fullscreen"; sleep 5; shot u10_split_fullscreen
@@ -87,6 +87,8 @@ log "split half fullscreen: screen $(dims u10_split_fullscreen) (expect taller t
 log "raven: $(since split-fullscreen | grep -m1 -o 'fullscreen: [0-9a-f]* *(*[a-z ]*)*') (expect none: only the whole-phone kind is logged)"
 $A shell input keyevent 4; sleep 4; shot u11_split_back
 log "after Back: halves $(has "^Top half: ") $(has "^Bottom half: ") (expect yes yes) | bars $(many "Address ") (expect 2) | page: $(text "state: ") (expect fullscreen: no)"
+# Both videos play once and stop by themselves (a playing video keeps the screen from settling for the test tool).
+sleep 25
 menu "End split screen"; sleep 3
 
 # 4. Video fullscreen from the floating tab: the whole phone screen, then back into its window.

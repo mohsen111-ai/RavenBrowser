@@ -14,6 +14,8 @@
 <p id="state">idle</p>
 <script>
   const v = document.getElementById("v");
+  // video.html?once: plays through once and stops by itself, so a test screen settles after it.
+  if (location.search.includes("once")) v.loop = false;
   const show = () => {
     document.getElementById("state").textContent =
       "state: " + (v.paused ? "paused" : "playing") + " | fullscreen: " + (document.fullscreenElement ? "yes" : "no") +
