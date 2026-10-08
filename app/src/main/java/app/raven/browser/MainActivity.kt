@@ -96,7 +96,6 @@ class MainActivity : FragmentActivity() {
     override fun onStop() {
         super.onStop()
         container.tabs.onAppHidden()
-        if (!isChangingConfigurations && !isInPictureInPictureMode) container.tabs.leaveFullscreen()
         if (!isChangingConfigurations) container.wasAway = true
         // Leaving for the phone's own lock screen (to unlock Raven) isn't leaving Raven.
         if (!isChangingConfigurations && !asking) container.leftAt = SystemClock.elapsedRealtime()
@@ -214,6 +213,43 @@ class MainActivity : FragmentActivity() {
         )
         val label = if (playing) "Pause" else "Play"
         return RemoteAction(Icon.createWithResource(this, if (playing) R.drawable.ic_media_pause else R.drawable.ic_media_play), label, label, intent)
+    }
+
+    /**
+     * Leaving Raven: the page must come back at the same size it had when it left. With the phone's bars hidden (a
+     * fullscreen video, full screen for pages) Android shows them for the trip and hides them again on return, so the
+     * page went from one size to another while the engine was still starting to draw (the screen stays black, then
+     * "Raven isn't responding"; seen in every emulator run that came back to hidden bars). So the bars come back
+     * while Raven is still on screen, a fullscreen video steps back to its page (unless it goes to a small
+     * picture-in-picture window), and Raven hides the bars again once it is back and has settled.
+     */
+    private var hideBarsAgain = false
+
+    override fun onPause() {
+        super.onPause()
+        if (isChangingConfigurations || pipReady || isInPictureInPictureMode) return
+        container.tabs.leaveFullscreen()
+        ui.fullscreen = false
+        ui.fullscreenTabId = null
+        if (ui.fullPage) hideBarsAgain = true
+        requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        androidx.core.view.WindowCompat.getInsetsController(window, window.decorView).show(androidx.core.view.WindowInsetsCompat.Type.systemBars())
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus && hideBarsAgain) {
+            hideBarsAgain = false
+            // Settled first: a short while after the screen is back and drawing.
+            window.decorView.postDelayed({
+                if (ui.fullPage && !isFinishing) {
+                    androidx.core.view.WindowCompat.getInsetsController(window, window.decorView).apply {
+                        systemBarsBehavior = androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                        hide(androidx.core.view.WindowInsetsCompat.Type.systemBars())
+                    }
+                }
+            }, 900)
+        }
     }
 
     // Android 12+ enters by itself (setAutoEnterEnabled); older versions are asked when you leave.

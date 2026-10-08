@@ -226,6 +226,8 @@ focus=$($A shell dumpsys window | grep -m1 mCurrentFocus)
 case "$focus" in *documentsui*|*DocumentsUI*|*files*) fm=yes;; *) fm=no;; esac
 log "tapping the finished file: file manager in front $fm (expect yes) | $focus"
 $A shell input keyevent 4; sleep 2; front; sleep 2
+# Raven is back on the Downloads page: Back goes to the browser (and if it was already there, front brings Raven back).
+$A shell input keyevent 4; sleep 2; front; sleep 2
 
 # 6. "Opened in a new tab": a tap on that message goes to the tab that was opened.
 newtab; sleep 3; open_page "$PAGES/links.html"
