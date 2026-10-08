@@ -1,0 +1,212 @@
+17:27:54 ---- setup
+Performing Streamed Install
+Success
+17:28:40 tap 'Not now' at 160 574
+17:29:10 Raven is in front
+17:29:10 screenshot 00_setup
+17:29:10 ---- setup done
+17:29:10 ---- raven
+17:29:17 tap 'open tabs' at 240 63
+17:29:23 tap '^Tabs · ' at 65 136
+17:29:26 tap '!=New tab' at 141 575
+17:29:30 screenshot r01_home
+17:30:08 screenshot r02_home_again
+17:30:08 sky after each return: Corvus, Rooftops, Night flight, Lighthouse, Wolf (expect a different one each time, never the same twice running)
+17:30:11 tap 'Address' at 139 63
+17:30:14 go example.com
+17:30:22 tap 'open tabs' at 240 63
+17:30:27 tap '^Tabs · ' at 65 136
+17:30:30 tap '!=New tab' at 141 575
+17:30:35 tap 'Address' at 139 63
+17:30:38 go example.org
+17:30:46 address before swiping: example.org (expect example.org)
+17:30:52 screenshot r03_swiped_back
+17:30:54 after swiping right: example.com (expect example.com)
+17:30:58 screenshot r04_swiped_forward
+17:31:00 after swiping left: example.org (expect example.org)
+17:31:05 swiping left past the last tab: example.org (expect example.org still: it only stretches)
+17:31:07 tap 'Menu' at 282 63
+17:31:13 tap 'Bookmark this page' at 160 78
+17:31:14 screenshot r05_saved_snackbar
+17:31:21 tap 'Menu' at 282 63
+17:31:25 menu shows the page saved: yes (expect yes)
+17:31:25 screenshot r06_menu_saved
+17:31:31 tap 'Menu' at 282 63
+17:31:37 tap '=Bookmarks' at 122 161
+17:31:40 screenshot r07_bookmarks
+17:31:42 Example Domain in bookmarks: yes (expect yes)
+17:31:45 tap 'More for Example Domain' at 278 259
+17:31:47 screenshot r08_bookmark_actions
+17:31:49 tap '=Remove' at 85 574
+17:31:50 screenshot r09_removed
+17:31:52 tap '=Undo' at 254 564
+17:31:54 screenshot r10_undone
+17:31:56 after Undo: yes (expect yes)
+17:32:02 tap 'Address' at 118 63
+17:32:08 screenshot r11_suggestions
+17:32:10 bookmark first in suggestions: yes (expect yes)
+17:32:17 tap 'open tabs' at 240 63
+17:32:22 tap '^Tabs · ' at 65 136
+17:32:27 hold '^Example Domain' at 160 316
+17:32:29 screenshot r12_card_held
+17:32:31 tap 'New flock with this tab' at 131 522
+17:32:34 screenshot r13_new_flock
+17:32:38 screenshot r14_flock_open
+17:32:42 flocks: 1 (expect 1) | open flock shows Example Domain: yes (expect yes)
+17:32:44 tap '=All flocks' at 34 196
+17:32:46 screenshot r15_flocks
+17:32:48 Work's tile: , 1 tab (expect ', 1 tab')
+17:32:50 tap '^Tabs · ' at 65 136
+17:32:57 tap 'Menu' at 282 63
+17:33:03 tap 'Settings' at 197 357
+17:33:09 tap 'Search settings' at 174 116
+17:33:15 tap '^Wallpapers' at 69 173
+17:33:20 screenshot r16_wallpaper_settings
+17:33:22 tap '!=New wallpaper each time' at 268 201
+17:33:29 tap '=Snow' at 50 368
+17:33:31 screenshot r17_snow_chosen
+17:33:38 tap 'open tabs' at 240 63
+17:33:43 tap '^Tabs · ' at 65 136
+17:33:46 tap '!=New tab' at 141 575
+17:33:50 screenshot r18_home_snow
+17:33:52 home after choosing Snow: Snow (expect Snow)
+17:34:01 and after coming back: Snow (expect Snow: the rotation is off)
+17:34:03 tap 'Menu' at 282 63
+17:34:10 tap 'Settings' at 197 357
+17:34:15 tap 'Search settings' at 174 116
+17:34:21 tap '^Wallpapers' at 69 173
+17:34:27 tap '!=New wallpaper each time' at 268 198
+17:34:35 tap 'Menu' at 282 63
+17:34:38 screenshot r21_menu
+17:34:42 menu: VPN square says off (expect off) | Private gone from the grid: no (expect no)
+17:34:48 tap 'open tabs' at 240 63
+17:34:53 tap '^Tabs · ' at 65 136
+17:34:56 tap '!=New tab' at 141 575
+17:35:01 tap 'Address' at 139 63
+17:35:05 go http://10.0.2.2:8000/french.html
+17:35:15 screenshot r22_french
+17:35:17 translate offered in the bar: no (expect yes on phones 360 dp or wider; on this narrow one it's in the menu)
+17:35:32 NOT FOUND: '=Translate this page'
+17:35:34 tap 'Menu' at 282 63
+17:35:41 tap 'Translate page' at 272 259
+17:35:44 screenshot r23_translate_sheet
+17:35:46 tap '!=Translate' at 160 573
+17:36:31 screenshot r24_translated
+17:36:33 page after translating: yes (expect yes: corbeau became raven)
+17:36:37 tap 'Menu' at 282 63
+17:36:43 tap 'Translate page' at 272 259
+17:36:46 screenshot r24b_translate_options
+17:36:48 tap '=Show original' at 160 573
+17:36:53 screenshot r25_original
+17:36:55 after Show original: yes (expect yes)
+17:36:57 tap 'open tabs' at 240 63
+17:37:02 tap '^Tabs · ' at 65 136
+17:37:05 tap '!=New tab' at 141 575
+17:37:10 tap 'Address' at 139 63
+17:37:14 go http://10.0.2.2:8000/video.html
+17:37:24 tap '=Play' at 41 255
+17:37:38 tap '=Fullscreen' at 230 339
+17:37:58 screenshot r19_pip
+17:37:58 picture-in-picture: 5 pinned window(s) (expect 1 or more)
+17:37:58 still playing: state=PlaybackState {state=PLAYING
+17:38:04 screenshot r20_back_from_pip
+17:38:13 tap 'Menu' at 282 63
+17:38:19 tap 'VPN:' at 122 455
+17:38:21 screenshot r26_vpn_sheet
+17:38:23 tap 'Add your first location' at 142 255
+17:38:27 screenshot r27_picker
+17:38:29 tap 'Show roots' at 28 48
+17:38:33 tap '=Downloads' at 164 219
+17:38:38 tap '=List view' at 272 198
+17:38:42 tap 'raven-NL-1' at 128 253
+17:38:47 screenshot r28_location_added
+17:38:49 location added: yes (expect yes)
+17:38:51 tap '=Netherlands' at 160 135
+17:38:54 screenshot r29_vpn_permission
+17:38:56 tap '=OK' at 260 430
+17:39:02 screenshot r30_vpn_on
+17:39:04 VPN sheet: Netherlands (expect the Netherlands) | Android's VPN networks: 3
+17:39:10 tap 'Menu' at 282 63
+17:39:14 menu square: browsing from Netherlands, on (expect browsing from the Netherlands)
+17:39:20 tap 'Menu' at 282 63
+17:39:27 tap 'VPN:' at 122 455
+17:39:31 tap 'Raven's VPN' at 270 76
+17:39:35 screenshot r31_vpn_off
+17:39:37 after switching off: - (expect -)
+17:39:49 tap 'open tabs' at 240 63
+17:39:54 tap '^Tabs · ' at 65 136
+17:39:57 tap '!=New tab' at 141 575
+17:40:02 tap 'Address' at 139 63
+17:40:06 go http://10.0.2.2:8000/media.html?float
+17:40:16 tap '=Play' at 160 195
+17:40:21 tap 'Menu' at 282 63
+17:40:27 tap 'Float this tab' at 47 259
+17:40:32 screenshot r32_floating
+17:40:36 floating: Raven media test float (expect Raven media test float) | under it: (empty) (expect another tab)
+17:40:38 the floating page still plays: yes (expect yes)
+17:40:45 screenshot r32b_resized
+17:40:47 resized from its corner: width 168 -> 193 (expect wider)
+17:40:53 screenshot r33_parked
+17:40:55 pushed against the edge: yes (expect yes)
+17:40:57 tap '^Floating tab parked' at 306 257
+17:41:01 screenshot r34_opened_again
+17:41:06 opened again: yes (expect yes) | its sound: yes (expect yes: paused while it was an icon)
+17:41:08 tap 'Move the floating tab' at 211 106
+17:41:11 tap '=Full size' at 148 272
+17:41:15 screenshot r36_full_size
+17:41:19 full size: 10.0.2.2 (expect the media test page) | still floating: no (expect no)
+17:41:23 tap 'open tabs' at 240 63
+17:41:28 tap '^Tabs · ' at 65 136
+17:41:31 tap '!=New tab' at 141 575
+17:41:36 tap 'Address' at 139 63
+17:41:40 go http://10.0.2.2:8000/media.html?first
+17:41:50 tap '=Play' at 160 195
+17:41:55 tap 'open tabs' at 240 63
+17:42:00 tap '^Tabs · ' at 65 136
+17:42:03 tap '!=New tab' at 141 575
+17:42:08 tap 'Address' at 139 63
+17:42:12 go http://10.0.2.2:8000/media.html?second
+17:42:22 tap '=Play' at 160 195
+17:42:28 tap 'Menu' at 282 63
+17:42:34 tap '=Split screen' at 122 259
+17:42:37 screenshot r37_split_pick
+17:42:39 tap 'Split with Raven media test first' at 160 211
+17:42:45 screenshot r38_split
+17:42:49 split: top yes bottom yes (expect yes yes)
+17:42:53 one at a time: the first tab after the second started: 1 paused, 1 playing (expect 1 and 1)
+17:42:55 tap '!=Play' at 160 427
+17:42:59 screenshot r39_both_playing
+17:43:01 both halves play at once: 2 playing (expect 2)
+17:43:03 tap '^Sound: on' at 171 48
+17:43:05 screenshot r40_sound_choice
+17:43:08 tap '=Top only' at 93 147
+17:43:11 screenshot r41_top_only
+17:43:15 top only: 1 muted and still playing (expect 1) | a half's speaker shows muted: yes (expect yes)
+17:43:17 tap 'Menu' at 295 48
+17:43:23 tap 'End split screen' at 122 259
+17:43:27 screenshot r42_split_ended
+17:43:29 split ended: no (expect no)
+17:43:31 tap 'open tabs' at 240 63
+17:43:36 tap '^Tabs · ' at 65 136
+17:43:40 tap '!=New tab' at 141 575
+17:43:45 tap 'Address' at 139 63
+17:43:48 go https://example.com/
+17:43:56 connected ahead while typing: 1 time(s) (expect 1 or more)
+17:43:59 tap 'open tabs' at 240 63
+17:44:04 tap '^Tabs · ' at 65 136
+17:44:07 tap '!=New tab' at 141 575
+17:44:10 screenshot r43_home_continue
+17:44:12 continue: yes (expect yes: its tab is open)
+17:44:34 greetings: 'Still bright out.' / 'Bright afternoon.' / 'Second wind.' (expect three different ones)
+17:44:36 tap 'open tabs' at 240 63
+17:44:40 screenshot r44_tabs_buttons
+17:44:44 tabs screen: Close all yes (expect yes) | Clean slate no (expect no: it's in the menu)
+17:44:46 tap '^Example Domain' at 160 316
+17:44:51 tap 'open tabs' at 240 63
+17:44:56 tap '=Close tab: Example Domain' at 277 229
+17:45:01 tap '^Tabs · ' at 65 136
+17:45:04 tap '!=New tab' at 141 575
+17:45:07 screenshot r45_home_after_closing
+17:45:09 continue after closing that tab: no (expect no)
+17:45:10 new crashes: 0
+17:45:10 reports: ANR 0, crash 0, native crash 0 (all apps)

@@ -1,0 +1,91 @@
+17:26:38 ---- setup
+Performing Streamed Install
+Success
+17:27:21 tap 'Not now' at 160 574
+17:27:51 Raven is in front
+17:27:51 screenshot 00_setup
+17:27:51 ---- setup done
+17:27:51 ---- pull
+17:27:59 tap 'open tabs' at 240 63
+17:28:04 tap '^Tabs · ' at 65 136
+17:28:07 tap '!=New tab' at 141 575
+17:28:12 tap 'Address' at 139 63
+17:28:16 go http://10.0.2.2:8000/pull.html
+17:28:26 loaded: Loaded 1 times (expect 1 time)
+17:28:28 screenshot p01_pulled
+17:28:34 after a pull from the top: Loaded 2 times (expect 2 times)
+17:28:40 after a short pull: Loaded 2 times (expect still 2 times)
+17:28:48 screenshot p02_scrolled_back
+17:28:53 scrolled down, then a pull: Loaded 2 times (expect still 2 times: it only scrolled up) | top of the page in view: yes
+17:29:01 then a pull from the top: Loaded 2 times (expect 3 times)
+17:29:06 after a sideways swipe: Loaded 2 times (expect still 3 times)
+17:29:08 tap 'Address' at 118 63
+17:29:12 go http://10.0.2.2:8000/pull.html?grab=1
+17:29:28 screenshot p03_map
+17:29:30 a map-like page: before 'Map: loaded 3 times', after a pull 'Map: loaded 3 times' (expect the same)
+17:29:32 tap 'Address' at 118 63
+17:29:36 go http://10.0.2.2:8000/pull.html?listen=1
+17:29:55 pull on a 'listen' page: before 'Loaded 4 times', after 'Loaded 5 times' (expect one more)
+17:29:57 tap 'Address' at 118 63
+17:30:01 go http://10.0.2.2:8000/pull.html?contain=1
+17:30:20 pull on a 'contain' page: before 'Loaded 6 times', after 'Loaded 6 times' (expect the same)
+17:30:22 tap 'Address' at 118 63
+17:30:25 go http://10.0.2.2:8000/pull.html?short=1
+17:30:44 pull on a 'short' page: before 'Loaded 7 times', after 'Loaded 8 times' (expect one more)
+17:30:46 tap 'Address' at 118 63
+17:30:50 go http://10.0.2.2:8000/pull.html?late=1
+17:31:09 pull on a 'late' page: before 'Loaded 9 times', after 'Loaded 10 times' (expect either)
+17:31:09 screenshot p03b_modes
+17:31:11 tap 'Address' at 118 63
+17:31:15 go http://10.0.2.2:8000/pull.html
+17:31:26 tap 'open tabs' at 240 63
+17:31:31 tap '^Tabs · ' at 65 136
+17:31:34 tap '!=New tab' at 141 575
+17:31:38 tap 'Address' at 139 63
+17:31:43 go http://10.0.2.2:8000/pull.html?name=Other
+17:31:51 screenshot p03c_other_tab
+17:32:01 after going to another tab mid-reload: a pull there reloads: before 'Other: loaded 1 times', after 'Other: loaded 2 times' (expect one more)
+17:32:03 tap 'open tabs' at 240 63
+17:32:08 tap '^Tabs · ' at 65 136
+17:32:11 tap '!=New tab' at 141 575
+17:32:16 tap 'Address' at 139 63
+17:32:20 go http://10.0.2.2:8000/pull.html
+17:32:30 tap 'open tabs' at 240 63
+17:32:35 tap '^Tabs · ' at 65 136
+17:32:38 tap '!=New tab' at 141 575
+17:32:43 tap 'Address' at 139 63
+17:32:46 go example.com
+17:32:57 tap 'Menu' at 282 63
+17:33:03 tap '=Split screen' at 122 259
+17:33:07 tap 'Split with Raven pull test' at 160 386
+17:33:13 screenshot p04_split
+17:33:21 screenshot p05_split_pulled
+17:33:25 split, bottom half pulled: before 'Loaded 1 times', after 'Loaded 2 times' (expect one more) | top half: Top half: Example Domain
+17:33:27 tap 'Menu' at 295 48
+17:33:34 tap 'End split screen' at 122 259
+17:33:39 tap 'open tabs' at 240 63
+17:33:44 tap '^Tabs · ' at 65 136
+17:33:47 tap '!=New tab' at 141 575
+17:33:52 tap 'Address' at 139 63
+17:33:56 go http://10.0.2.2:8000/pull.html
+17:34:06 tap 'Menu' at 282 63
+17:34:12 tap 'Full screen for pages' at 122 357
+17:34:19 screenshot p06_edge_swipe
+17:34:26 full screen, swipe from the top edge: bars back yes (expect yes) | before 'Loaded 1 times', after 'Loaded 1 times' (expect the same)
+17:34:38 full screen, a pull lower down: Loaded 2 times (expect one more than 'Loaded 1 times')
+17:34:53 NOT FOUND: 'Menu'
+17:35:11 NOT FOUND: 'open tabs'
+17:35:29 NOT FOUND: 'Address'
+17:35:29 go http://10.0.2.2:8000/pull.html?name=Floating
+17:35:53 NOT FOUND: 'Menu'
+17:36:12 NOT FOUND: '^Floating tab: '
+17:36:27 NOT FOUND: 'open tabs'
+17:36:45 NOT FOUND: 'Address'
+17:36:45 go http://10.0.2.2:8000/video.html
+17:37:09 NOT FOUND: '=Play'
+17:37:26 NOT FOUND: '=Fullscreen'
+17:37:36 screenshot p08_video_pull
+17:37:38 a pull on a fullscreen video: 1 reloads after the mark (expect 0) | still fullscreen: -
+17:37:42 pull: crashes 0 (expect 0)
+17:37:42 ---- pull done
+17:37:42 reports: ANR 0, crash 0, native crash 0 (all apps)
