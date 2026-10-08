@@ -73,14 +73,6 @@ import kotlin.math.roundToInt
 internal fun SplitArea(c: Container, ui: UiState, top: BrowserTab, bottom: BrowserTab, selectedId: String, barsHidden: Boolean = false, peek: Boolean = false) {
     val sound by c.tabs.splitSound.collectAsState()
     val onBrowser = ui.screen == Screen.Browser
-    // A half whose video went fullscreen fills the whole screen until it comes back.
-    val topFull by top.fullscreen.collectAsState()
-    val bottomFull by bottom.fullscreen.collectAsState()
-    val full = when {
-        topFull -> SplitFull.FIRST
-        bottomFull -> SplitFull.SECOND
-        else -> SplitFull.NONE
-    }
     // The half that isn't the selected tab stays awake and drawn too (the selected one is looked after in RavenRoot).
     if (top.id != selectedId) KeepShown(top, onBrowser)
     if (bottom.id != selectedId) KeepShown(bottom, onBrowser)
@@ -91,9 +83,8 @@ internal fun SplitArea(c: Container, ui: UiState, top: BrowserTab, bottom: Brows
             ui.splitRatio = 0.5f
             c.tabs.endSplit(if (keepFirst) top.id else bottom.id)
         },
-        full = full,
-        first = { sideBySide -> Half(c, ui, top, first = true, sideBySide, top.id == selectedId, sound, full != SplitFull.NONE, barsHidden, peek) },
-        second = { sideBySide -> Half(c, ui, bottom, first = false, sideBySide, bottom.id == selectedId, sound, full != SplitFull.NONE, barsHidden, peek) },
+        first = { sideBySide -> Half(c, ui, top, first = true, sideBySide, top.id == selectedId, sound, barsHidden, peek) },
+        second = { sideBySide -> Half(c, ui, bottom, first = false, sideBySide, bottom.id == selectedId, sound, barsHidden, peek) },
     )
 }
 
@@ -213,8 +204,10 @@ private fun SplitHandle(sideBySide: Boolean, onDrag: (Float) -> Unit, onDragEnd:
 @Composable
 private fun Half(
     c: Container, ui: UiState, tab: BrowserTab, first: Boolean, sideBySide: Boolean, active: Boolean, sound: SplitSound,
-    fullscreen: Boolean, barsHidden: Boolean, peek: Boolean,
+    barsHidden: Boolean, peek: Boolean,
 ) {
+    // This half's video is fullscreen: it fills this half only (the page does it), so the half's bar steps aside.
+    val fullscreen by tab.fullscreen.collectAsState()
     val muted by tab.muted.collectAsState()
     // Read here, so the half's name follows its page.
     val title by tab.title.collectAsState()

@@ -59,7 +59,9 @@ class MainActivity : FragmentActivity() {
     private fun settleRebuiltScreen() {
         val c = container
         val onScreen = c.tabs.onScreenIds()
-        val full = c.tabs.tabs.value.firstOrNull { it.id in onScreen && it.fullscreen.value }
+        // A half of split screen fills only its own half; the whole phone is for the tab on its own and the floating tab.
+        val halves = c.tabs.split.value?.let { setOf(it.top, it.bottom) }.orEmpty()
+        val full = c.tabs.tabs.value.firstOrNull { it.id in onScreen && it.id !in halves && it.fullscreen.value }
         val tab = c.tabs.selected
         val page = tab != null && !tab.ntpOverlay.value && tab.url.value.isNotBlank() && tab.url.value != "about:blank"
         ui.fullscreen = full != null

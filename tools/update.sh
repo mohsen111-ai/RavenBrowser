@@ -75,16 +75,18 @@ $A shell input swipe $((W / 2)) $((H * 60 / 100)) $((W / 2)) $((H * 88 / 100)) 3
 log "after scrolling it up: bars $(many "Address ") (expect 2)"
 menu "End split screen"; sleep 3
 
-# 3. Video fullscreen in a split half: the video fills the phone (sideways), Back puts the halves back.
+# 3. Video fullscreen in a split half, with two videos playing: the video fills only its own half. The other half stays
+# on screen (and keeps playing), the phone's bars stay, the screen doesn't turn; Back puts the half as it was.
+newtab; sleep 3; open_page "$PAGES/video.html?other"
 newtab; sleep 3; open_page "$PAGES/video.html"
-newtab; sleep 3; open_page example.com
 menu "=Split screen"; sleep 2; tap "Split with Raven video test"; sleep 6
-tap "=Play"; sleep 3; mark split-fullscreen; tap "=Fullscreen"; sleep 5; shot u10_split_fullscreen
+tap "=Play"; sleep 3; tap "!=Play"; sleep 3
+mark split-fullscreen; tap "=Fullscreen"; sleep 5; shot u10_split_fullscreen
 pause
-log "split half fullscreen: screen $(dims u10_split_fullscreen) (expect wider than tall) | page: $(text "state: ") (expect fullscreen: yes)"
-log "raven: $(since split-fullscreen | grep -m1 -o 'fullscreen: [0-9a-f]* *(*[a-z ]*)*')"
+log "split half fullscreen: screen $(dims u10_split_fullscreen) (expect taller than wide) | halves $(has "^Top half: ") $(has "^Bottom half: ") (expect yes yes: the other half is still there) | bars $(many "Address ") (expect 1: the full half's bar stepped aside) | page: $(text "state: ") (expect fullscreen: yes)"
+log "raven: $(since split-fullscreen | grep -m1 -o 'fullscreen: [0-9a-f]* *(*[a-z ]*)*') (expect none: only the whole-phone kind is logged)"
 $A shell input keyevent 4; sleep 4; shot u11_split_back
-log "after Back: halves $(has "^Top half: ") $(has "^Bottom half: ") (expect yes yes) | page: $(text "state: ") (expect fullscreen: no)"
+log "after Back: halves $(has "^Top half: ") $(has "^Bottom half: ") (expect yes yes) | bars $(many "Address ") (expect 2) | page: $(text "state: ") (expect fullscreen: no)"
 menu "End split screen"; sleep 3
 
 # 4. Video fullscreen from the floating tab: the whole phone screen, then back into its window.

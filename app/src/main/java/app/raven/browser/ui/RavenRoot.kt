@@ -39,6 +39,7 @@ import androidx.lifecycle.compose.currentStateAsState
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import app.raven.browser.Container
+import app.raven.browser.engine.BrowserTab
 import app.raven.browser.data.Motion
 import app.raven.browser.engine.TabEvent
 import app.raven.browser.ui.browser.BrowserScreen
@@ -129,14 +130,15 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
 
         // Fullscreen video: no bars, Android's or ours. Read from the tab, so it also holds for a screen Android
         // rebuilt while you were in another app. Any tab on screen can go fullscreen: the one the bar belongs to, a
-        // half of split screen, or the floating tab; its video then fills the whole phone screen.
+        // the floating tab; its video then fills the whole phone screen. (A half of split screen only fills its own half.)
         val split by c.tabs.split.collectAsState()
         val floatingId by c.tabs.floatingId.collectAsState()
         val parked by c.tabs.floatParked.collectAsState()
+        // A half of split screen whose video goes fullscreen fills just its own half (the page does it by itself, see
+        // Split.kt): the phone's bars stay and the screen doesn't turn. So only the tab on screen on its own and the
+        // floating tab can take the whole phone.
         val onScreen = listOfNotNull(
-            tab,
-            split?.let { s -> tabs.firstOrNull { it.id == s.top } },
-            split?.let { s -> tabs.firstOrNull { it.id == s.bottom } },
+            tab.takeIf { split == null },
             floatingId?.takeIf { !parked }?.let { id -> tabs.firstOrNull { it.id == id } },
         ).distinct()
         // Starts from what's true now, so a screen Android rebuilt is laid out for the fullscreen video at once.
@@ -327,6 +329,9 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
             }
         }
 
+        fun splitHalfFull(): BrowserTab? = c.tabs.split.value?.let { s ->
+            c.tabs.tabs.value.firstOrNull { (it.id == s.top || it.id == s.bottom) && it.fullscreen.value }
+        }
         BackHandler(enabled = true) {
             val t = tab
             when {
@@ -337,6 +342,8 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
                 ui.editing -> ui.editing = false
                 // A video fullscreen (here, in a half or in the floating tab): back to where it was.
                 ui.fullscreen -> (fullTab ?: t)?.session?.exitFullScreen()
+                // A video fullscreen in one half of split screen: back to the normal half.
+                splitHalfFull() != null -> splitHalfFull()?.session?.exitFullScreen()
                 ui.screen != Screen.Browser -> ui.screen = Screen.Browser
                 // Home showed the new tab page over a page: Back returns to that page.
                 t != null && t.ntpOverlay.value && t.overlayFromHome -> t.leaveHome()
