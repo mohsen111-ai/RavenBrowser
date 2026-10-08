@@ -1,34 +1,31 @@
 name: Smoke test (Android 16 emulator)
 
-# Drives the browser through its main screens on an emulator and saves screenshots. Started by hand.
+# Drives the browser through its screens on Android 16 emulators and saves screenshots. Started by hand.
+# One build, then one emulator for each group of scripts, all at the same time; their results meet on a smoke-N branch.
 on:
   workflow_dispatch:
     inputs:
       scripts:
-        description: Test scripts to run, in order (tools/<name>.sh; smoke installs the app, so it comes first)
-        default: smoke media video tabs back deep raven more
+        description: Groups of test scripts (tools/<name>.sh), one emulator per group, all at once; groups split by commas
+        default: smoke, media video, tabs back, deep, raven, more, update, recents
 
 permissions:
   contents: write
 
 jobs:
-  smoke:
+  build:
     runs-on: ubuntu-latest
-    timeout-minutes: 150
+    timeout-minutes: 40
+    outputs:
+      groups: ${{ steps.groups.outputs.json }}
     steps:
-      - name: Free disk space (the emulator needs room for its virtual phone storage)
-        run: |
-          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/.ghcup /usr/local/share/boost /usr/local/lib/node_modules \
-            "$AGENT_TOOLSDIRECTORY" /usr/local/share/powershell /usr/share/swift "$ANDROID_HOME/ndk" || true
-          df -h /
-
       - uses: actions/checkout@v4
 
-      - name: Enable KVM for the emulator
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
+      - name: The groups to run
+        id: groups
+        env:
+          SCRIPTS: ${{ inputs.scripts || 'smoke, media video, tabs back, deep, raven, more, update, recents' }}
+        run: python3 -c "import json, os; print('json=' + json.dumps([g.strip() for g in os.environ['SCRIPTS'].split(',') if g.strip()]))" >> "$GITHUB_OUTPUT"
 
       # The runner image already has JDK 21; downloading one can fail when the download site is busy.
       - name: Use the runner's JDK 21
@@ -42,40 +39,97 @@ jobs:
       - name: Build emulator APK (x86_64)
         run: |
           ./gradlew :app:assembleRelease -PgeckoAbi=x86_64 --console=plain
-          cp app/build/outputs/apk/release/app-release.apk raven-x86_64.apk
-          # Keep R8's map so crash stack traces from this build can be decoded (cmdline-tools retrace).
-          mkdir -p smoke && cp app/build/outputs/mapping/release/mapping.prt smoke/ || true
-          ./gradlew --stop
-          rm -rf app/build/intermediates app/build/tmp
+          mkdir -p apk
+          cp app/build/outputs/apk/release/app-release.apk apk/raven-x86_64.apk
+          # R8's map, so crash stack traces from this build can be decoded (cmdline-tools retrace).
+          cp app/build/outputs/mapping/release/mapping.prt apk/ || true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: apk
+          path: apk
+          retention-days: 3
+
+  emulator:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 130
+    strategy:
+      fail-fast: false
+      matrix:
+        group: ${{ fromJSON(needs.build.outputs.groups) }}
+    steps:
+      - name: Free disk space (the emulator needs room for its virtual phone storage)
+        run: |
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/.ghcup /usr/local/share/boost /usr/local/lib/node_modules \
+            "$AGENT_TOOLSDIRECTORY" /usr/local/share/powershell /usr/share/swift "$ANDROID_HOME/ndk" || true
           df -h /
 
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: apk
+          path: .
+
+      - name: Enable KVM for the emulator
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Name of this group's results
+        env:
+          GROUP: ${{ matrix.group }}
+        run: echo "RESULTS=$(echo "$GROUP" | tr ' ' '-')" >> "$GITHUB_ENV"
+
+      # The runners have 4 cores and 16 GB here (a public repository), so the emulator gets more than it used to.
       - name: Run on Android 16 emulator
-        timeout-minutes: 125
+        timeout-minutes: 120
         uses: reactivecircus/android-emulator-runner@v2
+        env:
+          GROUP: ${{ matrix.group }}
         with:
           api-level: 36
           target: google_apis
           arch: x86_64
-          cores: 3
-          ram-size: 4096M
-          disk-size: 4G
+          cores: 4
+          ram-size: 8192M
+          disk-size: 6G
           emulator-boot-timeout: 1500
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot
           disable-animations: true
           script: |
-            for s in ${{ inputs.scripts || 'smoke media video tabs back deep raven more' }}; do bash tools/$s.sh; done; bash tools/final.sh
-
-      - name: Publish screenshots to a smoke branch
-        if: always()
-        run: |
-          mkdir -p smoke "$RUNNER_TEMP/pub" && cp -r smoke/. "$RUNNER_TEMP/pub/"
-          cd "$RUNNER_TEMP/pub"
-          git init -q && git add -A
-          git -c user.name=ci -c user.email=ci@users.noreply.github.com commit -qm "Smoke test, run ${{ github.run_number }}" --allow-empty
-          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" HEAD:refs/heads/smoke-${{ github.run_number }}
+            case "$GROUP" in smoke*) ;; *) bash tools/setup.sh ;; esac
+            for s in $GROUP; do bash tools/$s.sh; done; bash tools/final.sh
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: smoke
+          name: results-${{ env.RESULTS }}
           path: smoke
+
+  publish:
+    needs: [build, emulator]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: results-*
+          path: pub
+
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: apk
+          path: apk
+
+      - name: Publish screenshots to a smoke branch
+        run: |
+          mkdir -p pub && cp apk/mapping.prt pub/ 2>/dev/null || true
+          cd pub
+          for d in results-*; do [ -d "$d" ] && mv "$d" "${d#results-}"; done
+          git init -q && git add -A
+          git -c user.name=ci -c user.email=ci@users.noreply.github.com commit -qm "Smoke test, run ${{ github.run_number }}" --allow-empty
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" HEAD:refs/heads/smoke-${{ github.run_number }}

@@ -74,15 +74,21 @@ fun VpnSheet(c: Container, ui: UiState) {
     fun start(id: String) = c.scope.launch {
         c.ravenVpn.choose(id).onFailure { say("Couldn't turn the VPN on. Check the file, or try another location.") }
     }
-    // The first time, Android asks whether Raven may run a VPN.
+    // The first time, Android asks whether Raven may run a VPN; then what was waiting for it goes ahead.
+    var then by remember { mutableStateOf<(() -> Unit)?>(null) }
     val allow = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { r ->
-        val id = waiting
+        val next = then
+        then = null
         waiting = null
-        if (r.resultCode == Activity.RESULT_OK && id != null) start(id) else if (id != null) say("Android didn't allow Raven's VPN")
+        if (r.resultCode == Activity.RESULT_OK) next?.invoke() else if (next != null) say("Android didn't allow Raven's VPN")
+    }
+    fun allowed(next: () -> Unit) {
+        val ask = VpnService.prepare(context)
+        if (ask != null) { then = next; allow.launch(ask) } else next()
     }
     fun connect(id: String) {
-        val ask = VpnService.prepare(context)
-        if (ask != null) { waiting = id; allow.launch(ask) } else start(id)
+        waiting = id
+        allowed { start(id) }
     }
     val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         if (uri != null) c.scope.launch {
@@ -130,7 +136,8 @@ fun VpnSheet(c: Container, ui: UiState) {
             if (places.isNotEmpty() && host != null) {
                 SiteRow(app.raven.browser.engine.RavenVpn.siteOf(host), c.ravenVpn.ruleFor(host), places) { place ->
                     c.ravenVpn.setRule(host, place)
-                    c.scope.launch { if (!c.ravenVpn.applyFor(host)) say("Couldn't switch the VPN for this site") }
+                    val apply = { c.scope.launch { if (!c.ravenVpn.applyFor(host)) say("Couldn't switch the VPN for this site") }; Unit }
+                    if (place != null && place != app.raven.browser.engine.RavenVpn.DIRECT) allowed(apply) else apply()
                 }
             }
             if (rules.isNotEmpty()) {

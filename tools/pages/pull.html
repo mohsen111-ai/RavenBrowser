@@ -1,0 +1,50 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>Raven pull test</title>
+<style>body { background: #f7f3ec; color: #222; font: 22px sans-serif; margin: 16px; } p { height: 140px; } #grab { position: fixed; inset: 0; background: #cfe3d4; }</style>
+<!-- Pull down to refresh: each load counts itself, so the test sees whether a pull reloaded the page.
+     pull.html?grab=1 is like a map: the page takes every touch for itself, so a pull must not reload it. -->
+<h1 id="n"></h1>
+<p>Line 1: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 2: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 3: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 4: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 5: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 6: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 7: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 8: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 9: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 10: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 11: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 12: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 13: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 14: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 15: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 16: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 17: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 18: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 19: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 20: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 21: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 22: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 23: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 24: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 25: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 26: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 27: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 28: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 29: a long page, so it can be scrolled away from its top and back.</p>
+<p>Line 30: a long page, so it can be scrolled away from its top and back.</p>
+<script>
+  const n = (+sessionStorage.getItem("loads") || 0) + 1;
+  sessionStorage.setItem("loads", n);
+  document.getElementById("n").textContent = "Loaded " + n + " times";
+  if (new URLSearchParams(location.search).get("grab")) {
+    const g = document.createElement("div");
+    g.id = "grab";
+    g.textContent = "Map: loaded " + n + " times";
+    document.body.appendChild(g);
+    for (const t of ["touchstart", "touchmove"]) g.addEventListener(t, e => e.preventDefault(), { passive: false });
+  }
+</script>

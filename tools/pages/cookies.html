@@ -1,0 +1,25 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>Raven cookie popup test</title>
+<style>
+  body { background: #f4f4f4; color: #222; font: 20px sans-serif; margin: 16px; }
+  #onetrust-banner-sdk { position: fixed; left: 0; right: 0; bottom: 0; background: #fff; border-top: 2px solid #999; padding: 16px; }
+  button { font-size: 20px; margin: 6px 4px; }
+</style>
+<!-- A cookie popup built like OneTrust's (one of the most common): Raven should press "Reject All" by itself. -->
+<h1>Cookie test</h1>
+<p id="state">state: popup open</p>
+<div id="onetrust-consent-sdk">
+  <div id="onetrust-banner-sdk">
+    We use cookies to improve your experience.
+    <button id="onetrust-accept-btn-handler" onclick="answer('accepted')">Accept All</button>
+    <button id="onetrust-reject-all-handler" onclick="answer('rejected')">Reject All</button>
+  </div>
+</div>
+<script>
+  function answer(a) {
+    document.getElementById("state").textContent = "state: " + a;
+    document.getElementById("onetrust-consent-sdk").remove();
+  }
+</script>

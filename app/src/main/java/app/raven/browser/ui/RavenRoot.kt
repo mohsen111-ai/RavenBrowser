@@ -267,7 +267,8 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
             install?.let { InstallSheet(c, it) }
             PromptHost(c)
 
-            if (!ui.pip) SnackbarHost(ui.snackbar, Modifier.align(Alignment.BottomCenter).navigationBarsPadding().padding(16.dp)) { data ->
+            // On the Tabs screen it sits above the New tab button, so a quick tap there never lands on Undo.
+            if (!ui.pip) SnackbarHost(ui.snackbar, Modifier.align(Alignment.BottomCenter).navigationBarsPadding().padding(16.dp).padding(bottom = if (ui.screen == Screen.Tabs) 72.dp else 0.dp)) { data ->
                 // Moonlight pill; an action (Undo, Folder) sits at its end.
                 Snackbar(
                     data,
