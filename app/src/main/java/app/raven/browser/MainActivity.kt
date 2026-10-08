@@ -45,14 +45,41 @@ class MainActivity : FragmentActivity() {
         c.tabs.selectionDelegateFactory = { RavenSelectionDelegate(this) }
         c.tabs.refreshSelectionDelegates()
         prompt  // created now, while the screen is being made
+        if (savedInstanceState != null) settleRebuiltScreen()
         setContent { RavenRoot(c, ui, this) }
         if (savedInstanceState == null) handle(intent)
+    }
+
+    /**
+     * Android threw the screen away while Raven was in another app and is building a new one. If a video was
+     * fullscreen, or pages are shown in full screen, the new screen starts that way: the bars hidden and the screen
+     * turned before the first frame, so the page isn't given one size and then another while it comes back (the
+     * engine can stall on that, leaving the screen black).
+     */
+    private fun settleRebuiltScreen() {
+        val c = container
+        val onScreen = c.tabs.onScreenIds()
+        val full = c.tabs.tabs.value.firstOrNull { it.id in onScreen && it.fullscreen.value }
+        val tab = c.tabs.selected
+        val page = tab != null && !tab.ntpOverlay.value && tab.url.value.isNotBlank() && tab.url.value != "about:blank"
+        ui.fullscreen = full != null
+        ui.fullscreenTabId = full?.id
+        ui.fullPage = full == null && c.settings.current.fullPage && (page || c.tabs.split.value != null)
+        if (full != null || ui.fullPage) {
+            androidx.core.view.WindowCompat.getInsetsController(window, window.decorView).apply {
+                systemBarsBehavior = androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                hide(androidx.core.view.WindowInsetsCompat.Type.systemBars())
+            }
+        }
+        if (full?.wideVideo?.value == true) requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
     }
 
     // A new wallpaper and greeting each time Raven is opened again, even if Android threw this screen away meanwhile.
     override fun onStart() {
         super.onStart()
         val c = container
+        // Pages the phone stopped while Raven was away load again.
+        c.tabs.onAppShown()
         if (c.wasAway) {
             c.wasAway = false
             c.sky.next()
@@ -66,6 +93,7 @@ class MainActivity : FragmentActivity() {
 
     override fun onStop() {
         super.onStop()
+        container.tabs.onAppHidden()
         if (!isChangingConfigurations) container.wasAway = true
         // Leaving for the phone's own lock screen (to unlock Raven) isn't leaving Raven.
         if (!isChangingConfigurations && !asking) container.leftAt = SystemClock.elapsedRealtime()

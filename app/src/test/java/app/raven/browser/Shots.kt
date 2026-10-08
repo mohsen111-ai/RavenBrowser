@@ -319,6 +319,28 @@ open class Shots {
         compose.onRoot().captureRoboImage("$dir/locked.png")
     }
 
+    /** Pull down to refresh: halfway, far enough to reload, reloading, and in a private tab. */
+    @Test fun pullCircle() {
+        val states = listOf(
+            app.raven.browser.ui.browser.PullState().apply { dragging = true; progress = 0.5f },
+            app.raven.browser.ui.browser.PullState().apply { dragging = true; progress = 1.1f; armed = true },
+            app.raven.browser.ui.browser.PullState().apply { refreshing = true },
+            app.raven.browser.ui.browser.PullState().apply { dragging = true; progress = 0.8f },
+        )
+        compose.setContent {
+            RavenTheme(0, false, true) {
+                androidx.compose.foundation.layout.Row(Modifier.fillMaxWidth().height(140.dp)) {
+                    states.forEachIndexed { i, st ->
+                        Box(Modifier.weight(1f).fillMaxSize().background(if (i == 3) Color(0xFF1B1730) else Color(0xFFF7F3EC))) {
+                            app.raven.browser.ui.browser.PullIndicator(st, private = i == 3, clearTop = { 0f }, modifier = Modifier.align(Alignment.TopCenter))
+                        }
+                    }
+                }
+            }
+        }
+        compose.onRoot().captureRoboImage("$dir/pull.png")
+    }
+
     @Test fun appLocked() {
         compose.setContent { RavenTheme(0, false, true) { AppLocked(onUnlock = {}) } }
         compose.onRoot().captureRoboImage("$dir/app_locked.png")

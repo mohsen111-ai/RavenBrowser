@@ -37,10 +37,28 @@ class RavenVpn(private val app: Application) {
     private val dir = File(app.filesDir, "vpn").apply { mkdirs() }
     private val index = File(dir, "places.json")
     private val backend by lazy { GoBackend(app) }
+    /** Raven itself is turning its VPN on or off (any other change came from outside Raven). */
+    @Volatile private var ourChange = false
+    /**
+     * Another VPN took over (the Proton VPN app, say), or Android withdrew Raven's permission: sites with their own
+     * country stop switching Raven's VPN (that would take the VPN back from the other app) until you pick something
+     * in Raven's VPN sheet again.
+     */
+    @Volatile var outsideTookOver = false
+        private set
     private val tunnel = object : Tunnel {
         override fun getName() = "raven"
         override fun onStateChange(newState: Tunnel.State) {
-            if (newState == Tunnel.State.DOWN) _active.value = null
+            if (newState != Tunnel.State.DOWN) return
+            _active.value = null
+            // Android took the VPN away (another VPN app started, or its permission was withdrawn): the switch is off
+            // now, and no site waits for a country Raven can't reach without asking again.
+            if (!ourChange) {
+                Log.i("Raven", "vpn: turned off from outside Raven")
+                chosen = null
+                _routedFor.value = null
+                outsideTookOver = true
+            }
         }
     }
 
@@ -67,7 +85,7 @@ class RavenVpn(private val app: Application) {
     val rules: StateFlow<Map<String, String>> = _rules.asStateFlow()
 
     /** What the switch says (a place, or null for off). A site with its own country doesn't change it. */
-    var chosen: String? = null
+    @Volatile var chosen: String? = null
         private set
 
     private val _routedFor = MutableStateFlow<String?>(null)
@@ -78,6 +96,7 @@ class RavenVpn(private val app: Application) {
 
     /** Gives [host]'s site its own place ([DIRECT]: no VPN), or back to following the switch (null). */
     fun setRule(host: String, place: String?) {
+        outsideTookOver = false  // you chose in Raven's VPN sheet: Raven's VPN is wanted again
         val site = siteOf(host)
         _rules.value = if (place == null) _rules.value - site else _rules.value + (site to place)
         sp.edit().putString("rules", JSONObject(_rules.value as Map<*, *>).toString()).apply()
@@ -87,9 +106,11 @@ class RavenVpn(private val app: Application) {
 
     /** The switch: on at [id], or off (null). Takes effect at once, whatever site is on screen. */
     suspend fun choose(id: String?): Result<Unit> = switching.withLock {
-        chosen = id
+        outsideTookOver = false
         _routedFor.value = null
-        if (id == null) { turnOff(); Result.success(Unit) } else turnOn(id)
+        if (id == null) { chosen = null; turnOff(); return@withLock Result.success(Unit) }
+        // Only a place that worked becomes the switch's; one that failed leaves the switch off.
+        turnOn(id).also { chosen = if (it.isSuccess) id else null }
     }
 
     /** Where [host] goes: its own place, no VPN, or what the switch says. */
@@ -104,7 +125,7 @@ class RavenVpn(private val app: Application) {
      * ago): otherwise the switch alone decides, as it always has.
      */
     fun needsSwitch(host: String?): Boolean =
-        (_rules.value.isNotEmpty() || _routedFor.value != null) && targetFor(host) != _active.value
+        !outsideTookOver && (_rules.value.isNotEmpty() || _routedFor.value != null) && targetFor(host) != _active.value
 
     /**
      * The page on screen is now on [host]: the VPN goes where that site goes (its own country, none, or what the
@@ -160,12 +181,15 @@ class RavenVpn(private val app: Application) {
         try {
             val text = File(dir, "$id.conf").readText()
             val config = Config.parse(onlyRaven(text).byteInputStream())
-            backend.setState(tunnel, Tunnel.State.UP, config)
+            ourChange = true
+            try { backend.setState(tunnel, Tunnel.State.UP, config) } finally { ourChange = false }
             _active.value = id
             if (remember) last = id
             Result.success(Unit)
         } catch (e: Exception) {
             Log.w("Raven", "vpn on failed: ${e.javaClass.simpleName}")
+            // Android no longer lets Raven run a VPN (another app has it): stop trying on every page.
+            if (e is com.wireguard.android.backend.BackendException && e.reason == com.wireguard.android.backend.BackendException.Reason.VPN_NOT_AUTHORIZED) outsideTookOver = true
             _active.value = null
             Result.failure(e)
         } finally {
@@ -174,7 +198,8 @@ class RavenVpn(private val app: Application) {
     }
 
     suspend fun turnOff() = withContext(Dispatchers.IO) {
-        runCatching { backend.setState(tunnel, Tunnel.State.DOWN, null) }
+        ourChange = true
+        try { runCatching { backend.setState(tunnel, Tunnel.State.DOWN, null) } } finally { ourChange = false }
         _active.value = null
     }
 

@@ -37,8 +37,9 @@ log "after a pull from the top: $(text "Loaded ") (expect 2 times)"
 pull 30 36 300; sleep 4
 log "after a short pull: $(text "Loaded ") (expect still 2 times)"
 
-# 3. Scrolled down, a pull only scrolls back up; once at the top, the next pull reloads.
-$A shell input swipe $((W / 2)) $((H * 75 / 100)) $((W / 2)) $((H * 30 / 100)) 300; sleep 2
+# 3. Scrolled down, a pull only scrolls back up; once at the top, the next pull reloads. (Slowly, so the page doesn't
+# fling further than the finger went.)
+$A shell input swipe $((W / 2)) $((H * 75 / 100)) $((W / 2)) $((H * 30 / 100)) 1200; sleep 2
 pull 30 75; sleep 4; shot p02_scrolled_back
 log "scrolled down, then a pull: $(text "Loaded ") (expect still 2 times: it only scrolled up) | top of the page in view: $(has "^Loaded ")"
 pull 30 75; sleep 5
@@ -53,6 +54,23 @@ open_page "$PAGES/pull.html?grab=1"
 before=$(text "Map: loaded ")
 pull 30 75; sleep 5; shot p03_map
 log "a map-like page: before '$before', after a pull '$(text "Map: loaded ")' (expect the same)"
+
+# 5b. More kinds of page: one that listens to touches but leaves them (reloads), one that says no pull in its CSS
+# (doesn't), one too short to scroll (reloads), and one that takes the touch late (noted, as Firefox behaves the same).
+for mode in listen contain short late; do
+  open_page "$PAGES/pull.html?$mode=1"; sleep 1
+  b=$(text "Loaded "); pull 30 75; sleep 5; a=$(text "Loaded ")
+  case $mode in contain) want="the same";; late) want="either";; *) want="one more";; esac
+  log "pull on a '$mode' page: before '$b', after '$a' (expect $want)"
+done
+shot p03b_modes
+
+# 5c. A pull, then straight to another tab: the other tab shows no turning circle, and a pull there works.
+open_page "$PAGES/pull.html"
+pull 30 75; sleep 0.3
+newtab; sleep 2; open_page "$PAGES/pull.html?name=Other"; shot p03c_other_tab
+b=$(text "Other: loaded"); pull 30 75; sleep 5
+log "after going to another tab mid-reload: a pull there reloads: before '$b', after '$(text "Other: loaded")' (expect one more)"
 
 # 6. Split screen: a pull in the bottom half reloads only that half.
 newtab; sleep 3; open_page "$PAGES/pull.html"
@@ -73,6 +91,22 @@ sleep 4
 pull 30 75; sleep 5
 log "full screen, a pull lower down: $(text "Loaded ") (expect one more than '$f1')"
 menu "Full screen for pages"; sleep 3
+
+# 8. The floating tab: a pull in its window reloads its page. A fullscreen video never reloads with a pull.
+newtab; sleep 3; open_page "$PAGES/pull.html?name=Floating"
+menu "Float this tab"; sleep 4
+if xy=$(find_xy "^Floating tab: "); then
+  set -- $xy
+  fb=$(text "Floating: loaded")
+  $A shell input swipe $1 $(( $2 - H / 10 )) $1 $(( $2 + H / 8 )) 700; sleep 5; shot p07_floating_pulled
+  log "floating tab pulled: before '$fb', after '$(text "Floating: loaded")' (expect one more)"
+  tap "Move the floating tab"; sleep 1; tap "=Close the floating tab"; sleep 2
+fi
+newtab; sleep 3; open_page "$PAGES/video.html"
+tap "=Play"; sleep 2; tap "=Fullscreen"; sleep 4; $A shell cmd media_session dispatch pause; sleep 1
+$A shell log -t RavenTest video-pull; pull 20 80; sleep 4; shot p08_video_pull
+log "a pull on a fullscreen video: $(grep -c 'pull: refresh' <($A logcat -d | sed -n '/RavenTest: video-pull/,$p')) reloads after the mark (expect 0) | still fullscreen: $(text "state: ")"
+$A shell input keyevent 4; sleep 3
 
 log "pull: crashes $(( $(fatals) - f0 )) (expect 0)"
 $A logcat -d > $OUT/logcat-pull.txt

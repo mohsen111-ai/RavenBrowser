@@ -11,6 +11,9 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.displayCutout
+import androidx.compose.foundation.layout.statusBarsIgnoringVisibility
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -45,6 +48,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import kotlinx.coroutines.flow.first
+import androidx.compose.ui.layout.positionInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
@@ -207,39 +213,97 @@ internal fun TabPage(c: Container, ui: UiState, tab: BrowserTab, primary: Boolea
 /**
  * The engine's view of [tab]'s page. [primary]: the view of the tab on screen (the one the bar belongs to), used
  * for its picture in the Tabs screen. [floating]: drawn in a way that can sit on top of another page and have
- * rounded corners (the floating tab); slightly more work for the phone, so only there.
+ * rounded corners (the floating tab); slightly more work for the phone, so only there. [pullable]: pulling the page
+ * down from its top reloads it.
  */
+@OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 @Composable
-internal fun PageView(tab: BrowserTab, ui: UiState, primary: Boolean, floating: Boolean = false) {
+internal fun PageView(tab: BrowserTab, ui: UiState, primary: Boolean, floating: Boolean = false, pullable: Boolean = true) {
     val url by tab.url.collectAsState()
     val asleep by tab.asleep.collectAsState()
     val opened by tab.opened.collectAsState()
     val key = "$url $asleep $opened"
-    AndroidView(
-        factory = { ctx ->
-            GeckoView(ctx).also {
-                if (floating) it.setViewBackend(GeckoView.BACKEND_TEXTURE_VIEW)
-                // No white flash before a page draws its first frame.
-                it.coverUntilFirstPaint(Space.Ground.toArgb())
-                // The tab, not the view, owns the page: never hand the session back to Android to restore.
-                it.isSaveEnabled = false
+    val made = remember { arrayOfNulls<GeckoView>(1) }
+    // The floating tab's view draws through a texture, which Android doesn't pause when Raven leaves the screen:
+    // the engine went on drawing into it, with nobody showing what it drew, and could stall everything when Raven
+    // came back. So it lets its page go when Raven leaves (sound keeps playing) and shows it again on return.
+    if (floating) {
+        val owner = androidx.lifecycle.compose.LocalLifecycleOwner.current
+        androidx.compose.runtime.DisposableEffect(owner, tab) {
+            val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
+                val view = made[0] ?: return@LifecycleEventObserver
+                when (event) {
+                    androidx.lifecycle.Lifecycle.Event.ON_STOP -> if (view.session === tab.session) Displays.release(tab.session)
+                    androidx.lifecycle.Lifecycle.Event.ON_START -> if (tab.session.isOpen && view.isAttachedToWindow) Displays.showWhenSettled(tab.session, view)
+                    else -> {}
+                }
             }
-        },
-        modifier = Modifier.fillMaxSize(),
-        update = { view ->
-            // Re-runs when the tab, its address, its sleep state or its session changes (a session can open later).
-            @Suppress("UNUSED_VARIABLE") val k = key
-            if (primary) ui.geckoView = view
-            val s = tab.session
-            if (s.isOpen) Displays.showWhenSettled(s, view)
-        },
-        // The screen is going away (Android can throw it away while you're in another app): let the page go,
-        // so the next screen can show it.
-        onRelease = { view ->
-            Displays.releaseView(view)
-            if (ui.geckoView === view) ui.geckoView = null
-        },
-    )
+            owner.lifecycle.addObserver(observer)
+            onDispose { owner.lifecycle.removeObserver(observer) }
+        }
+    }
+
+    // Pull down to refresh. The checks are read as a finger comes down, so following it never rebuilds the page.
+    val pull = remember { PullState() }
+    val current by androidx.compose.runtime.rememberUpdatedState(tab)
+    val canPull by androidx.compose.runtime.rememberUpdatedState(pullable)
+    val density = androidx.compose.ui.platform.LocalDensity.current
+    val edgePx = with(density) { 40.dp.toPx() }  // the full screen peek's edge (BrowserScreen)
+    SideEffect {
+        pull.allowed = {
+            val t = current
+            canPull && t.session.isOpen && !t.fullscreen.value && !ui.fullscreen && !t.isNewTabPage &&
+                !ui.editing && !ui.findOpen && ui.sheet == null
+        }
+        pull.topEdgePx = { if (ui.fullPage && !floating) edgePx else 0f }
+        pull.onRefresh = { current.session.reload() }
+    }
+    // The same view shows whichever tab is in front: another tab's circle isn't this one's.
+    LaunchedEffect(tab.id) { pull.refreshing = false }
+    LaunchedEffect(pull.refreshing) {
+        if (!pull.refreshing) return@LaunchedEffect
+        val t = current
+        // Turning until the page has reloaded (or a moment, if it never starts).
+        kotlinx.coroutines.withTimeoutOrNull(2_000) { t.loading.first { it } }
+            ?.let { kotlinx.coroutines.withTimeoutOrNull(15_000) { t.loading.first { !it } } }
+        pull.refreshing = false
+    }
+    // Clear of the status bar and the camera, even in full screen where the status bar is hidden.
+    val insetTop = maxOf(
+        WindowInsets.statusBarsIgnoringVisibility.getTop(density),
+        WindowInsets.displayCutout.getTop(density),
+    ).toFloat()
+    val pageTop = remember { androidx.compose.runtime.mutableFloatStateOf(0f) }
+
+    Box(Modifier.fillMaxSize().onGloballyPositioned { pageTop.floatValue = it.positionInWindow().y }) {
+        AndroidView(
+            factory = { ctx ->
+                PullGeckoView(ctx, pull).also {
+                    made[0] = it
+                    if (floating) it.setViewBackend(GeckoView.BACKEND_TEXTURE_VIEW)
+                    // No white flash before a page draws its first frame.
+                    it.coverUntilFirstPaint(Space.Ground.toArgb())
+                    // The tab, not the view, owns the page: never hand the session back to Android to restore.
+                    it.isSaveEnabled = false
+                }
+            },
+            modifier = Modifier.fillMaxSize(),
+            update = { view ->
+                // Re-runs when the tab, its address, its sleep state or its session changes (a session can open later).
+                @Suppress("UNUSED_VARIABLE") val k = key
+                if (primary) ui.geckoView = view
+                val s = tab.session
+                if (s.isOpen) Displays.showWhenSettled(s, view)
+            },
+            // The screen is going away (Android can throw it away while you're in another app): let the page go,
+            // so the next screen can show it.
+            onRelease = { view ->
+                Displays.releaseView(view)
+                if (ui.geckoView === view) ui.geckoView = null
+            },
+        )
+        PullIndicator(pull, tab.private, { (insetTop - pageTop.floatValue).coerceAtLeast(0f) }, Modifier.align(Alignment.TopCenter))
+    }
 }
 
 /** Captures the current page for the tab switcher. */
@@ -397,8 +461,9 @@ private fun TopBar(c: Container, ui: UiState, tab: BrowserTab, tabCount: Int) {
                 captureThumbnail(ui, tab) { ui.go(Screen.Tabs) }
             }
             val context = LocalContext.current
+            // (A menu is a window of its own: it closes when Raven locks, rather than staying over the lock.)
             androidx.compose.material3.DropdownMenu(
-                quick, { quick = false },
+                quick && LocalBrowserShown.current, { quick = false },
                 containerColor = Space.Surface2, shape = RoundedCornerShape(20.dp),
             ) {
                 androidx.compose.material3.DropdownMenuItem(

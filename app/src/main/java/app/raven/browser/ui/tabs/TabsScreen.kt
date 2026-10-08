@@ -204,7 +204,7 @@ fun TabsScreen(c: Container, ui: UiState) {
                 onNew = { naming = NewFlock(null) },
             )
             side == TabSide.Flocks -> Column {
-                FlockHeader(openFlock!!, shown.size, onBack = { openFlock = null }, onRename = { renaming = openFlock }, onUngroup = { c.tabs.ungroup(openFlock!!) }, onClose = { c.tabs.closeFlock(openFlock!!) })
+                FlockHeader(openFlock!!, shown.size, onBack = { openFlock = null }, onRename = { renaming = openFlock }, onUngroup = { c.tabs.ungroup(openFlock!!, shownProfile) }, onClose = { c.tabs.closeFlock(openFlock!!, shownProfile) })
                 Box(Modifier.weight(1f)) { hand() }
             }
             shown.isEmpty() -> EmptyHand(privateSide)
@@ -266,7 +266,7 @@ fun TabsScreen(c: Container, ui: UiState) {
     }
     renaming?.let { old ->
         RenameFlockDialog(old, onDismiss = { renaming = null }) { new ->
-            c.tabs.renameFlock(old, new)
+            c.tabs.renameFlock(old, new, shownProfile)
             openFlock = new.trim().ifEmpty { old }
             renaming = null
         }

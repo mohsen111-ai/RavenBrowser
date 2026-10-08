@@ -63,6 +63,8 @@ class BrowserTab(
     var committedUrl = ""
     /** A page is on its way: the blank document a new engine session starts with isn't the address. */
     var expectingLoad = false
+    /** An address typed, picked or opened from another app is loading; its redirects aren't sent to apps. */
+    var directLoad = false
     var insecureAllowed = false
 
     // Where the page was last scrolled to, and how far it has gone since the direction last changed.

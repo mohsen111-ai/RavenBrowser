@@ -221,6 +221,10 @@ private fun Half(
     val label = title.let { tab.displayTitle }
     val isActive by rememberUpdatedState(active)
     val scrolledAway by tab.scrolledAway.collectAsState()
+    // Back on the home page (no page to scroll), the half's bar is always there: it's the way to search from it.
+    val overNewTab by tab.ntpOverlay.collectAsState()
+    val pageUrl by tab.url.collectAsState()
+    val onHome = overNewTab || pageUrl.isBlank() || pageUrl == "about:blank"
     val name = when {
         sideBySide && first -> "Left half"
         sideBySide -> "Right half"
@@ -241,7 +245,7 @@ private fun Half(
             .semantics { contentDescription = "$name: $label" },
     ) {
         Column(Modifier.fillMaxSize()) {
-            if (!scrolledAway && !fullscreen && !barsHidden) HalfBar(c, ui, tab, muted, sound, sideBySide)
+            if ((!scrolledAway || onHome) && !fullscreen && !barsHidden) HalfBar(c, ui, tab, muted, sound, sideBySide)
             Box(Modifier.weight(1f).fillMaxWidth()) { TabPage(c, ui, tab, primary = active) }
         }
         // Full screen for pages: the bar comes over the page for a moment after a swipe down from the top.
@@ -361,7 +365,7 @@ private fun SoundButton(muted: Boolean, sound: SplitSound, sideBySide: Boolean, 
                 .semantics { contentDescription = if (muted) "Sound: muted" else "Sound: on" },
             contentAlignment = Alignment.Center,
         ) { Icon(if (muted) Icons.Mute else Icons.Sound, null, size = 17.dp, tint = if (muted) Space.Text3 else Space.Text) }
-        DropdownMenu(choosing, { choosing = false }, containerColor = Space.Surface2, shape = RoundedCornerShape(20.dp)) {
+        DropdownMenu(choosing && LocalBrowserShown.current, { choosing = false }, containerColor = Space.Surface2, shape = RoundedCornerShape(20.dp)) {
             soundChoices(sideBySide).forEach { (s, label, icon) ->
                 DropdownMenuItem(
                     text = { Text(label, fontWeight = if (s == sound) FontWeight.SemiBold else FontWeight.Normal) },

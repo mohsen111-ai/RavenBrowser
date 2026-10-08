@@ -119,8 +119,10 @@ fun FloatingTab(c: Container, ui: UiState) {
         val areaW = constraints.maxWidth.toFloat()
         val areaH = constraints.maxHeight.toFloat()
         // Usual widths: about half the screen for a page, two thirds for a video; [UiState.floatScale] from the corners.
-        val minW = 168f * dp
-        val w = if (full) areaW else ((if (wide) areaW * 0.66f else areaW * 0.46f) * ui.floatScale).coerceIn(minW, areaW * 0.96f)
+        // (In a window narrower than that, such as picture-in-picture, the window takes what there is.)
+        val maxW = areaW * 0.96f
+        val minW = minOf(168f * dp, maxW)
+        val w = if (full) areaW else ((if (wide) areaW * 0.66f else areaW * 0.46f) * ui.floatScale).coerceIn(minW, maxW)
         val h = if (full) areaH else (if (wide) w / aspect else w * 5f / 3f).coerceAtMost(areaH * 0.85f)
         // Into and out of fullscreen at once: the page is resized once, not on every frame of an animation.
         var wasFull by remember { mutableStateOf(full) }
@@ -150,7 +152,7 @@ fun FloatingTab(c: Container, ui: UiState) {
             // Pushed more than a third past the side: it parks there as an icon.
             if (leftOut > aw * 0.34f || rightOut > aw * 0.34f) {
                 ui.floatParkLeft = leftOut > rightOut
-                ui.floatParkY = (ui.floatY + ah / 2f - 28f * dp).coerceIn(0f, areaH - 56f * dp)
+                ui.floatParkY = (ui.floatY + ah / 2f - 28f * dp).coerceIn(0f, (areaH - 56f * dp).coerceAtLeast(0f))
                 ui.floatX = if (ui.floatParkLeft) 12f * dp else areaW - aw - 12f * dp
                 c.tabs.parkFloat(true)
             } else {
@@ -162,7 +164,7 @@ fun FloatingTab(c: Container, ui: UiState) {
             val before = w
             ui.floatScale = (ui.floatScale + dScale).coerceIn(0.6f, 2.0f)
             if (fromLeft) {
-                val after = ((if (wide) areaW * 0.66f else areaW * 0.46f) * ui.floatScale).coerceIn(minW, areaW * 0.96f)
+                val after = ((if (wide) areaW * 0.66f else areaW * 0.46f) * ui.floatScale).coerceIn(minW, maxW)
                 ui.floatX = (if (ui.floatX.isNaN()) defaultX else ui.floatX) - (after - before)
             }
         }
@@ -173,7 +175,7 @@ fun FloatingTab(c: Container, ui: UiState) {
                 letter, label, left = ui.floatParkLeft,
                 modifier = Modifier.offset { IntOffset(if (ui.floatParkLeft) (-28f * dp).roundToInt() else (areaW - 28f * dp).roundToInt(), parkY.roundToInt()) },
                 onOpen = { c.tabs.parkFloat(false) },
-                onDrag = { dy -> ui.floatParkY = (parkY + dy).coerceIn(0f, areaH - 56f * dp) },
+                onDrag = { dy -> ui.floatParkY = (parkY + dy).coerceIn(0f, (areaH - 56f * dp).coerceAtLeast(0f)) },
             )
         } else {
             var controls by remember { mutableStateOf(false) }
@@ -210,7 +212,8 @@ fun FloatingTab(c: Container, ui: UiState) {
                 onPlayPause = { c.engine.helper.toggle(tab.session) },
                 onClose = { c.tabs.unfloat() },
             ) {
-                PageView(tab, ui, primary = false, floating = true)
+                // (In "Video only" the video covers the page anyway; a reload would only lose it.)
+                PageView(tab, ui, primary = false, floating = true, pullable = !ui.floatVideoOnly)
                 if (tab.isNewTabPage) {
                     Box(Modifier.fillMaxSize().background(Space.Surface), contentAlignment = Alignment.Center) {
                         Text("New tab", color = Space.Text2, fontSize = 13.sp)

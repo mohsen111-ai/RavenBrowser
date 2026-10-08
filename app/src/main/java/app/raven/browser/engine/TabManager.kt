@@ -82,6 +82,8 @@ class TabManager(
      * site goes, or null when nothing needs to change.
      */
     var vpnGate: ((String?) -> GeckoResult<AllowOrDeny>?)? = null
+    /** Whether a page of this site would have to wait for the VPN to change countries. */
+    var vpnWaits: ((String?) -> Boolean)? = null
     /** Set by the app: another tab came on screen (the VPN follows its site). */
     var onShown: ((BrowserTab) -> Unit)? = null
 
@@ -90,6 +92,28 @@ class TabManager(
 
     /** Set by the activity: text-selection toolbar (copy, paste, share). */
     var selectionDelegateFactory: (() -> GeckoSession.SelectionActionDelegate)? = null
+
+    /**
+     * Raven is on screen (set by the activity). While it's away, pages the phone stopped wait to be reopened until it
+     * comes back, and no page reopens as active, so nothing loads in the background.
+     */
+    var inFront = false
+        private set
+
+    /** Raven came back on screen: the pages on it whose engine was stopped meanwhile load again where they were. */
+    fun onAppShown() {
+        inFront = true
+        val kept = keptAwake()
+        _tabs.value.filter { it.id in kept && it.asleep.value }.forEach { tab ->
+            Log.i("Raven", "back on screen: reopening ${tab.id.take(6)}")
+            wake(tab)
+        }
+    }
+
+    fun onAppHidden() {
+        inFront = false
+        saveNow()
+    }
 
     private val stateFile = File(context.filesDir, "tabs.json")
     /** How far a page must scroll one way before its bar hides or comes back (the engine counts in CSS pixels). */
@@ -103,7 +127,7 @@ class TabManager(
     // ------------------------------------------------------------------ lifecycle
 
     fun restore() {
-        val saved = runCatching { JSONObject(stateFile.readText()) }.getOrNull()
+        val saved = runCatching { JSONObject(String(android.util.AtomicFile(stateFile).readFully())) }.getOrNull()
         val list = saved?.optJSONArray("tabs")
         if (list != null && list.length() > 0 && !settings.current.eraseOnClose) {
             for (i in 0 until list.length()) {
@@ -152,14 +176,19 @@ class TabManager(
         tab.openedFromApp = fromApp
         tab.openerId = openerId
         if (!private) tab.flock.value = flock
-        if (open && url != null) openSession(tab)
+        // VPN per site: a page opened behind the one on screen whose site has a country of its own waits, unloaded,
+        // until you open it (it then loads once the VPN is there), rather than loading now by the wrong way out.
+        val waits = url != null && open && !select && vpnWaits?.invoke(Uri.parse(url).host) == true
+        if (open && url != null && !waits) openSession(tab)
         if (!open) adoptWhenOpen(tab)
         val list = _tabs.value.toMutableList()
         val at = list.indexOfFirst { it.id == _selectedId.value }
         if (at >= 0 && url != null) list.add(at + 1, tab) else list.add(tab)
         _tabs.value = list
-        if (url != null) load(tab, url, fromNewTab = false)
+        // On screen first, then loaded: a page in front waits for its site's VPN country, one behind doesn't.
+        if (url != null) tab.url.value = url
         if (select) select(tab.id)
+        if (url != null) { if (waits) tab.asleep.value = true else load(tab, url, fromNewTab = false) }
         persist()
         return tab
     }
@@ -190,7 +219,8 @@ class TabManager(
         engine.attachSession(tab.session)
         engine.helper.attach(tab.session)
         selectionDelegateFactory?.let { tab.session.selectionActionDelegate = it() }
-        val active = tab.id in keptAwake()
+        // In the background (a page reopened after the phone stopped it) it waits inactive until Raven is back.
+        val active = tab.id in keptAwake() && inFront
         tab.session.setActive(active)
         engine.runtime.webExtensionController.setTabActive(tab.session, active)
         tab.opened.value++
@@ -266,6 +296,7 @@ class TabManager(
         tab.asleep.value = false
         tab.url.value = url
         tab.expectingLoad = true
+        tab.directLoad = true
         if (fresh) tab.session.load(GeckoSession.Loader().uri(url).flags(GeckoSession.LOAD_FLAGS_REPLACE_HISTORY))
         else tab.session.loadUri(url)
     }
@@ -286,13 +317,14 @@ class TabManager(
                 }
             }
         }
+        // In front before it wakes, so its page loads as the one on screen (VPN per site waits for its country).
+        _selectedId.value = id
         if (target.asleep.value) wake(target)
         if (target.session.isOpen) {
             target.session.setActive(true)
             engine.runtime.webExtensionController.setTabActive(target.session, true)
         }
         target.lastActive = now
-        _selectedId.value = id
         if (!target.private) _profile.value = target.profile
         onShown?.invoke(target)
         enforceAwakeLimit()
@@ -364,6 +396,8 @@ class TabManager(
     }
 
     private fun closeGroup(ids: Set<String>, undoable: Boolean) {
+        // Clean slate or a profile going: tabs closed a moment ago go for good too, so their Undo can't bring them back.
+        if (!undoable) closed?.let { finishClosed(it.batch) }
         val all = _tabs.value
         val (gone, keep) = all.partition { it.id in ids }
         if (gone.isEmpty()) return
@@ -434,6 +468,15 @@ class TabManager(
     fun undoClose(batch: Long) {
         val c = closed?.takeIf { it.batch == batch } ?: return
         closed = null
+        // A tab of a profile removed meanwhile stays gone.
+        val gone = c.tabs.filter { (_, t) -> !t.private && t.profile.isNotEmpty() && profiles.all.value.none { it.id == t.profile } }
+        gone.forEach { (_, t) -> if (t.session.isOpen) t.session.close() }
+        if (gone.size == c.tabs.size) return
+        if (gone.isNotEmpty()) return undoKept(Closed(c.batch, c.tabs - gone.toSet(), c.selected?.takeIf { id -> gone.none { it.second.id == id } }, c.standIn))
+        undoKept(c)
+    }
+
+    private fun undoKept(c: Closed) {
         val list = _tabs.value.toMutableList()
         // The fresh new tab that stood in, if you haven't used it.
         c.standIn?.let { id -> list.firstOrNull { it.id == id }?.takeIf { it.hasNoPage && !it.loading.value } }?.let { t ->
@@ -470,12 +513,20 @@ class TabManager(
 
     private fun sleep(tab: BrowserTab) {
         dropPrompts(setOf(tab.id))
-        tab.playing.value = false
-        media.forget(tab)
-        tab.media = null
+        forgetPage(tab)
         tab.asleep.value = true
         Displays.release(tab.session)
         tab.session.close()
+    }
+
+    /** What a page that's gone can no longer report: it isn't playing, and its video isn't fullscreen any more. */
+    private fun forgetPage(tab: BrowserTab) {
+        tab.playing.value = false
+        media.forget(tab)
+        tab.media = null
+        tab.fullscreen.value = false
+        tab.wideVideo.value = null
+        tab.videoSize.value = null
     }
 
     private fun wake(tab: BrowserTab) {
@@ -670,19 +721,21 @@ class TabManager(
         persist()
     }
 
-    fun renameFlock(old: String, new: String) {
+    /** A flock's tabs: flocks belong to a profile, and two profiles may each have one with the same name. */
+    private fun flockTabs(flock: String, profile: String) = _tabs.value.filter { !it.private && it.profile == profile && it.flock.value == flock }
+
+    fun renameFlock(old: String, new: String, profile: String = _profile.value) {
         val name = new.trim().ifEmpty { return }
-        _tabs.value.filter { it.flock.value == old }.forEach { it.flock.value = name }
+        flockTabs(old, profile).forEach { it.flock.value = name }
         _flocksVersion.value++
         persist()
     }
 
     /** The tabs stay; they just stop flying together. */
-    fun ungroup(flock: String) = setFlock(_tabs.value.filter { it.flock.value == flock }.map { it.id }, null)
+    fun ungroup(flock: String, profile: String = _profile.value) = setFlock(flockTabs(flock, profile).map { it.id }, null)
 
-    fun closeFlock(flock: String) {
-        val ids = _tabs.value.filter { it.flock.value == flock }.map { it.id }.toSet()
-        closeTabs(ids)
+    fun closeFlock(flock: String, profile: String = _profile.value) {
+        closeTabs(flockTabs(flock, profile).map { it.id }.toSet())
         _flocksVersion.value++
     }
 
@@ -699,10 +752,33 @@ class TabManager(
     /** A backup's tabs were put in place: nothing more is saved over them before Raven restarts. */
     @Volatile private var frozen = false
 
+    /** One write at a time, in order. */
+    private val writer = Dispatchers.IO.limitedParallelism(1)
+
     private fun writeState() {
         if (frozen) return
         if (settings.current.eraseOnClose) { stateFile.delete(); return }
-        scope.launch(Dispatchers.IO) { runCatching { stateFile.writeText(savedState().toString()) } }
+        // Made here, written there; written whole or not at all, so a phone closing Raven halfway through a write
+        // can't leave a broken file that loses every tab.
+        val text = savedState().toString()
+        scope.launch(writer) {
+            val file = android.util.AtomicFile(stateFile)
+            var out: java.io.FileOutputStream? = null
+            try {
+                out = file.startWrite()
+                out.write(text.toByteArray())
+                file.finishWrite(out)
+            } catch (e: Exception) {
+                out?.let { file.failWrite(it) }
+                Log.w("Raven", "couldn't save the tabs", e)
+            }
+        }
+    }
+
+    /** Saves the tabs now (Raven is leaving the screen, and the phone may close it any time). */
+    fun saveNow() {
+        main.removeCallbacks(persistRunnable)
+        writeState()
     }
 
     /** The everyday tabs as Raven keeps them between starts (also what a backup holds). */
@@ -728,7 +804,15 @@ class TabManager(
     fun replaceSavedState(json: JSONObject) {
         frozen = true
         main.removeCallbacks(persistRunnable)
-        stateFile.writeText(json.toString())
+        val file = android.util.AtomicFile(stateFile)
+        val out = file.startWrite()
+        try {
+            out.write(json.toString().toByteArray())
+            file.finishWrite(out)
+        } catch (e: Exception) {
+            file.failWrite(out)
+            throw e
+        }
     }
 
     // ------------------------------------------------------------------ add-on actions
@@ -817,6 +901,7 @@ class TabManager(
                 if (u.startsWith(ErrorPages.PREFIX)) return
                 if (u == "about:blank" && tab.expectingLoad) return
                 tab.expectingLoad = false
+                tab.directLoad = false
                 tab.url.value = u
                 tab.committedUrl = u
                 if (!tab.private && u.startsWith("http")) scope.launch { db.recordVisit(u, tab.title.value, tab.profile) }
@@ -883,8 +968,8 @@ class TabManager(
                 if (!fullScreen) { tab.wideVideo.value = null; tab.videoSize.value = null }
             }
 
-            override fun onCrash(session: GeckoSession) = recover(tab)
-            override fun onKill(session: GeckoSession) = recover(tab)
+            override fun onCrash(session: GeckoSession) = recover(tab, crashed = true)
+            override fun onKill(session: GeckoSession) = recover(tab, crashed = false)
             override fun onCloseRequest(session: GeckoSession) = close(tab.id)
         }
 
@@ -1014,9 +1099,12 @@ class TabManager(
      * address you typed, and never within the same site.
      */
     private fun appLink(tab: BrowserTab, uri: Uri, request: NavigationDelegate.LoadRequest): GeckoResult<AllowOrDeny>? {
+        if (request.hasUserGesture) tab.directLoad = false
         val mode = settings.current.linksInApps
         if (mode == LinksInApps.NEVER || tab.private || request.isDirectNavigation) return null
         if (!request.hasUserGesture && !request.isRedirect) return null
+        // An address you typed or picked that redirects to another site (twitter.com to x.com) stays in Raven.
+        if (request.isRedirect && tab.directLoad) return null
         if (request.target != NavigationDelegate.TARGET_WINDOW_CURRENT && request.target != NavigationDelegate.TARGET_WINDOW_NEW) return null
         if (siteOf(uri.host) == siteOf(Uri.parse(tab.url.value).host)) return null
         val (intent, name) = appFor(uri) ?: return null
@@ -1044,21 +1132,29 @@ class TabManager(
         return view.setClassName(app.activityInfo.packageName, app.activityInfo.name) to name
     }
 
-    /** A site, without its subdomains (m.youtube.com and www.youtube.com are both youtube.com). */
-    private fun siteOf(host: String?): String = host.orEmpty().removePrefix("www.").split('.').takeLast(2).joinToString(".")
+    /** A site, without its subdomains (m.youtube.com and www.youtube.com are both youtube.com; bbc.co.uk stays whole). */
+    private fun siteOf(host: String?): String = RavenVpn.siteOf(host.orEmpty())
 
-    /** A content process died: reopen the tab where it was. */
-    private fun recover(tab: BrowserTab) {
+    /**
+     * The engine's process for this page crashed ([crashed]) or the phone stopped it for memory (often while Raven is
+     * in another app; one process runs all pages, so every tab gets this at once). Every tab on screen (the one in
+     * front, both halves of split screen, the floating tab) reopens where it was; the others sleep until opened. While
+     * Raven is away they wait for it to come back ([onAppShown]), so nothing loads in the background.
+     */
+    private fun recover(tab: BrowserTab, crashed: Boolean) {
         main.post {
+            if (_tabs.value.none { it === tab }) return@post  // closed meanwhile
+            if (tab.asleep.value && !tab.session.isOpen) return@post  // already handled
+            Log.i("Raven", "page engine ${if (crashed) "crashed" else "stopped"}: ${tab.id.take(6)}, Raven ${if (inFront) "on screen" else "away"}")
             dropPrompts(setOf(tab.id))
+            forgetPage(tab)
             // Let the page view go first, so the reopened session can be shown again.
             Displays.release(tab.session)
             if (tab.session.isOpen) tab.session.close()
-            if (tab.id == _selectedId.value) {
+            tab.asleep.value = true
+            if (inFront && tab.id in keptAwake()) {
                 wake(tab)
-                events.tryEmit(TabEvent.Message("The page stopped working and was reloaded"))
-            } else {
-                tab.asleep.value = true
+                if (crashed && tab.id == _selectedId.value) events.tryEmit(TabEvent.Message("The page stopped working and was reloaded"))
             }
         }
     }

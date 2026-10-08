@@ -1,6 +1,8 @@
 package app.raven.browser
 
+import android.app.ActivityManager
 import android.app.Application
+import android.app.ApplicationExitInfo
 import android.content.ComponentCallbacks2
 import android.os.Build
 import app.raven.browser.data.Database
@@ -67,9 +69,14 @@ class Container(app: Application) {
                 }
             }
         }
+        tabs.vpnWaits = { host -> ravenVpn.needsSwitch(host) }
         tabs.onShown = { tab ->
             val host = android.net.Uri.parse(tab.url.value).host
-            if (ravenVpn.needsSwitch(host)) scope.launch { ravenVpn.applyFor(host) }
+            // In split screen one VPN serves both halves: tapping from one half to the other doesn't move it (that
+            // cut off what played in the first); a new page in a half still goes where its site goes.
+            val split = tabs.split.value
+            val half = split != null && (tab.id == split.top || tab.id == split.bottom)
+            if (!half && ravenVpn.needsSwitch(host)) scope.launch { ravenVpn.applyFor(host) }
         }
         if (settings.current.eraseOnClose) eraseBrowsingData(history = true, cookies = true, cache = true)
         tabs.restore()
@@ -170,17 +177,22 @@ class RavenApp : Application() {
         super.onCreate()
         CrashLog.install(this)
         // Gecko's helper processes also start this class; only the main process runs the browser.
-        if (processName() == packageName) container = Container(this)
+        if (processName() == packageName) {
+            container = Container(this)
+            Thread({ ExitLog.collect(this) }, "raven-exits").start()
+        }
     }
 
     @Suppress("DEPRECATION")
     override fun onTrimMemory(level: Int) {
         super.onTrimMemory(level)
         if (!::container.isInitialized) return
-        // Low memory while in use (older Android), or Raven is in the background and the system needs
-        // memory. Not merely on leaving the app, so a quick switch away doesn't reload every tab.
+        // Low memory while in use, or Android about to close Raven in the background (older Android only).
+        // Not on merely leaving Raven: from Android 14 "background" comes on every trip away, and putting every
+        // other tab to sleep then made each one reload, and held up the screen just as Raven left. The limit on
+        // loaded tabs keeps memory in check instead.
         val low = level == ComponentCallbacks2.TRIM_MEMORY_RUNNING_LOW || level == ComponentCallbacks2.TRIM_MEMORY_RUNNING_CRITICAL
-        if (low || level >= ComponentCallbacks2.TRIM_MEMORY_BACKGROUND) container.tabs.sleepAllBackground()
+        if (low || level >= ComponentCallbacks2.TRIM_MEMORY_COMPLETE) container.tabs.sleepAllBackground()
     }
 
     private fun processName(): String? =
@@ -188,16 +200,125 @@ class RavenApp : Application() {
         else runCatching { File("/proc/self/cmdline").readText().substringBefore('\u0000') }.getOrNull()
 }
 
-/** Keeps the last crash's stack trace so a test build can report it. */
+/** Keeps what went wrong lately (newest first) so it can be copied from Settings, About Raven, and sent for a fix. */
 object CrashLog {
+    private const val MAX = 200_000
+
     fun install(app: Application) {
         val previous = Thread.getDefaultUncaughtExceptionHandler()
         Thread.setDefaultUncaughtExceptionHandler { thread, e ->
-            runCatching { File(app.filesDir, "last-crash.txt").writeText("Raven ${BuildConfig.VERSION_NAME}, Android ${Build.VERSION.RELEASE}, ${thread.name}\n${e.stackTraceToString()}") }
+            runCatching { add(app, "Raven ${BuildConfig.VERSION_NAME}, Android ${Build.VERSION.RELEASE}, ${thread.name}\n${e.stackTraceToString()}") }
             previous?.uncaughtException(thread, e)
         }
     }
 
+    /** Puts [text] at the top of the report; the oldest part goes once the report gets long. */
+    @Synchronized
+    fun add(app: Application, text: String) {
+        val file = File(app.filesDir, "last-crash.txt")
+        val before = if (file.exists()) file.readText() else ""
+        file.writeText((if (before.isEmpty()) text else "$text\n\n----------------\n\n$before").take(MAX))
+    }
+
     fun read(app: Application): String? = File(app.filesDir, "last-crash.txt").takeIf { it.exists() }?.readText()
     fun clear(app: Application) = File(app.filesDir, "last-crash.txt").delete()
+}
+
+/**
+ * Why Raven's processes stopped lately, as Android itself remembers it (Android 11 and later): Raven crashing, the
+ * engine crashing, Raven freezing ("isn't responding"), or the phone closing it or one of the engine's helpers for
+ * memory. Read once each time Raven starts. When something went wrong, the crash report gets Android's own account:
+ * every recent stop, and for a freeze what Raven's main threads were doing at that moment.
+ */
+object ExitLog {
+    fun collect(app: Application) {
+        if (Build.VERSION.SDK_INT < 30) return
+        runCatching {
+            val sp = app.getSharedPreferences("exits", 0)
+            val seen = sp.getLong("seen", 0)
+            val exits = app.getSystemService(ActivityManager::class.java)
+                .getHistoricalProcessExitReasons(app.packageName, 0, 32)
+                .filter { it.timestamp > seen }
+                .sortedByDescending { it.timestamp }
+            if (exits.isEmpty()) return
+            sp.edit().putLong("seen", exits.first().timestamp).apply()
+            val bad = exits.filter { it.reason in BAD }
+            if (bad.isEmpty()) return
+            val time = java.text.SimpleDateFormat("d MMM HH:mm:ss", java.util.Locale.US)
+            val text = buildString {
+                append("Raven ${BuildConfig.VERSION_NAME}, Android ${Build.VERSION.RELEASE}, ${Build.MANUFACTURER} ${Build.MODEL}\n")
+                append("How Raven's processes stopped lately (newest first), as Android remembers it:\n")
+                exits.forEach { e ->
+                    append("- ${time.format(java.util.Date(e.timestamp))}  ${part(app, e.processName)}: ${reason(e.reason)}")
+                    append(" (status ${e.status}, was ${importance(e.importance)}, memory ${e.pss / 1024} MB)")
+                    e.description?.takeIf { it.isNotBlank() }?.let { append(": $it") }
+                    append('\n')
+                }
+                // A freeze comes with what every thread was doing; the threads that matter are kept.
+                bad.firstOrNull { it.reason == ApplicationExitInfo.REASON_ANR }?.let { anr ->
+                    runCatching { anr.traceInputStream?.bufferedReader()?.use { it.readText() } }.getOrNull()?.let {
+                        append("\nWhat Raven was doing when it froze (${time.format(java.util.Date(anr.timestamp))}):\n")
+                        append(threads(it))
+                    }
+                }
+            }
+            CrashLog.add(app, text)
+        }
+    }
+
+    private val BAD = setOf(
+        ApplicationExitInfo.REASON_ANR,
+        ApplicationExitInfo.REASON_CRASH,
+        ApplicationExitInfo.REASON_CRASH_NATIVE,
+        ApplicationExitInfo.REASON_INITIALIZATION_FAILURE,
+        ApplicationExitInfo.REASON_EXCESSIVE_RESOURCE_USAGE,
+    )
+
+    /** "Raven" for the app itself, else which of the engine's helpers: the one that draws, a page's, ... */
+    private fun part(app: Application, name: String): String {
+        val helper = name.removePrefix(app.packageName).removePrefix(":")
+        return when {
+            helper.isEmpty() -> "Raven"
+            helper.startsWith("gpu") -> "engine (drawing)"
+            helper.startsWith("tab") -> "engine (pages)"
+            helper.startsWith("media") -> "engine (media)"
+            helper.startsWith("socket") -> "engine (network)"
+            else -> "engine ($helper)"
+        }
+    }
+
+    private fun reason(r: Int) = when (r) {
+        ApplicationExitInfo.REASON_ANR -> "FROZE (isn't responding)"
+        ApplicationExitInfo.REASON_CRASH -> "CRASHED"
+        ApplicationExitInfo.REASON_CRASH_NATIVE -> "CRASHED (engine code)"
+        ApplicationExitInfo.REASON_INITIALIZATION_FAILURE -> "FAILED TO START"
+        ApplicationExitInfo.REASON_EXCESSIVE_RESOURCE_USAGE -> "STOPPED for using too much"
+        ApplicationExitInfo.REASON_LOW_MEMORY -> "closed by the phone for memory"
+        ApplicationExitInfo.REASON_SIGNALED -> "stopped by the phone"
+        ApplicationExitInfo.REASON_EXIT_SELF -> "closed itself"
+        ApplicationExitInfo.REASON_USER_REQUESTED -> "closed by you"
+        ApplicationExitInfo.REASON_USER_STOPPED -> "force-stopped"
+        ApplicationExitInfo.REASON_DEPENDENCY_DIED -> "stopped because a part it needs stopped"
+        ApplicationExitInfo.REASON_PERMISSION_CHANGE -> "stopped after a permission changed"
+        ApplicationExitInfo.REASON_PACKAGE_UPDATED -> "updated"
+        ApplicationExitInfo.REASON_FREEZER -> "stopped while frozen in the background"
+        ApplicationExitInfo.REASON_OTHER -> "stopped by the phone (other)"
+        else -> "stopped (reason $r)"
+    }
+
+    private fun importance(i: Int) = when {
+        i <= ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND -> "on screen"
+        i <= ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE -> "visible"
+        i <= ActivityManager.RunningAppProcessInfo.IMPORTANCE_SERVICE -> "working in the background"
+        else -> "in the background"
+    }
+
+    /** From Android's freeze report: its header, the main thread, and Gecko's and the drawing threads, briefly. */
+    private fun threads(trace: String): String {
+        val blocks = trace.split(Regex("\n[ \t]*\n"))
+        val keep = blocks.filterIndexed { i, b ->
+            i == 0 || b.startsWith("\"main\"") || Regex("^\"(Gecko|Compositor|Renderer|CanvasRenderer|RenderBackend|ImageBridge|IPC I/O|Socket|Raven)", RegexOption.IGNORE_CASE).containsMatchIn(b)
+        }
+        return keep.joinToString("\n\n") { it.lines().take(60).joinToString("\n") }.take(60_000)
+    }
 }

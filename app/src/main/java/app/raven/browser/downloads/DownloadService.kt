@@ -33,10 +33,19 @@ class DownloadService : Service() {
         ensureChannels(this)
         val manager = (application as RavenApp).container.downloads
         if (intent?.action == ACTION_PAUSE_ALL) manager.active.forEach { manager.pause(it.id) }
-        ServiceCompat.startForeground(
-            this, NOTIFICATION_ID, progressNotification(manager.active),
-            if (Build.VERSION.SDK_INT >= 29) ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC else 0,
-        )
+        try {
+            ServiceCompat.startForeground(
+                this, NOTIFICATION_ID, progressNotification(manager.active),
+                if (Build.VERSION.SDK_INT >= 29) ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC else 0,
+            )
+        } catch (e: Exception) {
+            // Android won't let downloads run in the background any longer today (it allows 6 hours a day):
+            // they pause, and carry on from Raven's Downloads screen.
+            android.util.Log.w("Raven", "downloads can't run in the background now", e)
+            manager.active.forEach { manager.pause(it.id) }
+            stopSelf()
+            return START_NOT_STICKY
+        }
         scope.coroutineContext[kotlinx.coroutines.Job]?.children?.forEach { it.cancel() }
         scope.launch {
             manager.items.collectLatest {
@@ -55,6 +64,19 @@ class DownloadService : Service() {
     override fun onDestroy() {
         scope.cancel()
         super.onDestroy()
+    }
+
+    // Android 15 and later allow downloads 6 hours a day in the background; then they must stop, or Android closes Raven.
+    override fun onTimeout(startId: Int, fgsType: Int) = outOfTime()
+
+    @Deprecated("Android 14's form of the same")
+    override fun onTimeout(startId: Int) = outOfTime()
+
+    private fun outOfTime() {
+        val manager = (application as RavenApp).container.downloads
+        manager.active.forEach { manager.pause(it.id) }
+        ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
+        stopSelf()
     }
 
     private fun progressNotification(active: List<DownloadItem>) = NotificationCompat.Builder(this, CHANNEL_PROGRESS)
@@ -96,7 +118,8 @@ class DownloadService : Service() {
     companion object {
         private const val CHANNEL_PROGRESS = "downloads"
         private const val CHANNEL_DONE = "downloads_done"
-        private const val NOTIFICATION_ID = 7001
+        // Its own number: the media controls' notification is 7001, and sharing it made one replace the other.
+        private const val NOTIFICATION_ID = 7002
         private const val ACTION_PAUSE_ALL = "pause_all"
 
         fun start(context: Context) {

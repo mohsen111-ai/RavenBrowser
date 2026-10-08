@@ -7,7 +7,7 @@ on:
     inputs:
       scripts:
         description: Groups of test scripts (tools/<name>.sh), one emulator per group, all at once; groups split by commas
-        default: smoke, media video, tabs back, deep, raven, more, update, recents
+        default: smoke, media video, tabs back, deep, raven, more, update, recents, pull
 
 permissions:
   contents: write
@@ -24,7 +24,7 @@ jobs:
       - name: The groups to run
         id: groups
         env:
-          SCRIPTS: ${{ inputs.scripts || 'smoke, media video, tabs back, deep, raven, more, update, recents' }}
+          SCRIPTS: ${{ inputs.scripts || 'smoke, media video, tabs back, deep, raven, more, update, recents, pull' }}
         run: python3 -c "import json, os; print('json=' + json.dumps([g.strip() for g in os.environ['SCRIPTS'].split(',') if g.strip()]))" >> "$GITHUB_OUTPUT"
 
       # The runner image already has JDK 21; downloading one can fail when the download site is busy.

@@ -24,6 +24,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -65,7 +67,19 @@ import kotlinx.coroutines.launch
 fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
     val prefs by c.settings.prefs.collectAsState()
     val context = LocalContext.current
-    val batterySaver = remember { context.getSystemService(PowerManager::class.java).isPowerSaveMode }
+    // Followed as it changes (turning Battery Saver on stills the live wallpapers at once).
+    val power = remember { context.getSystemService(PowerManager::class.java) }
+    var batterySaver by remember { mutableStateOf(power.isPowerSaveMode) }
+    androidx.compose.runtime.DisposableEffect(power) {
+        val receiver = object : android.content.BroadcastReceiver() {
+            override fun onReceive(ctx: android.content.Context, intent: android.content.Intent) { batterySaver = power.isPowerSaveMode }
+        }
+        androidx.core.content.ContextCompat.registerReceiver(
+            context, receiver, android.content.IntentFilter(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED),
+            androidx.core.content.ContextCompat.RECEIVER_NOT_EXPORTED,
+        )
+        onDispose { context.unregisterReceiver(receiver) }
+    }
     val reduceMotion = when (prefs.reduceMotion) { Motion.ALWAYS -> true; Motion.NEVER -> false; Motion.AUTO -> batterySaver }
     RavenTheme(prefs.accent, prefs.trueBlack, reduceMotion) {
         if (!prefs.onboardingDone) {
@@ -104,8 +118,12 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
         // In another app the page rests too, unless it's playing something.
         val visible by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
         val started = visible.isAtLeast(Lifecycle.State.STARTED)
-        LaunchedEffect(onBrowser, playing, overNewTab, tab?.id, started) {
+        val resumed = visible.isAtLeast(Lifecycle.State.RESUMED)
+        LaunchedEffect(onBrowser, playing, overNewTab, tab?.id, started, resumed) {
             val session = tab?.session ?: return@LaunchedEffect
+            // Back from another app, the page view switches its page on by itself as its surface comes back: say
+            // again what Raven wants once that's done (a page under the Tabs screen or Settings stays resting).
+            if (resumed) { withFrameNanos { }; withFrameNanos { } }
             if (session.isOpen) session.setActive((started && onBrowser && !overNewTab) || playing)
         }
 
@@ -121,10 +139,11 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
             split?.let { s -> tabs.firstOrNull { it.id == s.bottom } },
             floatingId?.takeIf { !parked }?.let { id -> tabs.firstOrNull { it.id == id } },
         ).distinct()
+        // Starts from what's true now, so a screen Android rebuilt is laid out for the fullscreen video at once.
         val fullTab by remember(onScreen.map { it.id }) {
             if (onScreen.isEmpty()) flowOf(null)
             else combine(onScreen.map { t -> t.fullscreen.map { on -> if (on) t else null } }) { all -> all.firstOrNull { it != null } }
-        }.collectAsState(null)
+        }.collectAsState(onScreen.firstOrNull { it.fullscreen.value })
         val fullscreen = fullTab != null
         val fullPlaying = fullTab?.playing?.collectAsState()?.value == true
         // Like Firefox and Chrome: a wide video in fullscreen turns the screen to landscape (either way round,
@@ -136,7 +155,11 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
         val inFront = shown.isAtLeast(Lifecycle.State.STARTED)
         // Leaving fullscreen ends the page's lock too, as the Screen Orientation standard says. The engine
         // doesn't always say so itself (after picture-in-picture it didn't, and the screen stayed sideways).
-        LaunchedEffect(fullscreen) { if (!fullscreen) c.engine.orientationLock.value = null }
+        var wasFull by remember { mutableStateOf(fullscreen) }
+        LaunchedEffect(fullscreen) {
+            if (wasFull && !fullscreen) c.engine.orientationLock.value = null
+            wasFull = fullscreen
+        }
         // With the rotation lock on, the direction the screen had before the video (if Android left it turned).
         val rotationHold = rememberRotationHold(activity, fullscreen)
         LaunchedEffect(pageLock, fullscreen, wideVideo, inFront, rotationHold) {
@@ -149,10 +172,12 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
             android.util.Log.i("Raven", "screen: fullscreen=$fullscreen wide=$wideVideo pageLock=$pageLock hold=$rotationHold -> $want (was ${activity.requestedOrientation})")
             activity.requestedOrientation = want
         }
-        // Picture-in-picture: a fullscreen video that's playing shrinks into a small window when you leave Raven.
+        // Picture-in-picture: a fullscreen video that's playing shrinks into a small window when you leave Raven
+        // (never while Raven is locked).
         val videoSize = fullTab?.videoSize?.collectAsState()?.value
-        LaunchedEffect(fullscreen, fullPlaying, videoSize, prefs.pictureInPicture) {
-            (activity as? app.raven.browser.MainActivity)?.updatePip(prefs.pictureInPicture && fullscreen && fullPlaying && !c.appLocked.value, videoSize, fullPlaying)
+        val appLocked by c.appLocked.collectAsState()
+        LaunchedEffect(fullscreen, fullPlaying, videoSize, prefs.pictureInPicture, appLocked) {
+            (activity as? app.raven.browser.MainActivity)?.updatePip(prefs.pictureInPicture && fullscreen && fullPlaying && !appLocked, videoSize, fullPlaying)
         }
         LaunchedEffect(fullTab?.id) {
             ui.fullscreen = fullscreen
@@ -184,11 +209,10 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
         }
         val main = activity as? app.raven.browser.MainActivity
         val privateOnScreen = tab?.private == true && ui.screen == Screen.Browser
-        val resumed = visible.isAtLeast(Lifecycle.State.RESUMED)
         // (While all of Raven is locked, its own question comes first and opens these too.)
-        val appLocked by c.appLocked.collectAsState()
         LaunchedEffect(locked, privateOnScreen, resumed, appLocked) {
-            if (locked && privateOnScreen && resumed && !appLocked) main?.unlockPrivate()
+            // Asked once Raven has drawn its lock screen, not over a screen still coming back.
+            if (locked && privateOnScreen && resumed && !appLocked) { withFrameNanos { }; withFrameNanos { }; main?.unlockPrivate() }
         }
         // With the lock on, private tabs stay out of screenshots and the recent apps view.
         val secret = prefs.lockPrivateTabs && ((tab?.private == true && ui.screen == Screen.Browser) || (ui.screen == Screen.Tabs && ui.privateSideShown))
@@ -200,7 +224,7 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
         }
         // The lock for all of Raven: back in front while locked, it asks for a fingerprint or the screen lock at once.
         LaunchedEffect(appLocked, resumed) {
-            if (appLocked && resumed) main?.unlockApp()
+            if (appLocked && resumed) { withFrameNanos { }; withFrameNanos { }; main?.unlockApp() }
         }
 
         LaunchedEffect(Unit) {
@@ -235,9 +259,16 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
             }
         }
 
+        // Locked, nothing in a window of its own (a sheet, a page's question, a dialog) stays over the lock.
+        LaunchedEffect(appLocked) {
+            if (appLocked) { ui.sheet = null; ui.folderFor = null; ui.editing = false; ui.findOpen = false }
+        }
         Box(Modifier.fillMaxSize().background(Space.Ground)) {
             // The browser stays composed underneath other screens so the page keeps its place.
-            BrowserScreen(c, ui)
+            val homeShown = ui.screen == Screen.Browser && !appLocked && !(locked && tab?.private == true) && !ui.pip
+            androidx.compose.runtime.CompositionLocalProvider(app.raven.browser.ui.browser.LocalBrowserShown provides homeShown) {
+                BrowserScreen(c, ui)
+            }
             if (locked && tab?.private == true && ui.screen == Screen.Browser && !ui.pip) {
                 app.raven.browser.ui.browser.PrivateLocked(
                     onUnlock = { main?.unlockPrivate() },
@@ -248,12 +279,15 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
                     },
                 )
             }
-            Screens(c, ui)
+            // (Locked, the screens wait underneath: their dialogs would show over the lock.)
+            if (!appLocked) Screens(c, ui)
             // The floating tab floats over every screen in Raven (not over other apps, and not in picture-in-picture,
             // unless it's the floating tab's own video that's playing there).
             if (!ui.pip || (fullTab != null && fullTab?.id == floatingId)) app.raven.browser.ui.browser.FloatingTab(c, ui)
 
-            when (val s = ui.sheet) {
+            // Over the private tabs' lock too, no sheet or page question shows.
+            val covered = appLocked || (locked && tab?.private == true && ui.screen == Screen.Browser)
+            if (!covered) when (val s = ui.sheet) {
                 Sheet.Menu -> tab?.let { MenuSheet(c, ui, it) }
                 Sheet.SiteInfo -> tab?.let { SiteInfoSheet(c, ui, it) }
                 Sheet.Supernova -> SupernovaSheet(c, ui)
@@ -263,9 +297,11 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
                 is Sheet.LongPress -> LongPressSheet(c, ui, s)
                 null -> Unit
             }
-            popup?.let { UboSheet(c, it, tab) }
-            install?.let { InstallSheet(c, it) }
-            PromptHost(c)
+            if (!covered) {
+                popup?.let { UboSheet(c, it, tab) }
+                install?.let { InstallSheet(c, it) }
+                PromptHost(c)
+            }
 
             // On the Tabs screen it sits above the New tab button, so a quick tap there never lands on Undo.
             if (!ui.pip) SnackbarHost(ui.snackbar, Modifier.align(Alignment.BottomCenter).navigationBarsPadding().padding(16.dp).padding(bottom = if (ui.screen == Screen.Tabs) 72.dp else 0.dp)) { data ->

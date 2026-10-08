@@ -207,7 +207,7 @@ tap "Search settings"; sleep 1; $A shell input text "cookie"; sleep 2; $A shell 
 tap "^Cookie popups"; sleep 2; shot u42_cookie_page; $A shell input keyevent 4; sleep 2
 leave_settings
 for q in "permissions:Site permissions" "links:Open links in apps" "look:Look" "about:About Raven"; do
-  setting "${q%%:*}" "${q#*:}"; shot "u43_page_${q%%:*}"; leave_settings
+  if setting "${q%%:*}" "${q#*:}"; then shot "u43_page_${q%%:*}"; leave_settings; else log "settings page not found: ${q#*:}"; fi
 done
 
 log "new crashes: $(( $(fatals) - f0 ))"

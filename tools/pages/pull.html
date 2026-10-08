@@ -4,7 +4,12 @@
 <title>Raven pull test</title>
 <style>body { background: #f7f3ec; color: #222; font: 22px sans-serif; margin: 16px; } p { height: 140px; } #grab { position: fixed; inset: 0; background: #cfe3d4; }</style>
 <!-- Pull down to refresh: each load counts itself, so the test sees whether a pull reloaded the page.
-     pull.html?grab=1 is like a map: the page takes every touch for itself, so a pull must not reload it. -->
+     ?grab=1   like a map: the page takes every touch for itself, so a pull must not reload it.
+     ?listen=1 the page listens to touches (and could take them) but doesn't: a pull reloads.
+     ?late=1   the page takes the touch only from its third move on: Raven may have it by then (as Firefox does).
+     ?contain=1 the page says no pull (CSS overscroll-behavior): no reload.
+     ?short=1  a page too short to scroll: a pull reloads.
+     ?name=X   the count reads "X: loaded N times". -->
 <h1 id="n"></h1>
 <p>Line 1: a long page, so it can be scrolled away from its top and back.</p>
 <p>Line 2: a long page, so it can be scrolled away from its top and back.</p>
@@ -39,8 +44,19 @@
 <script>
   const n = (+sessionStorage.getItem("loads") || 0) + 1;
   sessionStorage.setItem("loads", n);
-  document.getElementById("n").textContent = "Loaded " + n + " times";
-  if (new URLSearchParams(location.search).get("grab")) {
+  // ?name=X labels the count "X: loaded N times", to tell two pages on screen apart.
+  const name = new URLSearchParams(location.search).get("name");
+  document.getElementById("n").textContent = name ? name + ": loaded " + n + " times" : "Loaded " + n + " times";
+  const q = new URLSearchParams(location.search);
+  if (q.get("short")) for (const p of document.querySelectorAll("p")) p.remove();
+  if (q.get("contain")) document.documentElement.style.overscrollBehaviorY = "contain";
+  if (q.get("listen")) for (const t of ["touchstart", "touchmove"]) document.addEventListener(t, () => {}, { passive: false });
+  if (q.get("late")) {
+    let moves = 0;
+    document.addEventListener("touchstart", () => { moves = 0; }, { passive: false });
+    document.addEventListener("touchmove", (e) => { if (++moves >= 3) e.preventDefault(); }, { passive: false });
+  }
+  if (q.get("grab")) {
     const g = document.createElement("div");
     g.id = "grab";
     g.textContent = "Map: loaded " + n + " times";

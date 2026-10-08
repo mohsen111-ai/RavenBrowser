@@ -45,7 +45,8 @@
     "i",
   );
   // Words that say "yes": a popup with only these is one to hide.
-  const YES = /^(accept|agree|allow|i agree|i accept|got it|ok|okay|understood|alle akzeptieren|akzeptieren|zustimmen|einverstanden|tout accepter|accepter|j'accepte|aceptar|accetta|accetto|accepteren|akkoord|aceitar|zaakceptuj|godkänn|acceptera|kabul)/i;
+  // The whole label must say it ("Accept all cookies" yes, "Allow notifications" no).
+  const YES = /^(accept|agree|allow|i agree|i accept|got it|ok|okay|understood|alle akzeptieren|akzeptieren|zustimmen|einverstanden|tout accepter|accepter|j'accepte|aceptar|accetta|accetto|accepteren|akkoord|aceitar|zaakceptuj|godkänn|acceptera|kabul)( all| alle| tout| todo| tutti)?( cookies)?[.!]*$/i;
   // What a consent popup talks about.
   const TOPIC = /cookie|consent|gdpr|datenschutz|einwilligung|consentement|consentimiento|consenso|toestemming|privacidade|zgod|samtycke|samtykke|rgpd|dsgvo/i;
   // Where else a popup may be: anything named after cookies or consent, and dialogs.
@@ -74,17 +75,23 @@
     try { b.click(); } catch (e) {}
   };
 
-  // A popup that's gone away may have left the page unable to scroll.
-  const unlockScrolling = () => {
-    for (const el of [document.documentElement, document.body]) {
-      if (el && getComputedStyle(el).overflowY === "hidden") el.style.setProperty("overflow", "auto", "important");
+  // A popup that's gone away may have left the page unable to scroll. Only what the popup locked is unlocked (what
+  // was locked just before Raven acted on it and still is), and gently, so the site can lock it again later for its
+  // own menus.
+  const locked = () => [document.documentElement, document.body].filter((el) => el && getComputedStyle(el).overflowY === "hidden");
+  const unlockLater = (before) => setTimeout(() => {
+    for (const el of before) {
+      if (!el.isConnected || getComputedStyle(el).overflowY !== "hidden") continue;
+      el.style.setProperty("overflow", "auto");
+      if (getComputedStyle(el).overflowY === "hidden") el.style.setProperty("overflow", "auto", "important");
     }
-  };
+  }, 800);
   const hide = (el, cmp) => {
     if (done.has(el)) return;
     done.add(el);
+    const before = locked();
     el.style.setProperty("display", "none", "important");
-    unlockScrolling();
+    unlockLater(before);
     tell("hidden", cmp);
   };
 
@@ -95,6 +102,12 @@
       if (pos === "fixed" || pos === "sticky") return p;
     }
     return null;
+  };
+
+  const isPopup = (stays, outer, text) => {
+    if (stays.matches("header, nav, main, [role=navigation], [role=banner], [role=main]")) return false;
+    if (stays.querySelector("nav, [role=navigation], main, [role=main]")) return false;
+    return stays === outer || (stays.innerText || "").length <= text.length * 1.2 + 40;
   };
 
   // A reject button among [root]'s buttons, by its words.
@@ -121,10 +134,11 @@
         }
         if (!b) b = rejectByWords(root);
         if (b) {
+          const before = locked();
           press(b);
           done.add(box);
           tell("rejected", k.name);
-          setTimeout(unlockScrolling, 800);
+          unlockLater(before);
           return true;
         }
         if (k.open) {
@@ -154,18 +168,22 @@
       for (let p = el.parentElement; p; p = p.parentElement) if (p.matches && p.matches(LIKELY)) outer = p;
       if (seen.has(outer) || done.has(outer)) continue;
       seen.add(outer);
-      const text = (outer.innerText || "").slice(0, 4000);
+      // A popup is short; a page-sized box that mentions cookies somewhere isn't one.
+      const text = outer.innerText || "";
       if (text.length > 4000 || !TOPIC.test(text)) continue;
       const b = rejectByWords(outer);
       if (b) {
+        const before = locked();
         press(b);
         done.add(outer);
         tell("rejected", "words");
-        setTimeout(unlockScrolling, 800);
+        unlockLater(before);
         return true;
       }
+      // Hidden only when what stays on screen is the popup itself, never a site's header, menu or main part that
+      // happens to hold a cookie note.
       const stays = pinned(outer);
-      if (stays && hasYes(outer)) { hide(stays, "words"); return true; }
+      if (stays && hasYes(outer) && isPopup(stays, outer, text)) { hide(stays, "words"); return true; }
     }
     return false;
   };

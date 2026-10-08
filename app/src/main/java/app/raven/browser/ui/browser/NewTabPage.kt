@@ -99,11 +99,15 @@ fun siteLabel(hostOrUrl: String): String {
     return names[main] ?: main.replaceFirstChar { it.uppercase() }
 }
 
+/** Whether the browser (and so a home screen in it) can be seen right now, rather than a screen or a lock over it. */
+val LocalBrowserShown = androidx.compose.runtime.compositionLocalOf { true }
+
 /** The home screen's sky, also drawn behind the address bar so the two read as one. */
 @Composable
 fun homeSky(c: Container, private: Boolean): Modifier {
     val prefs by c.settings.prefs.collectAsState()
-    val moving = prefs.movingSky && !Raven.reduceMotion
+    // A live wallpaper moves only while the home screen can be seen (not under Settings, the Tabs screen or a lock).
+    val moving = prefs.movingSky && !Raven.reduceMotion && LocalBrowserShown.current
     return if (private) {
         LaunchedEffect(Unit) { c.sky.loadEclipse() }
         val image by c.sky.eclipse.collectAsState()

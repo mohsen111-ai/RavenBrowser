@@ -9,7 +9,8 @@ how to build it, and what each emulator test script covers.
 
 - **Discuss first, build only on "go".** When they say "don't create anything", or are just asking or
   discussing, only answer. Don't start building, pushing or testing until they say so.
-- **Tell them before you start anything**, in a few words, and report what happened when it's done.
+- **No progress messages.** Write only when everything is finished, or when they ask. Keep it short, without
+  details ("Stop sending me messages, only send when everything is finished or when I ask. I don't need details").
 - **Plain, simple English.** Short sentences, no jargon. When they don't understand something, explain it
   again with an everyday example instead of more detail. They read on a phone.
 - **Make the APK only when they ask for it.** Starting `Build Raven` publishes a release; once a build ran
@@ -65,12 +66,18 @@ Kotlin + Jetpack Compose on GeckoView 157 (`app/build.gradle.kts`). Package `app
 ## Testing
 
 - **Unit tests and screen pictures:** `./gradlew :app:testDebugUnitTest` (pictures in `app/build/shots`).
-- **Emulator:** `Smoke test (Android 16 emulator)`, started by hand. Input `scripts`, default
-  `smoke media video tabs back deep raven more`. Results (screenshots, `steps.txt`, logs, crash and ANR
-  reports from `final.sh`) are pushed to a `smoke-N` branch. Read them there.
-- **Minutes are free here** (public repository) and the runners have 4 cores and 16 GB, against 2 and 8 in
-  the old private one. Planned: split the scripts over several jobs that run at once, and give the
-  emulator more cores and memory. A full run used to take 2 to 2½ hours.
+- **Emulator:** `Smoke test (Android 16 emulator)`, started by hand (the GitHub tools can dispatch it). Input
+  `scripts`: groups split by commas, one emulator each, all at once after one build; default
+  `smoke, media video, tabs back, deep, raven, more, update, recents, pull`. Results (screenshots,
+  `steps.txt`, logs, crash and ANR reports from `final.sh`) meet on a `smoke-N` branch, a folder per group.
+- **Minutes are free here** (public repository); runners have 4 cores and 16 GB, and each emulator gets 4 cores
+  and 8 GB. A group takes 15 to 45 minutes.
+- `update.sh` walks through the last update; `recents.sh` leaves through Recent Apps and comes back in every way
+  Android can treat Raven meanwhile (also stopping the engine's helper processes with adb root, as strict phones
+  do); `pull.sh` checks pull down to refresh. `setup.sh` readies each fresh emulator.
+- **Crash reports from the phone:** Settings, About Raven, "Copy crash report" holds Java crashes and, from
+  Android's own records (ApplicationExitInfo), every recent stop of Raven or its engine helpers, with thread
+  stacks for a freeze. Ask the owner to paste it when something crashes on the phone.
 - After starting a run, set a backup reminder for yourself, so a finished run is never left unread.
 - **Lessons the tests taught:**
   - uiautomator needs a still screen: a test page must not keep changing its text, or dumps fail.
@@ -80,19 +87,24 @@ Kotlin + Jetpack Compose on GeckoView 157 (`app/build.gradle.kts`). Package `app
     on resume (`syncResumeResizeCompositor`) because the emulator draws without a graphics chip. Neither
     is a Raven bug; anything else in `final.sh` is.
   - Things only the owner can test: a real Proton VPN connection and the fingerprint lock.
+  - Android shows a one-time "Viewing full screen" note the first time bars hide; `setup.sh` marks it as seen.
+  - Android lowers the priority of Gecko's helper processes (`:gpu`, `:tab*`) as soon as Raven leaves the
+    screen, so a strict phone can stop them while Raven runs on. `TabManager.recover` and `onAppShown` reopen
+    every page on screen when Raven is back.
 
-## Known bugs to fix
+## Known bugs
 
-1. **Split screen:** the address bar only works for the top half; the bottom half can't be refreshed or
-   sent to another address.
-2. **Video full screen in split screen** doesn't work.
-3. **Video full screen in the floating tab:** the window turns wide for a split second, then the page comes
-   back. `Float.kt` shows the page's fullscreen as "video only" in the window, and something exits
-   fullscreen at once.
-   **Fix for 2 and 3:** the video fills the whole phone screen (sideways for a wide video), and Back
-   returns it to its half or its floating window.
+The three earlier ones (split screen's bottom half bar, video fullscreen from a half or the floating tab) are
+fixed. Reported by the owner after 1.0.36 and fixed in code, not yet confirmed on the phone: a black screen then
+a crash on coming back from Recent Apps (likely cause: the phone stops the engine's helpers while Raven is away;
+pages on screen now reopen on return, and the floating tab's texture pauses while away). If it happens again, ask
+for the crash report (above). Added on request: pull down to refresh (`ui/browser/Pull.kt`,
+`engine/PullGesture.kt`, Firefox's rule from GeckoView's touch answer).
 
-## The next update: agreed, waiting for "go"
+## The update after 1.0.36: built (the owner said "go")
+
+All eleven items below are built; the owner hasn't tried them on the phone yet. Still open: the owner's look at the
+20 new wallpapers (any to swap), and whether Snow, Aurora, Clouds, Still water and Feather should move too.
 
 1. **Undo after closing a tab:** a "Tab closed · Undo" bar for a few seconds, also after Close all.
 2. **VPN per site:** the owner picks a country for each site; other sites follow the normal VPN setting.
