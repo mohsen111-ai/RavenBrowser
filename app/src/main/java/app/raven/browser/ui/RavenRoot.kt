@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.clickable
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
@@ -308,8 +309,11 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
             // On the Tabs screen it sits above the New tab button, so a quick tap there never lands on Undo.
             if (!ui.pip) SnackbarHost(ui.snackbar, Modifier.align(Alignment.BottomCenter).navigationBarsPadding().padding(16.dp).padding(bottom = if (ui.screen == Screen.Tabs) 72.dp else 0.dp)) { data ->
                 // Moonlight pill; an action (Undo, Folder) sits at its end.
+                // "Downloading <file>": a tap on it opens the Downloads page.
+                val toDownloads = data.visuals.message.startsWith("Downloading ")
                 Snackbar(
                     data,
+                    modifier = if (toDownloads) Modifier.clickable { data.dismiss(); ui.go(Screen.Downloads) } else Modifier,
                     shape = androidx.compose.foundation.shape.CircleShape,
                     containerColor = Space.Text,
                     contentColor = Space.OnAccent,

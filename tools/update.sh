@@ -212,6 +212,17 @@ for q in "permissions:Site permissions" "links:Open links in apps" "look:Look" "
   if setting "${q%%:*}" "${q#*:}"; then shot "u43_page_${q%%:*}"; leave_settings; else log "settings page not found: ${q#*:}"; fi
 done
 
+# 5. Downloads: tapping the "Downloading ..." pill opens the Downloads page; tapping a finished file opens it, or (when
+# no app can) shows the Downloads folder in the file manager instead of doing nothing.
+newtab; sleep 3
+tap "Address"; sleep 2; $A shell input text "'$PAGES/sample.bin'"; sleep 1; $A shell input keyevent 66
+dump; python3 tools/find.py "$OUT/ui.xml" "^Downloading " > /dev/null && { xy=$(python3 tools/find.py "$OUT/ui.xml" "^Downloading "); $A shell input tap $xy; log "tapped the Downloading pill at $xy"; } || log "the Downloading pill was already gone"
+sleep 3; shot u44_downloads_from_pill
+log "tapping the Downloading pill: Downloads page $(has "=Downloads") $(has "sample.bin") (expect yes yes)"
+tap "^sample.bin"; sleep 4; shot u45_opened_file
+log "tapping the finished file: front app $($A shell dumpsys window | grep -m1 mCurrentFocus | grep -c "$APP") (expect 0: another app, the file manager, came to the front)"
+$A shell input keyevent 4; sleep 2; front; sleep 2
+
 log "new crashes: $(( $(fatals) - f0 ))"
 $A logcat -d > $OUT/logcat-update.txt
 crashes $OUT/logcat-update.txt > $OUT/crashes-update.txt

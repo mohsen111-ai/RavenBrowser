@@ -96,6 +96,18 @@ fun DownloadsScreen(c: Container, ui: UiState, onBack: () -> Unit) {
     }
 }
 
+/** Opens a finished file with the app for its type; if no app can, shows the Downloads folder in the file manager. */
+private fun openDownloaded(context: android.content.Context, c: Container, item: DownloadItem) {
+    try {
+        context.startActivity(c.downloads.openIntent(item))
+    } catch (e: Exception) {
+        android.widget.Toast.makeText(context, "No app can open this file. Showing your Downloads folder.", android.widget.Toast.LENGTH_LONG).show()
+        runCatching {
+            context.startActivity(android.content.Intent(android.app.DownloadManager.ACTION_VIEW_DOWNLOADS).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK))
+        }
+    }
+}
+
 @Composable
 private fun DownloadRow(c: Container, item: DownloadItem) {
     val context = LocalContext.current
@@ -122,7 +134,7 @@ private fun DownloadRow(c: Container, item: DownloadItem) {
             .clip(RoundedCornerShape(20.dp))
             .background(Space.Surface)
             .border(1.dp, Color(0x0FFFFFFF), RoundedCornerShape(20.dp))
-            .clickable(enabled = item.status == DownloadStatus.DONE) { runCatching { context.startActivity(c.downloads.openIntent(item)) } }
+            .clickable(enabled = item.status == DownloadStatus.DONE) { openDownloaded(context, c, item) }
             .padding(start = 12.dp, end = 8.dp, top = 12.dp, bottom = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
