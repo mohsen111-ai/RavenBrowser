@@ -61,6 +61,11 @@ class TabManager(
     val selected: BrowserTab? get() = _tabs.value.firstOrNull { it.id == _selectedId.value }
 
     val events = MutableSharedFlow<TabEvent>(extraBufferCapacity = 16)
+    /**
+     * The tab whose video or page is fullscreen. It can be any tab on screen: the selected one, a half of split screen
+     * or the floating tab. The screen then shows just that tab, over everything, and gives it back when it leaves.
+     */
+    val fullscreenId = MutableStateFlow<String?>(null)
     val prompts = MutableStateFlow<List<UiPrompt>>(emptyList())
 
     /** Called with how many more requests uBlock Origin blocked (feeds "blocked today"). */
@@ -301,6 +306,7 @@ class TabManager(
         if (otherHalf != null) { _split.value = null; find(otherHalf)?.let { setMuted(it, false) } }
         dropPrompts(setOf(tab.id))
         media.forget(tab)
+        leftFullscreen(tab)
         Displays.release(tab.session)
         if (tab.session.isOpen) tab.session.close()
         val rest = list - tab
@@ -323,7 +329,7 @@ class TabManager(
         if (_floatingId.value in goneIds) { _floatingId.value = null; floatParked.value = false }
         _split.value?.let { s -> if (s.top in goneIds || s.bottom in goneIds) { _split.value = null; keep.forEach { setMuted(it, false) } } }
         dropPrompts(goneIds)
-        gone.forEach { media.forget(it); Displays.release(it.session); if (it.session.isOpen) it.session.close() }
+        gone.forEach { media.forget(it); leftFullscreen(it); Displays.release(it.session); if (it.session.isOpen) it.session.close() }
         _tabs.value = keep
         if (keep.none { it.id == _selectedId.value }) {
             // Closing every normal tab never drops you into a private one: a fresh new tab instead.
@@ -353,8 +359,17 @@ class TabManager(
     /** The system is short of memory: everything but the tab on screen sleeps, private ones too. */
     fun sleepAllBackground() = sleepIdleTabs(1, includePrivate = true)
 
+    /** The tab's session is closing: whatever was fullscreen in it is over. */
+    private fun leftFullscreen(tab: BrowserTab) {
+        tab.fullscreen.value = false
+        tab.wideVideo.value = null
+        tab.videoSize.value = null
+        if (fullscreenId.value == tab.id) fullscreenId.value = null
+    }
+
     private fun sleep(tab: BrowserTab) {
         dropPrompts(setOf(tab.id))
+        leftFullscreen(tab)
         tab.playing.value = false
         media.forget(tab)
         tab.media = null
@@ -729,7 +744,11 @@ class TabManager(
 
             override fun onFullScreen(session: GeckoSession, fullScreen: Boolean) {
                 tab.fullscreen.value = fullScreen
-                if (!fullScreen) { tab.wideVideo.value = null; tab.videoSize.value = null }
+                if (fullScreen) fullscreenId.value = tab.id
+                else {
+                    tab.wideVideo.value = null; tab.videoSize.value = null
+                    if (fullscreenId.value == tab.id) fullscreenId.value = null
+                }
             }
 
             override fun onCrash(session: GeckoSession) = recover(tab)
@@ -839,6 +858,7 @@ class TabManager(
     private fun recover(tab: BrowserTab) {
         main.post {
             dropPrompts(setOf(tab.id))
+            leftFullscreen(tab)
             // Let the page view go first, so the reopened session can be shown again.
             Displays.release(tab.session)
             if (tab.session.isOpen) tab.session.close()

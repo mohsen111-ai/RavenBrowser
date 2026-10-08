@@ -80,11 +80,12 @@ fun FloatingTab(c: Container, ui: UiState) {
     val tab = tabs.firstOrNull { it.id == id } ?: return
     val parked by c.tabs.floatParked.collectAsState()
     val fullscreen by tab.fullscreen.collectAsState()
-    val videoSize by tab.videoSize.collectAsState()
     val muted by tab.muted.collectAsState()
     val url by tab.url.collectAsState()
     val title by tab.title.collectAsState()
     KeepShown(tab, shown = !parked)
+    // The page's own fullscreen fills the whole screen (BrowserScreen shows it); the window comes back afterwards.
+    if (fullscreen) return
 
     // A new floating tab, or a new page in it: back to the whole page.
     LaunchedEffect(tab.id, url) { ui.floatVideoOnly = false }
@@ -103,9 +104,8 @@ fun FloatingTab(c: Container, ui: UiState) {
         onDispose { c.engine.helper.onVideoOnly = null }
     }
 
-    // The page's own fullscreen (its video player's button) also shows just the video, in the window.
-    val wide = ui.floatVideoOnly || fullscreen
-    val aspect = (if (fullscreen) videoSize?.let { (w, h) -> if (h > 0) w.toFloat() / h else null } else null) ?: ui.floatAspect
+    val wide = ui.floatVideoOnly
+    val aspect = ui.floatAspect
     // Reads the title, so the window's name follows its page.
     val label = title.let { tab.displayTitle }
     val letter = tab.host.ifBlank { label }.take(1).uppercase()
@@ -194,7 +194,6 @@ fun FloatingTab(c: Container, ui: UiState) {
                 },
                 onToPage = {
                     controls = false
-                    if (fullscreen) tab.session.exitFullScreen()
                     c.engine.helper.videoOnly(tab.session, false)
                     ui.floatVideoOnly = false
                 },
