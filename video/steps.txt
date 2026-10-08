@@ -1,0 +1,30 @@
+18:45:12 ---- setup
+Performing Streamed Install
+Success
+18:45:53 tap 'Not now' at 160 574
+18:46:24 Raven is in front
+18:46:24 screenshot 00_setup
+18:46:24 ---- setup done
+18:46:24 ---- video
+18:46:31 tap 'open tabs' at 240 63
+18:46:36 tap '^Tabs · ' at 65 136
+18:46:39 tap '!=New tab' at 141 575
+18:46:44 tap 'Address' at 139 63
+18:46:48 go http://10.0.2.2:8000/video.html
+18:46:58 tap '=Play' at 41 255
+18:47:02 screenshot v01_playing
+18:47:06 video: state: paused | fullscreen: no | screen: portrait-primary
+18:47:08 tap '=Fullscreen' at 230 339
+18:47:18 screenshot v02_fullscreen
+18:47:22 fullscreen: screen 640x320 (expect wider than tall) | no bar (expect no bar)
+18:47:42 screenshot v03_back_to_fullscreen
+18:47:46 back in the app: screen 640x320 (expect still wider than tall) | no bar (expect no bar: the video is still fullscreen)
+18:47:51 screenshot v04_after_back
+18:47:55 after Back: screen 320x640 (expect taller than wide) | bar shown (expect bar shown) | state: paused | fullscreen: no | screen: portrait-primary
+18:47:57 tap '=Fullscreen' at 230 339
+18:48:03 screenshot v05_fullscreen_again
+18:48:06 screenshot v06_out_again
+18:48:08 second fullscreen: 640x320 then 320x640 | bar shown (expect bar shown)
+18:48:13 video: new crashes: 0
+18:48:13 ---- video done
+18:48:13 reports: ANR 0, crash 0, native crash 0 (all apps)

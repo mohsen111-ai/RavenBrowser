@@ -1,0 +1,258 @@
+18:46:57 ---- setup
+Performing Streamed Install
+Success
+18:47:36 tap 'Not now' at 160 574
+18:48:06 Raven is in front
+18:48:06 screenshot 00_setup
+18:48:06 ---- setup done
+18:48:06 ---- update
+18:48:13 tap 'open tabs' at 240 63
+18:48:18 tap '^Tabs · ' at 65 136
+18:48:21 tap '!=New tab' at 141 575
+18:48:26 tap 'Address' at 139 63
+18:48:29 go example.com
+18:48:40 tap 'open tabs' at 240 63
+18:48:45 tap '^Tabs · ' at 65 136
+18:48:48 tap '!=New tab' at 141 575
+18:48:53 tap 'Address' at 139 63
+18:48:56 go example.org
+18:49:06 tap 'open tabs' at 240 63
+18:49:12 tap '^Tabs · ' at 65 136
+18:49:15 tabs before closing: Tabs · 3
+18:49:17 tap '=Close tab: Example Domain' at 278 231
+18:49:23 screenshot u02_undone
+18:49:23 after closing one: Undo offered: yes (expect yes)
+18:49:27 after Undo: Tabs · 3 (expect the count before) | Example Domain back: yes (expect yes)
+18:49:29 tap '=Close all' at 268 70
+18:49:33 tap '!=Close all' at 254 382
+18:49:40 screenshot u04_all_back
+18:49:40 after Close all: 'N tabs closed' bar shown: yes (expect yes)
+18:49:42 after Undo: Tabs · 3 (expect the count before)
+18:49:48 tap 'open tabs' at 240 63
+18:49:53 tap '^Tabs · ' at 65 136
+18:49:56 tap '!=New tab' at 141 575
+18:50:01 tap 'Address' at 139 63
+18:50:05 go http://10.0.2.2:8000/long.html
+18:50:15 tap 'open tabs' at 240 63
+18:50:20 tap '^Tabs · ' at 65 136
+18:50:23 tap '!=New tab' at 141 575
+18:50:28 tap 'Address' at 139 63
+18:50:31 go example.com
+18:50:41 tap 'Menu' at 282 63
+18:50:48 tap '=Split screen' at 122 259
+18:50:52 tap 'Split with Raven long page' at 160 386
+18:50:58 screenshot u05_split_bars
+18:51:04 split: bars 2 (expect 2: one per half) | top Top half: Example Domain | bottom Bottom half: Raven long page
+18:51:09 screenshot u06_bottom_editing
+18:51:18 screenshot u07_bottom_moved
+18:51:22 bottom half after typing in its bar: Bottom half: Example Domain (expect Example Domain, at example.org) | top: Top half: Example Domain (expect Example Domain)
+18:51:24 bottom half's address: Address example.org. Tap to search or edit (expect it)
+18:51:32 bottom half back on the long page: Bottom half: Raven long page (expect Raven long page)
+18:51:34 tap '!=Reload' at 211 351
+18:51:40 bottom half reloaded: Bottom half: Raven long page (expect Raven long page)
+18:51:43 screenshot u08_scrolled_down
+18:51:45 after scrolling the bottom half down: bars 1 (expect 1: its bar stepped aside)
+18:51:47 screenshot u09_scrolled_up
+18:51:50 after scrolling it up: bars 2 (expect 2)
+18:51:52 tap 'Menu' at 295 48
+18:51:58 tap 'End split screen' at 122 259
+18:52:03 tap 'open tabs' at 240 63
+18:52:08 tap '^Tabs · ' at 65 136
+18:52:11 tap '!=New tab' at 141 575
+18:52:16 tap 'Address' at 139 63
+18:52:20 go http://10.0.2.2:8000/video.html?other
+18:52:30 tap 'open tabs' at 240 63
+18:52:35 tap '^Tabs · ' at 65 136
+18:52:38 tap '!=New tab' at 141 575
+18:52:43 tap 'Address' at 139 63
+18:52:47 go http://10.0.2.2:8000/video.html
+18:52:57 tap 'Menu' at 282 63
+18:53:03 tap '=Split screen' at 122 259
+18:53:07 tap 'Split with Raven video test' at 160 266
+18:53:15 tap '=Play' at 41 225
+18:53:30 tap '!=Play' at 83 610
+18:53:44 tap '=Fullscreen' at 230 309
+18:53:49 screenshot u10_split_fullscreen
+18:54:36 split half fullscreen: screen 320x640 (expect taller than wide) | halves yes yes (expect yes yes: the other half is still there) | bars 2 (expect 1: the full half's bar stepped aside) | page: - (expect fullscreen: yes)
+18:54:37 raven:  (expect none: only the whole-phone kind is logged)
+18:54:41 screenshot u11_split_back
+18:55:26 after Back: halves yes yes (expect yes yes) | bars 2 (expect 2) | page: - (expect fullscreen: no)
+18:55:37 tap 'Menu' at 295 48
+18:55:43 tap 'End split screen' at 122 259
+18:56:29 NOT FOUND: 'open tabs'
+18:57:15 NOT FOUND: 'Address'
+18:57:15 go http://10.0.2.2:8000/video.html
+18:58:15 NOT FOUND: '=Play'
+18:59:02 NOT FOUND: 'Menu'
+18:59:06 screenshot u12_floating_video
+18:59:48 NOT FOUND: '=Fullscreen'
+18:59:54 screenshot u13_float_fullscreen
+19:00:07 floating tab fullscreen: screen 320x640 (expect wider than tall) | page: - (expect fullscreen: yes)
+19:00:07 raven:  (expect '(floating tab)')
+19:00:21 fullscreen kept after 3 seconds: - (expect fullscreen: yes: before, it left fullscreen at once)
+19:00:26 screenshot u14_float_back
+19:00:28 after Back: in its window again no (expect yes)
+19:00:32 tap 'open tabs' at 240 63
+19:00:37 tap '^Tabs · ' at 65 136
+19:00:40 tap '!=New tab' at 141 575
+19:00:45 tap 'Address' at 139 63
+19:00:49 go http://10.0.2.2:8000/cookies.html
+19:01:01 screenshot u15_cookie_popup
+19:01:03 cookie popup: state: rejected (expect state: rejected) | raven: cookie popup: rejected (OneTrust)
+19:01:05 tap 'Address' at 118 63
+19:01:08 go example.com
+19:01:19 tap 'Menu' at 282 63
+19:01:25 tap 'Full screen for pages' at 122 357
+19:01:28 screenshot u16_full_screen
+19:01:30 full screen: address bar no (expect no)
+19:01:32 screenshot u17_bars_peek
+19:01:34 after a swipe down from the top: address bar yes (expect yes)
+19:01:42 a few seconds later: address bar no (expect no)
+19:01:45 tap 'Menu' at 282 39
+19:01:51 tap 'Full screen for pages' at 122 357
+19:01:54 screenshot u18_full_screen_off
+19:01:56 full screen off: address bar yes (expect yes)
+19:01:59 tap 'open tabs' at 240 63
+19:02:04 tap '^Tabs · ' at 65 136
+19:02:07 tap '!=New tab' at 141 575
+19:02:12 tap 'Address' at 139 63
+19:02:15 go http://10.0.2.2:8000/jar.html?set=personal
+19:02:25 personal tab: jar: who=personal (expect who=personal)
+19:02:28 tap 'Menu' at 282 63
+19:02:34 tap 'Settings' at 197 357
+19:02:39 tap 'Search settings' at 174 116
+19:02:45 tap '^Profiles' at 56 182
+19:02:47 screenshot u19_profiles_page
+19:02:49 tap '=Add a profile' at 107 360
+19:02:53 tap '=Name' at 59 330
+19:02:58 tap '=Add' at 267 289
+19:03:00 screenshot u20_profile_added
+19:03:02 profiles: Work added yes (expect yes)
+19:03:09 tap 'open tabs' at 240 63
+19:03:12 screenshot u21_tabs_profiles
+19:03:16 tabs screen: profile chips yes yes (expect yes yes)
+19:03:18 tap '^Profile Work' at 186 193
+19:03:22 tap '!=New tab' at 141 575
+19:03:27 tap 'Address' at 139 63
+19:03:31 go http://10.0.2.2:8000/jar.html
+19:03:39 screenshot u22_work_jar
+19:03:41 work tab: jar: empty (expect empty: a profile keeps its own cookies)
+19:03:44 hold at 113 261
+19:03:47 screenshot u23_link_other_profile
+19:03:49 long press: Open in Personal offered yes (expect yes)
+19:03:55 tap 'open tabs' at 240 63
+19:04:00 tap '^Profile Personal' at 73 193
+19:04:04 tap '=Done' at 277 575
+19:04:09 back in Personal: jar: who=personal (expect who=personal)
+19:04:12 tap 'Menu' at 282 63
+19:04:18 tap 'Settings' at 197 357
+19:04:23 tap 'Search settings' at 174 116
+19:04:29 tap '^Lock' at 152 116
+19:04:31 screenshot u24_lock_page
+19:04:33 tap '!=Lock Raven' at 68 230
+19:04:37 screenshot u25_asks_pin
+19:04:44 screenshot u25b_lock_on
+19:04:46 lock on: no (expect yes: 'Lock after' shows once it's on)
+19:05:01 NOT FOUND: '=Immediately'
+19:05:14 screenshot u26_locked
+19:05:16 after leaving and coming back: in front app.raven.browser/app.raven.browser.MainActivity (expect the PIN screen over Raven's lock) | lock screen no (expect yes, or the PIN screen over it)
+19:05:23 screenshot u27_unlocked
+19:05:28 after the PIN: locked no (expect no) | address bar no (expect yes)
+19:05:43 NOT FOUND: 'Menu'
+19:05:58 NOT FOUND: '!=Lock Raven'
+19:06:13 tap 'open tabs' at 240 63
+19:06:24 tap 'Menu' at 282 63
+19:06:30 tap 'Settings' at 197 357
+19:06:35 tap 'Search settings' at 174 116
+19:06:42 tap '^Backup and restore' at 94 182
+19:06:44 screenshot u28_backup_page
+19:06:46 tap '^Back up' at 91 243
+19:06:50 tap 'Password (8 or more' at 148 328
+19:06:53 tap 'The same again' at 91 315
+19:06:54 screenshot u29_backup_password
+19:06:57 tap '=Choose where to save' at 209 391
+19:07:01 screenshot u30_save_picker
+19:07:11 screenshot u31_backup_saved
+19:07:11 backup file: 0 in Downloads (expect 1)
+19:07:26 NOT FOUND: '^Restore from a backup'
+19:07:51 NOT FOUND: '^Raven backup'
+19:08:10 NOT FOUND: '=Password'
+19:08:26 NOT FOUND: '=Open'
+19:08:32 screenshot u32_restore_question
+19:08:36 restore: no (expect yes) | -
+19:08:51 NOT FOUND: '=Restore and restart'
+19:09:29 screenshot u33_after_restore
+19:09:44 NOT FOUND: 'open tabs'
+19:09:49 tabs after restoring: - (expect as before: Tabs · 9)
+19:10:08 NOT FOUND: 'open tabs'
+19:10:26 NOT FOUND: 'Address'
+19:10:26 go example.com
+19:10:50 NOT FOUND: 'Menu'
+19:11:07 NOT FOUND: 'Add your first location'
+19:11:32 NOT FOUND: 'raven-NL-1'
+19:11:36 screenshot u34_vpn_sheet
+19:11:52 NOT FOUND: '^This site: example.com'
+19:11:54 screenshot u35_site_choice
+19:12:09 NOT FOUND: '!Netherlands'
+19:12:14 screenshot u36_site_country
+19:12:16 site's own country: - | raven:  (expect on for a site with its own country)
+19:12:25 tap 'Address' at 139 63
+19:12:28 go example.org
+19:12:40 another site: raven:  (expect off for the switch)
+19:12:42 tap 'Menu' at 282 61
+19:12:49 tap 'Settings' at 197 357
+19:12:54 tap 'Search settings' at 174 116
+19:13:00 tap '^Wallpapers' at 69 173
+19:13:06 tap '!=New wallpaper each time' at 268 201
+19:13:12 tap '=Campfire' at 93 612
+19:13:14 screenshot u37_campfire_chosen
+19:13:21 tap 'open tabs' at 240 63
+19:13:26 tap '^Tabs · ' at 65 136
+19:13:30 tap '!=New tab' at 141 575
+19:13:36 live wallpaper moving: yes (expect yes)
+19:13:38 tap 'Menu' at 282 63
+19:13:44 tap 'Settings' at 197 357
+19:13:49 tap 'Search settings' at 174 116
+19:13:56 tap '^Wallpapers' at 69 173
+19:14:02 tap '!=New wallpaper each time' at 268 198
+19:14:10 tap 'Menu' at 282 63
+19:14:16 tap 'Settings' at 197 357
+19:14:20 screenshot u39_settings_main
+19:14:22 screenshot u40_settings_main_more
+19:14:37 NOT FOUND: 'Search settings'
+19:14:41 screenshot u41_settings_search
+19:14:57 NOT FOUND: '^Cookie popups'
+19:14:59 screenshot u42_cookie_page
+19:15:08 tap 'Menu' at 282 63
+19:15:14 tap 'Settings' at 197 357
+19:15:20 tap 'Search settings' at 174 116
+19:15:26 tap '^Site permissions' at 84 182
+19:15:28 screenshot u43_page_permissions
+19:15:35 tap 'Menu' at 282 63
+19:15:41 tap 'Settings' at 197 357
+19:15:46 tap 'Search settings' at 174 116
+19:15:53 tap '^Open links in apps' at 90 182
+19:15:55 screenshot u43_page_links
+19:16:02 tap 'Menu' at 282 63
+19:16:08 tap 'Settings' at 197 357
+19:16:13 tap 'Search settings' at 174 116
+19:16:20 tap '^Look' at 152 116
+19:16:22 screenshot u43_page_look
+19:16:29 tap 'Menu' at 282 63
+19:16:35 tap 'Settings' at 197 357
+19:16:40 tap 'Search settings' at 174 116
+19:16:47 tap '^About Raven' at 72 182
+19:16:49 screenshot u43_page_about
+19:16:56 tap 'open tabs' at 240 63
+19:17:01 tap '^Tabs · ' at 65 136
+19:17:04 tap '!=New tab' at 141 575
+19:17:09 tap 'Address' at 139 63
+19:17:15 tapped the Downloading pill at 121 564
+19:17:19 screenshot u44_downloads_from_pill
+19:17:23 tapping the Downloading pill: Downloads page yes yes (expect yes yes)
+19:17:25 tap '^sample.bin' at 124 315
+19:17:29 screenshot u45_opened_file
+19:17:29 tapping the finished file: front app 0 (expect 0: another app, the file manager, came to the front)
+19:17:35 new crashes: 0
+19:17:36 ---- update done
+19:17:36 reports: ANR 0, crash 0, native crash 0 (all apps)
