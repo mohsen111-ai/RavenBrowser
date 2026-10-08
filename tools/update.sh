@@ -95,7 +95,7 @@ menu "End split screen"; sleep 3
 newtab; sleep 3; open_page "$PAGES/video.html"
 tap "=Play"; sleep 2; pause
 menu "Float this tab"; sleep 4; shot u12_floating_video
-mark float-fullscreen; tap "=Fullscreen"; sleep 5; shot u13_float_fullscreen
+mark float-fullscreen; tap "!=Fullscreen"; sleep 5; shot u13_float_fullscreen
 pause
 log "floating tab fullscreen: screen $(dims u13_float_fullscreen) (expect wider than tall) | page: $(text "state: ") (expect fullscreen: yes)"
 log "raven: $(since float-fullscreen | grep -m1 -o 'fullscreen: [0-9a-f]* *(*[a-z ]*)*') (expect '(floating tab)')"
