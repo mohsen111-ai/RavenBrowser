@@ -40,13 +40,16 @@ newtab; sleep 3; open_page example.com
 newtab; sleep 3; open_page example.org
 tap "open tabs"; sleep 3; tap "^Tabs · "; sleep 1
 log "tabs before closing: $(text "Tabs · ")"
-tap "=Close tab: Example Domain"; sleep 2; shot u01_tab_closed_undo
-log "after closing one: $(text "Tabs · ") | Undo offered: $(has "=Undo") (expect yes)"
-tap "=Undo"; sleep 3; shot u02_undone
+tap "=Close tab: Example Domain"; sleep 1
+# The Undo bar stays a few seconds: look for it first, then take the picture.
+dump; xy=$(python3 tools/find.py "$OUT/ui.xml" "=Undo") && offered=yes || offered=no
+[ $offered = yes ] && $A shell input tap $xy; sleep 3; shot u02_undone
+log "after closing one: Undo offered: $offered (expect yes)"
 log "after Undo: $(text "Tabs · ") (expect the count before) | Example Domain back: $(has "^Example Domain") (expect yes)"
-tap "=Close all"; sleep 2; tap "!=Close all"; sleep 2; shot u03_all_closed
-log "after Close all: $(text "Tabs · ") | $(text "tabs closed") (expect 'N tabs closed')"
-tap "=Undo"; sleep 3; shot u04_all_back
+tap "=Close all"; sleep 2; tap "!=Close all"; sleep 1
+dump; closed=$(python3 tools/find.py "$OUT/ui.xml" "tabs closed" > /dev/null && echo yes || echo no)
+xy=$(python3 tools/find.py "$OUT/ui.xml" "=Undo") && $A shell input tap $xy; sleep 3; shot u04_all_back
+log "after Close all: 'N tabs closed' bar shown: $closed (expect yes)"
 log "after Undo: $(text "Tabs · ") (expect the count before)"
 back
 
@@ -169,8 +172,9 @@ tap "open tabs"; sleep 3; log "tabs after restoring: $(text "Tabs · ") (expect 
 # 10. VPN per site (with a made-up location: the emulator can't reach Proton, but the tunnel still comes up).
 key() { head -c 32 /dev/urandom | base64; }
 printf '[Interface]\nPrivateKey = %s\nAddress = 10.2.0.2/32\nDNS = 10.2.0.1\n\n[Peer]\nPublicKey = %s\nAllowedIPs = 0.0.0.0/0, ::/0\nEndpoint = 10.0.2.2:51820\n' \
-  "$(key)" "$(key)" > $OUT/raven-NL-1.conf
-$A push $OUT/raven-NL-1.conf /sdcard/Download/raven-NL-1.conf > /dev/null
+  "$(key)" "$(key)" > /tmp/raven-NL-1.conf
+# Kept out of the results folder: even a made-up location file isn't published with the screenshots.
+$A push /tmp/raven-NL-1.conf /sdcard/Download/raven-NL-1.conf > /dev/null; rm -f /tmp/raven-NL-1.conf
 newtab; sleep 3; open_page example.com
 menu "VPN:"; sleep 2
 tap "Add your first location"; sleep 4

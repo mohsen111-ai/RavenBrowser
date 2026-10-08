@@ -7,6 +7,8 @@ source tools/lib.sh
 log "---- setup"
 $A install -r raven-x86_64.apk | tee -a $OUT/steps.txt
 $A shell pm grant $APP android.permission.POST_NOTIFICATIONS > /dev/null 2>&1
+# Android explains "Viewing full screen" the first time an app hides its bars; that note would cover the tests.
+$A shell settings put secure immersive_mode_confirmations confirmed
 $A logcat -c
 $A shell am start -n $MAIN > /dev/null
 sleep 25

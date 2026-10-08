@@ -112,7 +112,7 @@ menu "End split screen"; sleep 3
 
 # 8. Full screen for pages.
 newtab; sleep 3; open_page "$PAGES/long.html"
-menu "Full screen for pages"; sleep 3
+menu "Full screen for pages"; sleep 3; try_tap "Got it"; sleep 1
 p=$(pid); away r12; come_back r12; check r12 "expect over 200, no bars" "$p"
 $A shell input swipe $((W / 2)) 5 $((W / 2)) $((H / 3)) 300; sleep 1
 menu "Full screen for pages"; sleep 3
@@ -133,6 +133,35 @@ for i in 1 2 3 4 5; do
   sleep 2
 done
 p=$(pid); check r14 "expect over 200 after five quick trips" "$p"
+
+# 11. What a strict phone does to apps in the background: it stops the engine's helper processes (the one that draws
+# and the ones that run the pages) but leaves Raven itself running. Android lowers their priority as soon as Raven
+# leaves the screen. Needs adb as root (the emulator allows it).
+$A root > /dev/null 2>&1; sleep 3; $A wait-for-device
+helpers() { $A shell ps -A -o PID,ARGS | tr -d '\r' | grep "$APP:$1" | grep -v grep | awk '{print $1}'; }
+stop_helpers() { for k in "$@"; do for h in $(helpers "$k"); do $A shell kill -9 "$h"; done; done; log "stopped Raven's $* helper(s)"; }
+newtab; sleep 3; open_page "$PAGES/long.html"
+p=$(pid); away r15; stop_helpers gpu; sleep 3; come_back r15; check r15 "drawing helper stopped while away: expect over 200" "$p"
+p=$(pid); away r16; stop_helpers tab; sleep 3; come_back r16; check r16 "page helpers stopped while away: expect over 200 once reloaded" "$p"
+p=$(pid); away r17; stop_helpers gpu tab; sleep 3; come_back r17; check r17 "both stopped while away: expect over 200 once reloaded" "$p"
+# The same with split screen and a floating tab on screen: every page on screen must come back, not only one.
+newtab; sleep 3; open_page "$PAGES/long.html"
+menu "Float this tab"; sleep 4
+newtab; sleep 3; open_page "$PAGES/jar.html"
+menu "=Split screen"; sleep 2; tap "Split with Raven long page"; sleep 6; shot r18_a_before
+p=$(pid); away r18; stop_helpers tab; sleep 3; come_back r18; sleep 10; check r18 "split and floating, page helpers stopped" "$p"
+log "after: halves $(has "^Top half: ") $(has "^Bottom half: ") floating $(has "^Floating tab: ") (expect yes yes yes)"
+p=$(pid); away r19; stop_helpers gpu tab; sleep 3; come_back r19; sleep 10; check r19 "split and floating, both stopped" "$p"
+menu "End split screen"; sleep 3
+if [ "$(has "^Floating tab: ")" = yes ]; then tap "Move the floating tab"; sleep 1; tap "=Close the floating tab"; sleep 2; fi
+# A video fullscreen in the floating tab, page helpers stopped while away: the screen must not stay black.
+newtab; sleep 3; open_page "$PAGES/video.html"
+tap "=Play"; sleep 2; $A shell cmd media_session dispatch pause; sleep 2
+menu "Float this tab"; sleep 4; tap "=Fullscreen"; sleep 5; shot r20_a_fullscreen
+p=$(pid); away r20; stop_helpers tab; sleep 3; come_back r20; sleep 10; check r20 "floating video was fullscreen, page helpers stopped" "$p"
+$A shell input keyevent 4; sleep 3; shot r20_d_after_back
+log "after Back: Raven in front $(infront), floating $(has "^Floating tab: ")"
+$A unroot > /dev/null 2>&1; sleep 3; $A wait-for-device
 
 log "recents: crashes $(( $(fatals) - f0 )) (expect 0)"
 $A logcat -d > $OUT/logcat-recents.txt
