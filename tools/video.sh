@@ -42,18 +42,18 @@ $A shell input keyevent 3; sleep 4
 $A shell am start -a android.settings.SETTINGS > /dev/null 2>&1; sleep 3
 $A shell input keyevent 3; sleep 2
 front; sleep 6; shot v03_back_to_fullscreen; pause
-log "back in the app: screen $(dims v03_back_to_fullscreen) (expect still wider than tall) | $(bar) (expect no bar: the video is still fullscreen)"
+log "back in the app: screen $(dims v03_back_to_fullscreen) (expect taller than wide: the video stepped back to its page for the trip) | $(bar) (expect bar shown)"
 $A shell settings put global always_finish_activities 0
 
-# Back leaves fullscreen: the bar comes back and the screen turns upright again.
-$A shell input keyevent 4; sleep 4; shot v04_after_back
+# Raven brought the video back to its page for the trip, so the bar is there and the screen is upright already.
+sleep 2; shot v04_after_back
 # What Android itself says about the screen's direction and the rotation settings, to tell an app request from a setting.
 { echo "--- after Back"; $A shell settings get system accelerometer_rotation; $A shell settings get system user_rotation
   $A shell dumpsys window displays | grep -E -m6 "mUserRotation|mCurrentRotation|mRotation=|mLastOrientation|mUserRotationMode"
   $A shell dumpsys activity activities | grep -E -m4 "requestedOrientation|mRequestedOrientation"; } > $OUT/v_rotation.txt 2>&1
-log "after Back: screen $(dims v04_after_back) (expect taller than wide) | $(bar) (expect bar shown) | $(page)"
+log "after return: screen $(dims v04_after_back) (expect taller than wide) | $(bar) (expect bar shown) | $(page)"
 
-# Fullscreen again, and out again with Back.
+# Fullscreen again, and out again with Back (Back leaves fullscreen: the bar comes back and the screen turns upright).
 tap "=Fullscreen"; sleep 4; try_tap "=Got it" && sleep 2; shot v05_fullscreen_again
 $A shell input keyevent 4; sleep 3; shot v06_out_again
 log "second fullscreen: $(dims v05_fullscreen_again) then $(dims v06_out_again) | $(bar) (expect bar shown)"
