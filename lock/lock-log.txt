@@ -1,0 +1,174 @@
+10-09 04:09:23.517   670   989 D BiometricDeferredQueue: Fingerprint addPendingLockoutResetForUser: 0
+10-09 04:09:23.517   670   989 D BiometricDeferredQueue: Processing pending resetLockouts(Generic)
+10-09 04:09:23.517   670   989 D BiometricDeferredQueue: Resetting biometric lockout for user: 0
+10-09 04:09:23.518   670   989 D BiometricService: resetLockout(userId=0, hat=present)
+10-09 04:09:23.654  4778  4778 I AconfigPackage: com.android.server.biometrics is mapped to system
+10-09 04:09:23.654  4778  4778 I AconfigPackage: android.hardware.biometrics is mapped to system
+10-09 04:09:25.559   670  2208 D CoreBackPreview: Window{1ef9d02 u0 app.raven.browser/app.raven.browser.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@2dab050, mPriority=-1, mIsAnimationCallback=false, mOverrideBehavior=0}
+10-09 04:09:25.559   670  2208 D CoreBackPreview: Window{1ef9d02 u0 app.raven.browser/app.raven.browser.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@6b5a249, mPriority=0, mIsAnimationCallback=true, mOverrideBehavior=0}
+10-09 04:09:25.824   670   794 I ImeTracker: app.raven.browser:57325849: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-09 04:09:25.825  3236  3236 I ImeTracker: app.raven.browser:57325849: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+10-09 04:09:25.833  1580  1580 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1293 onStartInput(EditorInfo{EditorInfo{packageName=app.raven.browser, inputType=0, inputTypeString=NULL, enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, false)
+10-09 04:09:25.834   670  2208 W PackageConfigPersister: App-specific configuration not found for packageName: app.raven.browser and userId: 0
+10-09 04:09:27.660  4805  4805 I AconfigPackage: com.android.server.biometrics is mapped to system
+10-09 04:09:27.660  4805  4805 I AconfigPackage: android.hardware.biometrics is mapped to system
+10-09 04:09:29.695  4820  4820 I AconfigPackage: com.android.server.biometrics is mapped to system
+10-09 04:09:29.695  4820  4820 I AconfigPackage: android.hardware.biometrics is mapped to system
+10-09 04:09:31.623   670   751 D CoreBackPreview: Window{1ef9d02 u0 app.raven.browser/app.raven.browser.MainActivity}: Setting back callback null
+10-09 04:09:31.654   670   794 I ImeTracker: app.raven.browser:9e56c1ed: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-09 04:09:31.654  3236  3236 I ImeTracker: app.raven.browser:9e56c1ed: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+10-09 04:09:31.655  1580  1580 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1293 onStartInput(EditorInfo{EditorInfo{packageName=app.raven.browser, inputType=0, inputTypeString=NULL, enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, false)
+10-09 04:09:31.656   670  2208 W PackageConfigPersister: App-specific configuration not found for packageName: app.raven.browser and userId: 0
+10-09 04:09:34.711  4841  4841 I AconfigPackage: com.android.server.biometrics is mapped to system
+10-09 04:09:34.711  4841  4841 I AconfigPackage: android.hardware.biometrics is mapped to system
+10-09 04:09:36.554  1355  1377 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceSettingsLockscreenBypassPreferenceController
+10-09 04:09:36.582  1355  3706 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceSettingsLockscreenBypassPreferenceController
+10-09 04:09:36.618  1355  1532 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceSettingsLockscreenBypassPreferenceController
+10-09 04:09:36.638  1355  3706 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceSettingsLockscreenBypassPreferenceController
+10-09 04:09:36.648  3236  3236 I ImeTracker: app.raven.browser:b0e7c056: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT_BY_INSETS_API fromUser false
+10-09 04:09:36.649  1580  1580 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1293 onStartInput(EditorInfo{EditorInfo{packageName=app.raven.browser, inputType=8001, inputTypeString=Normal[AutoCorrect], enableLearning=true, autoCorrection=true, autoComplete=true, imeOptions=2000006, privateImeOptions=null, actionName=DONE, actionLabel=null, initialSelStart=0, initialSelEnd=0, initialCapsMode=0, label=null, fieldId=-1, fieldName=null, extras=Bundle[mParcelledData.dataSize=404], hintText=null, hintLocales=[]}}, false)
+10-09 04:09:36.663   670  2207 D ContentCapturePerUserService: Notified activity assist data for activity: Token{eb52554 ActivityRecord{31990118 u0 app.raven.browser/.MainActivity t8}} without a session Id
+10-09 04:09:36.672  3236  3236 I ImeTracker: app.raven.browser:6f441c4e: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+10-09 04:09:36.672  3236  3236 I ImeTracker: app.raven.browser:6f441c4e: onCancelled at PHASE_CLIENT_REPORT_REQUESTED_VISIBLE_TYPES
+10-09 04:09:36.681   670  2207 W PackageConfigPersister: App-specific configuration not found for packageName: app.raven.browser and userId: 0
+10-09 04:09:36.692  1355  1377 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceSettingsLockscreenBypassPreferenceController
+10-09 04:09:36.696  1580  1580 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1293 onStartInput(EditorInfo{EditorInfo{packageName=app.raven.browser, inputType=8001, inputTypeString=Normal[AutoCorrect], enableLearning=true, autoCorrection=true, autoComplete=true, imeOptions=2000006, privateImeOptions=null, actionName=DONE, actionLabel=null, initialSelStart=0, initialSelEnd=0, initialCapsMode=0, label=null, fieldId=-1, fieldName=null, extras=Bundle[mParcelledData.dataSize=404], hintText=null, hintLocales=[]}}, true)
+10-09 04:09:36.699   670  2151 W PackageConfigPersister: App-specific configuration not found for packageName: app.raven.browser and userId: 0
+10-09 04:09:36.703  1580  1580 I GoogleInputMethodService: GoogleInputMethodService.onStartInputView():1392 onStartInputView(EditorInfo{EditorInfo{packageName=app.raven.browser, inputType=8001, inputTypeString=Normal[AutoCorrect], enableLearning=true, autoCorrection=true, autoComplete=true, imeOptions=2000006, privateImeOptions=null, actionName=DONE, actionLabel=null, initialSelStart=0, initialSelEnd=0, initialCapsMode=0, label=null, fieldId=-1, fieldName=null, extras=Bundle[{android.support.text.emoji.emojiCompat_metadataVersion=11, androidx.core.view.inputmethod.EditorInfoCompat.STYLUS_HANDWRITING_ENABLED=true, android.support.text.emoji.emojiCompat_replaceAll=false}], hintText=null, hintLocales=[]}}, false)
+10-09 04:09:36.719  1580  1580 I AndroidIME: AbstractIme.onActivate():90 LatinIme.onActivate() : EditorInfo = EditorInfo{packageName=app.raven.browser, inputType=8001, inputTypeString=Normal[AutoCorrect], enableLearning=true, autoCorrection=true, autoComplete=true, imeOptions=2000006, privateImeOptions=null, actionName=DONE, actionLabel=null, initialSelStart=0, initialSelEnd=0, initialCapsMode=0, label=null, fieldId=-1, fieldName=null, extras=Bundle[{android.support.text.emoji.emojiCompat_metadataVersion=11, androidx.core.view.inputmethod.EditorInfoCompat.STYLUS_HANDWRITING_ENABLED=true, android.support.text.emoji.emojiCompat_replaceAll=false}], hintText=null, hintLocales=[]}, IncognitoMode = false, DeviceLocked = false
+10-09 04:09:36.744  1355  4886 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceSettingsLockscreenBypassPreferenceController
+10-09 04:09:36.790  1355  3706 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.fingerprint.FingerprintSettingsKeyguardUnlockPreferenceController
+10-09 04:09:36.790  1355  3706 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.fingerprint.FingerprintSettingsAppsPreferenceController
+10-09 04:09:36.790  1355  3706 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.fingerprint.FingerprintsEnrolledCategoryPreferenceController
+10-09 04:09:36.790  1355  3706 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.fingerprint.FingerprintUnlockCategoryController
+10-09 04:09:36.790  1355  3706 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.fingerprint.FingerprintSettingsRequireScreenOnToAuthPreferenceController
+10-09 04:09:36.790  1355  3706 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.fingerprint.FingerprintSettingsScreenOffUnlockUdfpsPreferenceController
+10-09 04:09:36.823  1355  3687 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceSettingsLockscreenBypassPreferenceController
+10-09 04:09:36.833  1355  3706 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceSettingsKeyguardUnlockPreferenceController
+10-09 04:09:36.833  1355  3706 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceSettingsAppsPreferenceController
+10-09 04:09:36.833  1355  3706 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceUnlockCategoryPreferenceController
+10-09 04:09:36.833  1355  3706 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceSettingsLockscreenBypassPreferenceController
+10-09 04:09:36.833  1355  3706 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.BiometricLockscreenBypassPreferenceController
+10-09 04:09:36.839  1355  1376 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceSettingsLockscreenBypassPreferenceController
+10-09 04:09:36.860  1355  3706 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.combination.BiometricFaceStatusPreferenceController
+10-09 04:09:36.860  1355  3706 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.combination.BiometricFingerprintStatusPreferenceController
+10-09 04:09:36.861  1355  3706 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.combination.BiometricSettingsKeyguardPreferenceController
+10-09 04:09:36.861  1355  3706 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.combination.BiometricSettingsAppPreferenceController
+10-09 04:09:36.871  1355  3706 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.security.CombinedBiometricStatusGooglePreferenceController
+10-09 04:09:36.909  1355  4886 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceSettingsLockscreenBypassPreferenceController
+10-09 04:09:36.971  1355  3687 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceSettingsLockscreenBypassPreferenceController
+10-09 04:09:36.981   670  1365 D CoreBackPreview: Window{4003886 u0 app.raven.browser/app.raven.browser.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@71f24e0, mPriority=0, mIsAnimationCallback=true, mOverrideBehavior=0}
+10-09 04:09:37.020  1355  4886 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.fingerprint.FingerprintSettingsKeyguardUnlockPreferenceController
+10-09 04:09:37.020  1355  4886 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.fingerprint.FingerprintSettingsAppsPreferenceController
+10-09 04:09:37.020  1355  4886 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.fingerprint.FingerprintsEnrolledCategoryPreferenceController
+10-09 04:09:37.020  1355  4886 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.fingerprint.FingerprintUnlockCategoryController
+10-09 04:09:37.024  1355  4886 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.fingerprint.FingerprintSettingsRequireScreenOnToAuthPreferenceController
+10-09 04:09:37.024  1355  4886 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.fingerprint.FingerprintSettingsScreenOffUnlockUdfpsPreferenceController
+10-09 04:09:37.054  1355  4886 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceSettingsKeyguardUnlockPreferenceController
+10-09 04:09:37.054  1355  4886 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceSettingsAppsPreferenceController
+10-09 04:09:37.058  1355  4886 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceUnlockCategoryPreferenceController
+10-09 04:09:37.058  1355  4886 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceSettingsLockscreenBypassPreferenceController
+10-09 04:09:37.058  1355  4886 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.BiometricLockscreenBypassPreferenceController
+10-09 04:09:37.060  1355  4886 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.combination.BiometricFaceStatusPreferenceController
+10-09 04:09:37.060  1355  4886 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.combination.BiometricFingerprintStatusPreferenceController
+10-09 04:09:37.061  1355  4886 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.combination.BiometricSettingsKeyguardPreferenceController
+10-09 04:09:37.061  1355  4886 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.combination.BiometricSettingsAppPreferenceController
+10-09 04:09:37.071  1355  4886 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.security.CombinedBiometricStatusGooglePreferenceController
+10-09 04:09:37.091  1355  1532 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceSettingsLockscreenBypassPreferenceController
+10-09 04:09:37.177  1355  1532 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.fingerprint.FingerprintSettingsKeyguardUnlockPreferenceController
+10-09 04:09:37.177  1355  1532 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.fingerprint.FingerprintSettingsAppsPreferenceController
+10-09 04:09:37.177  1355  1532 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.fingerprint.FingerprintsEnrolledCategoryPreferenceController
+10-09 04:09:37.177  1355  1532 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.fingerprint.FingerprintUnlockCategoryController
+10-09 04:09:37.177  1355  1532 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.fingerprint.FingerprintSettingsRequireScreenOnToAuthPreferenceController
+10-09 04:09:37.177  1355  1532 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.fingerprint.FingerprintSettingsScreenOffUnlockUdfpsPreferenceController
+10-09 04:09:37.177  1355  1532 V SettingsSearchProvider: com.android.settings.biometrics.fingerprint.FingerprintSettings$FingerprintSettingsFragment$1@a78393f tried to add an empty non-indexable key
+10-09 04:09:37.191  1355  1532 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceSettingsKeyguardUnlockPreferenceController
+10-09 04:09:37.191  1355  1532 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceSettingsAppsPreferenceController
+10-09 04:09:37.191  1355  1532 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceUnlockCategoryPreferenceController
+10-09 04:09:37.192  1355  1532 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceSettingsLockscreenBypassPreferenceController
+10-09 04:09:37.192  1355  1532 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.BiometricLockscreenBypassPreferenceController
+10-09 04:09:37.192  1355  1532 V SettingsSearchProvider: com.android.settings.biometrics.face.FaceSettings$1@b04a4a5 tried to add an empty non-indexable key
+10-09 04:09:37.201  1355  1532 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.combination.BiometricFaceStatusPreferenceController
+10-09 04:09:37.201  1355  1532 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.combination.BiometricFingerprintStatusPreferenceController
+10-09 04:09:37.204  1355  1532 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.combination.BiometricSettingsKeyguardPreferenceController
+10-09 04:09:37.204  1355  1532 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.combination.BiometricSettingsAppPreferenceController
+10-09 04:09:37.204  1355  1532 V SettingsSearchProvider: com.android.settings.biometrics.combination.CombinedBiometricSettings$2@94e3859 tried to add an empty non-indexable key
+10-09 04:09:37.207  1355  1532 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.security.CombinedBiometricStatusGooglePreferenceController
+10-09 04:09:37.216  1355  1376 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceSettingsLockscreenBypassPreferenceController
+10-09 04:09:37.377  1355  1376 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.fingerprint.FingerprintSettingsKeyguardUnlockPreferenceController
+10-09 04:09:37.377  1355  1376 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.fingerprint.FingerprintSettingsAppsPreferenceController
+10-09 04:09:37.377  1355  1376 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.fingerprint.FingerprintsEnrolledCategoryPreferenceController
+10-09 04:09:37.377  1355  1376 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.fingerprint.FingerprintUnlockCategoryController
+10-09 04:09:37.377  1355  1376 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.fingerprint.FingerprintSettingsRequireScreenOnToAuthPreferenceController
+10-09 04:09:37.377  1355  1376 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.fingerprint.FingerprintSettingsScreenOffUnlockUdfpsPreferenceController
+10-09 04:09:37.377  1355  1376 V SettingsSearchProvider: com.android.settings.biometrics.fingerprint.FingerprintSettings$FingerprintSettingsFragment$1@a78393f tried to add an empty non-indexable key
+10-09 04:09:37.382  1355  1376 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceSettingsKeyguardUnlockPreferenceController
+10-09 04:09:37.382  1355  1376 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceSettingsAppsPreferenceController
+10-09 04:09:37.382  1355  1376 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceUnlockCategoryPreferenceController
+10-09 04:09:37.382  1355  1376 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.FaceSettingsLockscreenBypassPreferenceController
+10-09 04:09:37.382  1355  1376 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.face.BiometricLockscreenBypassPreferenceController
+10-09 04:09:37.382  1355  1376 V SettingsSearchProvider: com.android.settings.biometrics.face.FaceSettings$1@b04a4a5 tried to add an empty non-indexable key
+10-09 04:09:37.388  1355  1376 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.combination.BiometricFaceStatusPreferenceController
+10-09 04:09:37.388  1355  1376 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.combination.BiometricFingerprintStatusPreferenceController
+10-09 04:09:37.388  1355  1376 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.combination.BiometricSettingsKeyguardPreferenceController
+10-09 04:09:37.388  1355  1376 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.biometrics.combination.BiometricSettingsAppPreferenceController
+10-09 04:09:37.388  1355  1376 V SettingsSearchProvider: com.android.settings.biometrics.combination.CombinedBiometricSettings$2@94e3859 tried to add an empty non-indexable key
+10-09 04:09:37.391  1355  1376 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.security.CombinedBiometricStatusGooglePreferenceController
+10-09 04:09:37.775  3236  3236 W InteractionJankMonitor: Initializing without READ_DEVICE_CONFIG permission. enabled=true, interval=1, missedFrameThreshold=3, frameTimeThreshold=64, package=app.raven.browser
+10-09 04:09:37.841  3236  3236 I ImeTracker: app.raven.browser:b0e7c056: onShown
+10-09 04:09:37.926  3236  3236 W FrameTracker: Missed SF frame:JANK_COMPOSER, 5849, 115113109, CUJ=J<IME_INSETS_SHOW_ANIMATION::0@1@app.raven.browser>
+10-09 04:09:39.971  3236  3236 I ImeTracker: app.raven.browser:5578056f: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT_REQUEST_HIDE_WITH_CONTROL fromUser true
+10-09 04:09:39.971   670  1416 D CoreBackPreview: Window{4003886 u0 app.raven.browser/app.raven.browser.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@96c9573, mPriority=0, mIsAnimationCallback=true, mOverrideBehavior=0}
+10-09 04:09:40.060  3236  3236 W FrameTracker: Missed SF frame:JANK_COMPOSER, 6116, 11107076, CUJ=J<IME_INSETS_HIDE_ANIMATION::1@1@app.raven.browser>
+10-09 04:09:41.100  5166  5166 I AconfigPackage: com.android.server.biometrics is mapped to system
+10-09 04:09:41.100  5166  5166 I AconfigPackage: android.hardware.biometrics is mapped to system
+10-09 04:09:42.984  3236  3236 I ImeTracker: app.raven.browser:72de7953: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT_BY_INSETS_API fromUser false
+10-09 04:09:42.987  3236  3236 I ImeTracker: app.raven.browser:2f14e185: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+10-09 04:09:42.987  3236  3236 I ImeTracker: app.raven.browser:2f14e185: onCancelled at PHASE_CLIENT_REPORT_REQUESTED_VISIBLE_TYPES
+10-09 04:09:42.989  1580  1580 I GoogleInputMethodService: GoogleInputMethodService.onStartInputView():1392 onStartInputView(EditorInfo{EditorInfo{packageName=app.raven.browser, inputType=8001, inputTypeString=Normal[AutoCorrect], enableLearning=true, autoCorrection=true, autoComplete=true, imeOptions=2000006, privateImeOptions=null, actionName=DONE, actionLabel=null, initialSelStart=0, initialSelEnd=0, initialCapsMode=0, label=null, fieldId=-1, fieldName=null, extras=Bundle[{android.support.text.emoji.emojiCompat_metadataVersion=11, androidx.core.view.inputmethod.EditorInfoCompat.STYLUS_HANDWRITING_ENABLED=true, android.support.text.emoji.emojiCompat_replaceAll=false}], hintText=null, hintLocales=[]}}, false)
+10-09 04:09:42.991  1580  1580 I AndroidIME: AbstractIme.onActivate():90 LatinIme.onActivate() : EditorInfo = EditorInfo{packageName=app.raven.browser, inputType=8001, inputTypeString=Normal[AutoCorrect], enableLearning=true, autoCorrection=true, autoComplete=true, imeOptions=2000006, privateImeOptions=null, actionName=DONE, actionLabel=null, initialSelStart=0, initialSelEnd=0, initialCapsMode=0, label=null, fieldId=-1, fieldName=null, extras=Bundle[{android.support.text.emoji.emojiCompat_metadataVersion=11, androidx.core.view.inputmethod.EditorInfoCompat.STYLUS_HANDWRITING_ENABLED=true, android.support.text.emoji.emojiCompat_replaceAll=false}], hintText=null, hintLocales=[]}, IncognitoMode = false, DeviceLocked = false
+10-09 04:09:43.037   670  2211 D CoreBackPreview: Window{4003886 u0 app.raven.browser/app.raven.browser.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@3a366d8, mPriority=0, mIsAnimationCallback=true, mOverrideBehavior=0}
+10-09 04:09:43.217  3236  3236 I ImeTracker: app.raven.browser:72de7953: onShown
+10-09 04:09:43.278  3236  3236 W FrameTracker: Missed SF frame:JANK_COMPOSER, 6515, 10430042, CUJ=J<IME_INSETS_SHOW_ANIMATION::0@1@app.raven.browser>
+10-09 04:09:45.193  5204  5204 I AconfigPackage: com.android.server.biometrics is mapped to system
+10-09 04:09:45.193  5204  5204 I AconfigPackage: android.hardware.biometrics is mapped to system
+10-09 04:09:47.156  5220  5220 I AconfigPackage: com.android.server.biometrics is mapped to system
+10-09 04:09:47.156  5220  5220 I AconfigPackage: android.hardware.biometrics is mapped to system
+10-09 04:09:49.050  3236  3236 I ImeTracker: app.raven.browser:341fb178: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT_BY_INSETS_API fromUser false
+10-09 04:09:49.050   670  2211 D CoreBackPreview: Window{4003886 u0 app.raven.browser/app.raven.browser.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@c369038, mPriority=0, mIsAnimationCallback=true, mOverrideBehavior=0}
+10-09 04:09:49.054  1580  1580 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1293 onStartInput(EditorInfo{EditorInfo{packageName=app.raven.browser, inputType=0, inputTypeString=NULL, enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, true)
+10-09 04:09:49.055   670  1183 W PackageConfigPersister: App-specific configuration not found for packageName: app.raven.browser and userId: 0
+10-09 04:09:49.055  1580  1580 I GoogleInputMethodService: GoogleInputMethodService.onStartInputView():1392 onStartInputView(EditorInfo{EditorInfo{packageName=app.raven.browser, inputType=0, inputTypeString=NULL, enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, true)
+10-09 04:09:49.060  1580  1580 I AndroidIME: AbstractIme.onActivate():90 PasswordIme.onActivate() : EditorInfo = EditorInfo{packageName=app.raven.browser, inputType=0, inputTypeString=NULL, enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}, IncognitoMode = false, DeviceLocked = false
+10-09 04:09:49.129  3236  3236 W FrameTracker: Missed SF frame:JANK_COMPOSER, 9122, 17209569, CUJ=J<IME_INSETS_HIDE_ANIMATION::1@1@app.raven.browser>
+10-09 04:09:49.972   670   794 I ImeTracker: app.raven.browser:5578056f: setFinished at PHASE_CLIENT_ANIMATION_CANCEL with STATUS_TIMEOUT
+10-09 04:09:53.336  5250  5250 I AconfigPackage: com.android.server.biometrics is mapped to system
+10-09 04:09:53.336  5250  5250 I AconfigPackage: android.hardware.biometrics is mapped to system
+10-09 04:09:59.054   670   794 I ImeTracker: app.raven.browser:341fb178: setFinished at PHASE_CLIENT_ANIMATION_CANCEL with STATUS_TIMEOUT
+10-09 04:09:59.461  5337  5337 I AconfigPackage: com.android.server.biometrics is mapped to system
+10-09 04:09:59.461  5337  5337 I AconfigPackage: android.hardware.biometrics is mapped to system
+10-09 04:10:04.431  5354  5354 I AconfigPackage: com.android.server.biometrics is mapped to system
+10-09 04:10:04.432  5354  5354 I AconfigPackage: android.hardware.biometrics is mapped to system
+10-09 04:10:09.407  5370  5370 I AconfigPackage: com.android.server.biometrics is mapped to system
+10-09 04:10:09.407  5370  5370 I AconfigPackage: android.hardware.biometrics is mapped to system
+10-09 04:10:18.565  5398  5398 I AconfigPackage: com.android.server.biometrics is mapped to system
+10-09 04:10:18.566  5398  5398 I AconfigPackage: android.hardware.biometrics is mapped to system
+10-09 04:10:24.710  5450  5450 I AconfigPackage: com.android.server.biometrics is mapped to system
+10-09 04:10:24.710  5450  5450 I AconfigPackage: android.hardware.biometrics is mapped to system
+10-09 04:10:29.693  5479  5479 I AconfigPackage: com.android.server.biometrics is mapped to system
+10-09 04:10:29.694  5479  5479 I AconfigPackage: android.hardware.biometrics is mapped to system
+10-09 04:10:34.673  5493  5493 I AconfigPackage: com.android.server.biometrics is mapped to system
+10-09 04:10:34.673  5493  5493 I AconfigPackage: android.hardware.biometrics is mapped to system
+10-09 04:10:43.880  5521  5521 I AconfigPackage: com.android.server.biometrics is mapped to system
+10-09 04:10:43.880  5521  5521 I AconfigPackage: android.hardware.biometrics is mapped to system
+10-09 04:10:46.819  3236  3236 I ImeTracker: app.raven.browser:a288eba8: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT_BY_INSETS_API fromUser false
+10-09 04:10:46.826  1580  1580 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1293 onStartInput(EditorInfo{EditorInfo{packageName=app.raven.browser, inputType=11, inputTypeString=Uri[], enableLearning=false, autoCorrection=false, autoComplete=true, imeOptions=2000002, privateImeOptions=null, actionName=GO, actionLabel=null, initialSelStart=0, initialSelEnd=0, initialCapsMode=0, label=null, fieldId=-1, fieldName=null, extras=Bundle[mParcelledData.dataSize=404], hintText=null, hintLocales=[]}}, true)
+10-09 04:10:46.890   670  2211 D ContentCapturePerUserService: Notified activity assist data for activity: Token{eb52554 ActivityRecord{31990118 u0 app.raven.browser/.MainActivity t8}} without a session Id
+10-09 04:10:46.892  3236  3236 I ImeTracker: app.raven.browser:5000b9fe: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+10-09 04:10:46.893  3236  3236 I ImeTracker: app.raven.browser:5000b9fe: onCancelled at PHASE_CLIENT_REPORT_REQUESTED_VISIBLE_TYPES
+10-09 04:10:46.895   670  2211 W PackageConfigPersister: App-specific configuration not found for packageName: app.raven.browser and userId: 0
+10-09 04:10:46.896  1580  1580 I GoogleInputMethodService: GoogleInputMethodService.onStartInputView():1392 onStartInputView(EditorInfo{EditorInfo{packageName=app.raven.browser, inputType=11, inputTypeString=Uri[], enableLearning=false, autoCorrection=false, autoComplete=true, imeOptions=2000002, privateImeOptions=null, actionName=GO, actionLabel=null, initialSelStart=0, initialSelEnd=0, initialCapsMode=0, label=null, fieldId=-1, fieldName=null, extras=Bundle[{android.support.text.emoji.emojiCompat_metadataVersion=11, androidx.core.view.inputmethod.EditorInfoCompat.STYLUS_HANDWRITING_ENABLED=true, android.support.text.emoji.emojiCompat_replaceAll=false}], hintText=null, hintLocales=[]}}, false)
+10-09 04:10:46.904  1580  1580 I AndroidIME: AbstractIme.onActivate():90 LatinIme.onActivate() : EditorInfo = EditorInfo{packageName=app.raven.browser, inputType=11, inputTypeString=Uri[], enableLearning=false, autoCorrection=false, autoComplete=true, imeOptions=2000002, privateImeOptions=null, actionName=GO, actionLabel=null, initialSelStart=0, initialSelEnd=0, initialCapsMode=0, label=null, fieldId=-1, fieldName=null, extras=Bundle[{android.support.text.emoji.emojiCompat_metadataVersion=11, androidx.core.view.inputmethod.EditorInfoCompat.STYLUS_HANDWRITING_ENABLED=true, android.support.text.emoji.emojiCompat_replaceAll=false}], hintText=null, hintLocales=[]}, IncognitoMode = false, DeviceLocked = false
+10-09 04:10:46.929   670   751 D CoreBackPreview: Window{4003886 u0 app.raven.browser/app.raven.browser.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@1cb6bd5, mPriority=0, mIsAnimationCallback=true, mOverrideBehavior=0}
+10-09 04:10:47.000  3236  3236 I ImeTracker: app.raven.browser:a288eba8: onShown
+10-09 04:10:47.060  3236  3236 W FrameTracker: Missed SF frame:JANK_COMPOSER, 9824, 9256582, CUJ=J<IME_INSETS_SHOW_ANIMATION::0@1@app.raven.browser>

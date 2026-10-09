@@ -1,0 +1,36 @@
+04:08:11 ---- setup
+Performing Streamed Install
+Success
+04:08:48 tap 'Not now' at 160 574
+04:09:18 Raven is in front
+04:09:18 screenshot 00_setup
+04:09:18 ---- setup done
+04:09:18 ---- lock
+04:09:23 set-pin: Pin set to '1234' 
+04:09:23 verify: Lock credential verified successfully 
+04:09:23 keyguard secure: 
+04:09:25 tap 'Menu' at 282 63
+04:09:31 tap 'Settings' at 197 357
+04:09:37 tap 'Search settings' at 174 116
+04:09:43 tap '^Lock' at 152 116
+04:09:45 screenshot l01_lock_page
+04:09:49 tapped the switch (1) at 230
+04:09:51 screenshot l02_after_tap_1
+04:09:53 screenshot l03_after_wait_1
+04:09:55 after tap 1: prompt Lock Raven label on screen | PIN field no
+04:09:59 screenshot l04_after_pin_1
+04:10:14 NOT FOUND: '^Lock Raven'
+04:10:14 tapped the switch (2) at NOT
+04:10:16 screenshot l02_after_tap_2
+04:10:18 screenshot l03_after_wait_2
+04:10:20 after tap 2: prompt none | PIN field no
+04:10:24 screenshot l04_after_pin_2
+04:10:39 NOT FOUND: '^Lock Raven'
+04:10:39 tapped the switch (3) at NOT
+04:10:42 screenshot l02_after_tap_3
+04:10:44 screenshot l03_after_wait_3
+04:10:46 after tap 3: prompt none | PIN field no
+04:10:50 screenshot l04_after_pin_3
+04:10:50 log lines kept: 174
+04:10:50 ---- lock done
+04:10:50 reports: ANR 0, crash 0, native crash 0 (all apps)
