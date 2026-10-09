@@ -1,0 +1,31 @@
+10-09 02:33:59.576   666  8598 E ActivityManager: ANR in app.raven.browser (app.raven.browser/.MainActivity)
+10-09 02:33:59.576   666  8598 E ActivityManager: PID: 6584
+10-09 02:33:59.576   666  8598 E ActivityManager: Reason: Input dispatching timed out (d6c0bc1 app.raven.browser/app.raven.browser.MainActivity is not responding. Waited 5000ms for FocusEvent(hasFocus=true)).
+10-09 02:33:59.576   666  8598 E ActivityManager: Parent: app.raven.browser/.MainActivity
+10-09 02:33:59.576   666  8598 E ActivityManager: ErrorId: 4a0f9acc-6d58-4bdc-8830-aa15644afa0b
+10-09 02:33:59.576   666  8598 E ActivityManager: Frozen: false
+10-09 02:33:59.576   666  8598 E ActivityManager: Load: 1.17 / 1.44 / 1.56
+10-09 02:33:59.576   666  8598 E ActivityManager: ----- Output from /proc/pressure/memory -----
+10-09 02:33:59.576   666  8598 E ActivityManager: some avg10=0.00 avg60=0.00 avg300=0.00 total=696195
+10-09 02:33:59.576   666  8598 E ActivityManager: full avg10=0.00 avg60=0.00 avg300=0.00 total=152716
+10-09 02:33:59.576   666  8598 E ActivityManager: ----- End output from /proc/pressure/memory -----
+10-09 02:33:59.576   666  8598 E ActivityManager: ----- Output from /proc/pressure/cpu -----
+10-09 02:33:59.576   666  8598 E ActivityManager: some avg10=2.88 avg60=2.63 avg300=3.30 total=71462357
+10-09 02:33:59.576   666  8598 E ActivityManager: full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+10-09 02:33:59.576   666  8598 E ActivityManager: ----- End output from /proc/pressure/cpu -----
+10-09 02:33:59.576   666  8598 E ActivityManager: ----- Output from /proc/pressure/io -----
+10-09 02:33:59.576   666  8598 E ActivityManager: some avg10=0.00 avg60=0.00 avg300=0.47 total=18820120
+10-09 02:33:59.576   666  8598 E ActivityManager: full avg10=0.00 avg60=0.00 avg300=0.08 total=5109088
+10-09 02:33:59.576   666  8598 E ActivityManager: ----- End output from /proc/pressure/io -----
+10-09 02:33:59.576   666  8598 E ActivityManager: 
+10-09 02:33:59.576   666  8598 E ActivityManager: CPU usage from 149597ms to -1ms ago (2026-10-09 02:31:29.033 to 2026-10-09 02:33:58.631):
+10-09 02:33:59.576   666  8598 E ActivityManager:   4% 6664/app.raven.browser:gpu_disable_art_image_: 0.4% user + 3.6% kernel / faults: 2623 minor
+10-09 02:33:59.576   666  8598 E ActivityManager:   3.2% 6584/app.raven.browser: 1.2% user + 2% kernel / faults: 31555 minor 2 major
+10-09 02:33:59.576   666  8598 E ActivityManager:   2.2% 503/android.hardware.graphics.composer3-service.ranchu: 0.5% user + 1.7% kernel / faults: 6 minor
+10-09 02:33:59.576   666  8598 E ActivityManager:   2.2% 543/surfaceflinger: 0.9% user + 1.2% kernel / faults: 243 minor
+10-09 02:33:59.576   666  8598 E ActivityManager:   1.8% 666/system_server: 1.1% user + 0.6% kernel / faults: 15096 minor
+10-09 02:33:59.576   666  8598 E ActivityManager:   1.4% 6712/app.raven.browser:tab_disable_art_image_11: 0.9% user + 0.5% kernel / faults: 4958 minor
+10-09 02:33:59.576   666  8598 E ActivityManager:   1% 1678/com.google.android.inputmethod.latin: 0.7% user + 0.3% kernel / faults: 21514 minor
+10-09 02:33:59.576   666  8598 E ActivityManager:   0.6% 1097/com.android.systemui: 0.4% user + 0.2% kernel / faults: 9774 minor 1 major
+10-09 02:33:59.576   666  8598 E ActivityManager:   0.6% 609/logcat: 0% user + 0.5% kernel
+10-09 02:33:59.576   666  8598 E ActivityManager:   0.2% 487/android.hardware.media.c2@1.0-service-goldfish: 0% user + 0.1% kernel / faults: 198 minor

@@ -1,0 +1,154 @@
+02:20:47 ---- setup
+Performing Streamed Install
+Success
+02:21:30 tap 'Not now' at 160 574
+02:22:00 Raven is in front
+02:22:00 screenshot 00_setup
+02:22:00 ---- setup done
+02:22:00 ---- update
+02:22:08 tap 'open tabs' at 240 63
+02:22:13 tap '^Tabs · ' at 65 136
+02:22:16 tap '!=New tab' at 141 575
+02:22:21 tap 'Address' at 139 63
+02:22:25 go example.com
+02:22:35 tap 'open tabs' at 240 63
+02:22:40 tap '^Tabs · ' at 65 136
+02:22:44 tap '!=New tab' at 141 575
+02:22:49 tap 'Address' at 139 63
+02:22:52 go example.org
+02:23:02 tap 'open tabs' at 240 63
+02:23:08 tap '^Tabs · ' at 65 136
+02:23:11 tabs before closing: Tabs · 3
+02:23:13 tap '=Close tab: Example Domain' at 278 231
+02:23:19 screenshot u02_undone
+02:23:19 after closing one: Undo offered: yes (expect yes)
+02:23:23 after Undo: Tabs · 3 (expect the count before) | Example Domain back: yes (expect yes)
+02:23:26 tap '=Close all' at 268 70
+02:23:30 tap '!=Close all' at 254 382
+02:23:36 screenshot u04_all_back
+02:23:36 after Close all: 'N tabs closed' bar shown: yes (expect yes)
+02:23:38 after Undo: Tabs · 3 (expect the count before)
+02:23:45 tap 'open tabs' at 240 63
+02:23:50 tap '^Tabs · ' at 65 136
+02:23:53 tap '!=New tab' at 141 575
+02:23:58 tap 'Address' at 139 63
+02:24:02 go http://10.0.2.2:8000/long.html
+02:24:12 tap 'open tabs' at 240 63
+02:24:18 tap '^Tabs · ' at 65 136
+02:24:21 tap '!=New tab' at 141 575
+02:24:26 tap 'Address' at 139 63
+02:24:29 go example.com
+02:24:40 tap 'Menu' at 282 63
+02:24:46 tap '=Split screen' at 122 259
+02:24:50 tap 'Split with Raven long page' at 160 386
+02:24:56 screenshot u05_split_bars
+02:25:03 split: bars 2 (expect 2: one per half) | top Top half: Example Domain | bottom Bottom half: Raven long page
+02:25:07 screenshot u06_bottom_editing
+02:25:17 screenshot u07_bottom_moved
+02:25:21 bottom half after typing in its bar: Bottom half: Example Domain (expect Example Domain, at example.org) | top: Top half: Example Domain (expect Example Domain)
+02:25:23 bottom half's address: Address example.org. Tap to search or edit (expect it)
+02:25:31 bottom half back on the long page: Bottom half: Raven long page (expect Raven long page)
+02:25:33 tap '!=Reload' at 211 351
+02:25:40 bottom half reloaded: Bottom half: Raven long page (expect Raven long page)
+02:25:42 screenshot u08_scrolled_down
+02:25:44 after scrolling the bottom half down: bars 1 (expect 1: its bar stepped aside)
+02:25:47 screenshot u09_scrolled_up
+02:25:49 after scrolling it up: bars 2 (expect 2)
+02:25:51 tap 'Menu' at 295 48
+02:25:58 tap 'End split screen' at 122 259
+02:26:03 tap 'open tabs' at 240 63
+02:26:08 tap '^Tabs · ' at 65 136
+02:26:11 tap '!=New tab' at 141 575
+02:26:16 tap 'Address' at 139 63
+02:26:21 go http://10.0.2.2:8000/video.html?other&once
+02:26:31 tap 'open tabs' at 240 63
+02:26:36 tap '^Tabs · ' at 65 136
+02:26:39 tap '!=New tab' at 141 575
+02:26:45 tap 'Address' at 139 63
+02:26:48 go http://10.0.2.2:8000/video.html?once
+02:26:59 tap 'Menu' at 282 63
+02:27:05 tap '=Split screen' at 122 259
+02:27:09 tap 'Split with Raven video test' at 160 266
+02:27:17 tap '=Play' at 41 225
+02:27:32 tap '!=Play' at 83 610
+02:27:46 tap '=Fullscreen' at 230 309
+02:27:52 screenshot u10_split_fullscreen
+02:28:02 split half fullscreen: screen 320x640 (expect taller than wide) | halves yes yes (expect yes yes: the other half is still there) | bars 1 (expect 1: the full half's bar stepped aside) | page: - (expect fullscreen: yes)
+02:28:03 raven:  (expect none: only the whole-phone kind is logged)
+02:28:07 screenshot u11_split_back
+02:28:15 after Back: halves yes yes (expect yes yes) | bars 2 (expect 2) | page: - (expect fullscreen: no)
+02:28:42 tap 'Menu' at 295 48
+02:28:49 tap 'End split screen' at 122 259
+02:28:54 tap 'open tabs' at 240 63
+02:28:59 tap '^Tabs · ' at 65 136
+02:29:02 tap '!=New tab' at 141 575
+02:29:07 tap 'Address' at 139 63
+02:29:12 go http://10.0.2.2:8000/video.html
+02:29:22 tap '=Play' at 41 255
+02:29:28 tap 'Menu' at 282 63
+02:29:35 tap 'Float this tab' at 47 259
+02:29:39 screenshot u12_floating_video
+02:29:41 tap '!=Fullscreen' at 236 246
+02:29:46 screenshot u13_float_fullscreen
+02:29:51 floating tab fullscreen: screen 640x320 (expect wider than tall) | page: - (expect fullscreen: yes)
+02:29:51 raven: fullscreen: 96fe40 (floating tab) (expect '(floating tab)')
+02:29:56 fullscreen kept after 3 seconds: - (expect fullscreen: yes: before, it left fullscreen at once)
+02:30:00 screenshot u14_float_back
+02:30:03 after Back: in its window again yes (expect yes)
+02:30:07 tap 'Move the floating tab' at 224 106
+02:30:10 tap '=Close the floating tab' at 284 251
+02:30:14 tap 'open tabs' at 240 63
+02:30:19 tap '^Tabs · ' at 65 136
+02:30:22 tap '!=New tab' at 141 575
+02:30:28 tap 'Address' at 139 63
+02:30:32 go http://10.0.2.2:8000/cookies.html
+02:30:44 screenshot u15_cookie_popup
+02:30:47 cookie popup: state: rejected (expect state: rejected) | raven: cookie popup: rejected (OneTrust)
+02:30:49 tap 'Address' at 118 63
+02:30:52 go example.com
+02:31:02 tap 'Menu' at 282 63
+02:31:09 tap 'Full screen for pages' at 122 357
+02:31:12 screenshot u16_full_screen
+02:31:14 full screen: address bar no (expect no)
+02:31:16 screenshot u17_bars_peek
+02:31:18 after a swipe down from the top: address bar yes (expect yes)
+02:31:26 a few seconds later: address bar no (expect no)
+02:31:29 tap 'Menu' at 282 39
+02:31:35 menu scrolled
+02:31:50 NOT FOUND: 'Full screen for pages'
+02:31:53 screenshot u18_full_screen_off
+02:31:56 full screen off: address bar no (expect yes)
+02:32:11 NOT FOUND: 'open tabs'
+02:32:29 NOT FOUND: 'Address'
+02:32:29 go http://10.0.2.2:8000/jar.html?set=personal
+02:32:40 personal tab: - (expect who=personal)
+02:32:55 NOT FOUND: 'Menu'
+02:32:55 screenshot u19_profiles_page
+02:33:10 NOT FOUND: '=Add a profile'
+02:33:28 NOT FOUND: '=Name'
+02:33:45 NOT FOUND: '=Add'
+02:33:47 screenshot u20_profile_added
+02:33:49 profiles: Work added no (expect yes)
+02:33:57 tap 'open tabs' at 240 63
+02:34:00 screenshot u21_tabs_profiles
+02:34:04 tabs screen: profile chips no no (expect yes yes)
+02:34:20 NOT FOUND: '^Profile Work'
+02:34:24 tap '!=New tab' at 141 575
+02:34:29 tap 'Address' at 139 63
+02:34:33 go http://10.0.2.2:8000/jar.html
+02:34:41 screenshot u22_work_jar
+02:34:43 work tab: jar: empty (expect empty: a profile keeps its own cookies)
+02:34:46 hold at 113 261
+02:34:50 screenshot u23_link_other_profile
+02:34:52 long press: Open in Personal offered no (expect yes)
+02:34:58 tap 'open tabs' at 240 63
+02:35:17 NOT FOUND: '^Profile Personal'
+02:35:21 tap '=Done' at 277 575
+02:35:26 back in Personal: - (expect who=personal)
+02:35:29 tap 'Menu' at 282 63
+02:35:35 tap 'Settings' at 197 357
+02:35:40 tap 'Search settings' at 174 116
+02:35:47 tap '^Lock' at 152 116
+02:35:49 screenshot u24_lock_page
+02:36:06 NOT FOUND: '=Off until you turn it on'
+02:36:06 reports: ANR 0, crash 0, native crash 0 (all apps)
