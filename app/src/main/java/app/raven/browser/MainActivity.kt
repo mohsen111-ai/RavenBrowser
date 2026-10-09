@@ -96,6 +96,7 @@ class MainActivity : FragmentActivity() {
     override fun onStop() {
         super.onStop()
         container.tabs.onAppHidden()
+        if (!isChangingConfigurations && !isInPictureInPictureMode) stepOutForLeaving()
         if (!isChangingConfigurations) container.wasAway = true
         // Leaving for the phone's own lock screen (to unlock Raven) isn't leaving Raven.
         if (!isChangingConfigurations && !asking) container.leftAt = SystemClock.elapsedRealtime()
@@ -228,6 +229,11 @@ class MainActivity : FragmentActivity() {
     override fun onPause() {
         super.onPause()
         if (isChangingConfigurations || pipReady || isInPictureInPictureMode) return
+        stepOutForLeaving()
+    }
+
+    // Stopped without a picture-in-picture window (it was expected but didn't come, or it was closed): the same.
+    private fun stepOutForLeaving() {
         container.tabs.leaveFullscreen()
         ui.fullscreen = false
         ui.fullscreenTabId = null

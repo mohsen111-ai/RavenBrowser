@@ -90,12 +90,7 @@ log "full screen, swipe from the top edge: bars back $(has "^Address ") (expect 
 sleep 4
 pull 30 75; sleep 5
 log "full screen, a pull lower down: $(text "Loaded ") (expect one more than '$f1')"
-# Full screen off again: a swipe down from the top shows the bar for a few seconds (more than reading the screen takes),
-# so its menu button is tapped straight away.
-$A shell input swipe $((W / 2)) 3 $((W / 2)) $((H * 40 / 100)) 500; sleep 1
-$A shell input tap $((W * 88 / 100)) $((H * 6 / 100)); sleep 2
-dump; python3 tools/find.py "$OUT/ui.xml" "Full screen for pages" > /dev/null || { $A shell input swipe $((W / 2)) $((H * 85 / 100)) $((W / 2)) $((H * 40 / 100)) 400; sleep 1; }
-tap "Full screen for pages"; sleep 3
+fullscreen_pages_off
 
 # 8. The floating tab: a pull in its window reloads its page. A fullscreen video never reloads with a pull.
 newtab; sleep 3; open_page "$PAGES/pull.html?name=Floating"

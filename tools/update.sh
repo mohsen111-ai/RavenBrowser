@@ -115,8 +115,7 @@ log "full screen: address bar $(has "^Address ") (expect no)"
 $A shell input swipe $((W / 2)) 4 $((W / 2)) $((H / 3)) 300; sleep 1; shot u17_bars_peek
 log "after a swipe down from the top: address bar $(has "^Address ") (expect yes)"
 sleep 6; log "a few seconds later: address bar $(has "^Address ") (expect no)"
-$A shell input swipe $((W / 2)) 4 $((W / 2)) $((H / 3)) 300; sleep 1
-menu "Full screen for pages"; sleep 3; shot u18_full_screen_off
+fullscreen_pages_off; shot u18_full_screen_off
 log "full screen off: address bar $(has "^Address ") (expect yes)"
 
 # 7. Profiles: a second person whose cookies are their own.
@@ -147,8 +146,8 @@ focus() { $A shell dumpsys window | grep -m1 mCurrentFocus | sed 's/.*{[^ ]* [^ 
 setting "lock" "Lock"; shot u24_lock_page
 # The switch sits at the right of the "Lock Raven" row, level with the middle of its two lines of text.
 lock_switch() {
-  local a b; a=$(find_xy "^Lock Raven" | cut -d' ' -f2); b=$(find_xy "=Off until you turn it on" | cut -d' ' -f2)
-  [ -n "$a" ] && [ -n "$b" ] && { $A shell input tap $((W * 84 / 100)) $(( (a + b) / 2 )); log "tapped the Lock Raven switch"; }
+  local y; y=$(find_xy "^Lock Raven" | cut -d' ' -f2)
+  [ -n "$y" ] && { $A shell input tap $((W * 84 / 100)) $y; log "tapped the Lock Raven switch at row height $y"; }
 }
 lock_switch; sleep 3; shot u25_asks_pin; pin; shot u25b_lock_on
 log "lock on: $(has "=Immediately") (expect yes: 'Lock after' shows once it's on)"

@@ -65,3 +65,12 @@ setting() {
 }
 # Leaves Settings from one of its pages: Back to the main page, Back out, and Raven in front.
 leave_settings() { $A shell input keyevent 4; sleep 1; $A shell input keyevent 4; sleep 2; front; }
+
+# Full screen for pages off again: a swipe down from the top shows the bar, but only for a few seconds (less than reading
+# the screen takes), so its menu button is tapped straight away, then the menu's tile.
+fullscreen_pages_off() {
+  $A shell input swipe $((W / 2)) 3 $((W / 2)) $((H * 40 / 100)) 500; sleep 1
+  $A shell input tap $((W * 88 / 100)) $((H * 6 / 100)); sleep 2
+  dump; python3 tools/find.py "$OUT/ui.xml" "Full screen for pages" > /dev/null || { $A shell input swipe $((W / 2)) $((H * 85 / 100)) $((W / 2)) $((H * 40 / 100)) 400; sleep 1; }
+  tap "Full screen for pages"; sleep 3
+}
