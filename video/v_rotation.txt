@@ -1,0 +1,12 @@
+--- after Back
+1
+0
+  mLastOrientationSource=WindowedMagnification:0:31@57039860
+  overrideConfig={1.0 310mcc260mnc [en_US] ldltr sw320dp w320dp h640dp 160dpi nrml long port finger qwerty/v/v -nav/h winConfig={ mBounds=Rect(0, 0 - 320, 640) mAppBounds=Rect(0, 0 - 320, 640) mMaxBounds=Rect(0, 0 - 320, 640) mDisplayRotation=ROTATION_0 mWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_0} as.2 s.123 fontWeightAdjustment=0}
+      overrideConfig={0.0 ?mcc0mnc ?localeList ?layoutDir ?swdp ?wdp ?hdp ?density ?lsize ?long ?ldr ?wideColorGamut ?orien ?uimode ?night ?touch ?keyb/?/? ?nav/? winConfig={ mBounds=Rect(0, 0 - 0, 0) mAppBounds=null mMaxBounds=Rect(0, 0 - 0, 0) mDisplayRotation=undefined mWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=undefined} ?fontWeightAdjustment}
+    mLastOrientation=-1
+    mRotation=0 mDeferredRotationPauseCount=0
+      mCurrentRotation=ROTATION_0
+      requestedOrientation=SCREEN_ORIENTATION_UNSPECIFIED
+        requestedOrientation=SCREEN_ORIENTATION_NOSENSOR
+      requestedOrientation=SCREEN_ORIENTATION_UNSPECIFIED

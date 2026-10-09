@@ -1,0 +1,416 @@
+00:17:17 ---- setup
+Performing Streamed Install
+Success
+00:17:58 tap 'Not now' at 160 574
+00:18:28 Raven is in front
+00:18:28 screenshot 00_setup
+00:18:28 ---- setup done
+00:18:28 ---- recents
+00:18:35 tap 'open tabs' at 240 63
+00:18:40 tap '^Tabs · ' at 65 136
+00:18:43 tap '!=New tab' at 141 575
+00:18:49 tap 'Address' at 139 63
+00:18:52 go http://10.0.2.2:8000/long.html
+00:19:06 screenshot r01_a_recents
+00:19:15 tapped Raven's card in Recent Apps at 25 304
+00:19:17 screenshot r01_b_back
+00:19:24 screenshot r01_c_later
+00:19:24 r01: in front yes | app process 3109 (was 3109) | middle of the screen right away 219, after 8 s 219 (expect over 200) | crashes so far 0
+00:19:26 tap 'open tabs' at 240 63
+00:19:31 tap '^Tabs · ' at 65 136
+00:19:35 tap '!=New tab' at 141 575
+00:19:40 tap 'Address' at 139 63
+00:19:43 go http://10.0.2.2:8000/jar.html
+00:19:53 tap 'open tabs' at 240 63
+00:19:59 tap '^Tabs · ' at 65 136
+00:20:02 tap '!=New tab' at 141 575
+00:20:07 tap 'Address' at 139 63
+00:20:10 go http://10.0.2.2:8000/jar.html
+00:20:20 tap 'open tabs' at 240 63
+00:20:25 tap '^Tabs · ' at 65 136
+00:20:28 tap '!=New tab' at 141 575
+00:20:34 tap 'Address' at 139 63
+00:20:37 go http://10.0.2.2:8000/jar.html
+00:20:47 tap 'open tabs' at 240 63
+00:20:52 tap '^Tabs · ' at 65 136
+00:20:55 tap '!=New tab' at 141 575
+00:21:00 tap 'Address' at 139 63
+00:21:04 go http://10.0.2.2:8000/long.html
+00:21:15 screenshot r02_a_recents
+00:21:27 tapped Raven's card in Recent Apps at 25 304
+00:21:29 screenshot r02_b_back
+00:21:36 screenshot r02_c_later
+00:21:36 r02: in front yes | app process 3109 (was 3109) | middle of the screen right away 223, after 8 s 224 (expect over 200) | crashes so far 0
+00:21:38 tap 'open tabs' at 240 63
+00:21:42 screenshot r02_d_tabs
+00:21:47 screenshot r03_a_recents
+00:21:56 tapped Raven's card in Recent Apps at 25 304
+00:21:57 screenshot r03_b_back
+00:22:04 screenshot r03_c_later
+00:22:05 r03: in front yes | app process 3109 (was 3109) | middle of the screen right away 224, after 8 s 224 (expect over 200) | crashes so far 0
+00:22:08 screenshot r04_a_recents
+00:22:17 tapped Raven's card in Recent Apps at 25 304
+00:22:18 screenshot r04_b_back
+00:22:25 screenshot r04_c_later
+00:22:26 r04: in front yes | app process 3109 (was 3109) | middle of the screen right away 224, after 8 s 224 (expect over 200) | crashes so far 0
+00:22:28 tap 'open tabs' at 240 63
+00:22:34 screenshot r05_a_recents
+00:22:43 tapped Raven's card in Recent Apps at 25 304
+00:22:45 screenshot r05_b_back
+00:22:52 screenshot r05_c_later
+00:22:52 r05: in front yes | app process 3109 (was 3109) | middle of the screen right away 112, after 8 s 112 (the Tabs screen) | crashes so far 0
+00:22:57 screenshot r06_a_recents
+00:23:04 after am kill: app process  (expect none)
+00:23:10 tapped Raven's card in Recent Apps at 25 304
+00:23:31 screenshot r06_b_back
+00:23:38 screenshot r06_c_later
+00:23:38 r06: in front yes | app process 6567 (was 3109) | middle of the screen right away 224, after 8 s 224 (expect over 200 once the page is back) | crashes so far 0
+00:23:41 tap 'open tabs' at 240 63
+00:23:46 tap '^Tabs · ' at 65 136
+00:23:49 tap '!=New tab' at 141 575
+00:23:56 screenshot r07_a_recents
+00:24:05 tapped Raven's card in Recent Apps at 25 304
+00:24:06 screenshot r07_b_back
+00:24:14 screenshot r07_c_later
+00:24:14 r07: in front yes | app process 6567 (was 6567) | middle of the screen right away 45, after 8 s 45 (the home page, dark) | crashes so far 0
+00:24:16 tap 'open tabs' at 240 63
+00:24:21 tap '^Tabs · ' at 65 136
+00:24:24 tap '!=New tab' at 141 575
+00:24:29 tap 'Address' at 139 63
+00:24:33 go http://10.0.2.2:8000/long.html
+00:24:43 tap 'Menu' at 282 63
+00:24:49 tap 'Float this tab' at 47 259
+00:24:56 tap 'open tabs' at 240 63
+00:25:01 tap '^Tabs · ' at 65 136
+00:25:04 tap '!=New tab' at 141 575
+00:25:09 tap 'Address' at 139 63
+00:25:13 go http://10.0.2.2:8000/jar.html
+00:25:24 screenshot r08_a_recents
+00:25:33 tapped Raven's card in Recent Apps at 25 304
+00:25:34 screenshot r08_b_back
+00:25:42 screenshot r08_c_later
+00:25:42 r08: in front yes | app process 6567 (was 6567) | middle of the screen right away 95, after 8 s 95 (a page with the floating tab) | crashes so far 0
+00:25:44 floating tab still there: yes (expect yes)
+00:25:47 screenshot r09_a_recents
+00:25:56 tapped Raven's card in Recent Apps at 25 304
+00:25:58 screenshot r09_b_back
+00:26:05 screenshot r09_c_later
+00:26:05 r09: in front yes | app process 6567 (was 6567) | middle of the screen right away 95, after 8 s 95 (a page with the floating tab, screen rebuilt) | crashes so far 0
+00:26:07 floating tab still there: yes (expect yes)
+00:26:12 tap 'Move the floating tab' at 224 106
+00:26:15 tap '=Close the floating tab' at 284 251
+00:26:19 tap 'Menu' at 282 63
+00:26:25 tap '=Split screen' at 122 259
+00:26:29 tap 'Split with Raven long page' at 160 271
+00:26:38 screenshot r10_a_recents
+00:26:47 tapped Raven's card in Recent Apps at 25 304
+00:26:49 screenshot r10_b_back
+00:26:56 screenshot r10_c_later
+00:26:56 r10: in front yes | app process 6567 (was 6567) | middle of the screen right away 127, after 8 s 127 (split screen) | crashes so far 0
+00:27:01 split still there: yes yes (expect yes yes)
+00:27:04 screenshot r11_a_recents
+00:27:13 tapped Raven's card in Recent Apps at 25 304
+00:27:14 screenshot r11_b_back
+00:27:21 screenshot r11_c_later
+00:27:22 r11: in front yes | app process 6567 (was 6567) | middle of the screen right away 127, after 8 s 127 (split screen, screen rebuilt) | crashes so far 0
+00:27:24 tap 'Menu' at 295 48
+00:27:30 tap 'End split screen' at 122 259
+00:27:35 tap 'open tabs' at 240 63
+00:27:40 tap '^Tabs · ' at 65 136
+00:27:43 tap '!=New tab' at 141 575
+00:27:48 tap 'Address' at 139 63
+00:27:52 go http://10.0.2.2:8000/long.html
+00:28:02 tap 'Menu' at 282 63
+00:28:08 tap 'Full screen for pages' at 122 357
+00:28:17 screenshot r12_a_recents
+00:28:27 tapped Raven's card in Recent Apps at 25 304
+00:28:28 screenshot r12_b_back
+00:28:35 screenshot r12_c_later
+00:28:36 r12: in front yes | app process 6567 (was 6567) | middle of the screen right away 224, after 8 s 224 (expect over 200, no bars) | crashes so far 0
+00:28:58 NOT FOUND: 'Full screen for pages'
+00:29:16 NOT FOUND: 'open tabs'
+00:29:34 NOT FOUND: 'Address'
+00:29:34 go http://10.0.2.2:8000/video.html
+00:29:58 NOT FOUND: '=Play'
+00:30:15 NOT FOUND: '=Fullscreen'
+00:30:20 screenshot r13_a_fullscreen
+00:30:23 screenshot r13_a_recents
+00:30:33 tapped Raven's card in Recent Apps at 25 304
+00:30:34 screenshot r13_b_back
+00:30:41 screenshot r13_c_later
+00:30:42 r13: in front yes | app process 6567 (was 6567) | middle of the screen right away 225, after 8 s 225 (the video, fullscreen or back in its page) | crashes so far 0
+00:30:47 tap 'open tabs' at 240 63
+00:30:52 tap '^Tabs · ' at 65 136
+00:30:55 tap '!=New tab' at 141 575
+00:31:00 tap 'Address' at 139 63
+00:31:04 go http://10.0.2.2:8000/video.html?once
+00:31:14 tap '=Play' at 41 255
+00:31:27 tap '=Fullscreen' at 230 339
+00:31:37 screenshot r13b_a_recents
+00:31:46 tapped Raven's card in Recent Apps at 25 304
+00:31:48 screenshot r13b_b_back
+00:31:55 screenshot r13b_c_later
+00:31:55 r13b: in front yes | app process 6567 (was 6567) | middle of the screen right away 70, after 8 s 70 (paused fullscreen video: the page back, not fullscreen) | crashes so far 0
+00:31:57 r13b: screen 320x640 (expect taller than wide) | bars back: no (expect yes)
+00:32:12 NOT FOUND: 'open tabs'
+00:32:31 NOT FOUND: 'Address'
+00:32:31 go http://10.0.2.2:8000/long.html
+00:33:16 screenshot r14_b_back
+00:33:23 screenshot r14_c_later
+00:33:23 r14: in front yes | app process 6567 (was 6567) | middle of the screen right away 70, after 8 s 70 (expect over 200 after five quick trips) | crashes so far 0
+00:33:43 NOT FOUND: 'open tabs'
+00:34:01 NOT FOUND: 'Address'
+00:34:01 go http://10.0.2.2:8000/long.html
+00:34:12 screenshot r15_a_recents
+00:34:16 stopped Raven's gpu helper(s)
+00:34:24 tapped Raven's card in Recent Apps at 25 304
+00:34:26 screenshot r15_b_back
+00:34:33 screenshot r15_c_later
+00:34:34 r15: in front yes | app process 6567 (was 6567) | middle of the screen right away 11, after 8 s 70 (drawing helper stopped while away: expect over 200) | crashes so far 0
+00:34:37 screenshot r16_a_recents
+00:34:41 stopped Raven's tab helper(s)
+00:34:49 tapped Raven's card in Recent Apps at 25 304
+00:34:52 screenshot r16_b_back
+00:34:59 screenshot r16_c_later
+00:35:00 r16: in front yes | app process 6567 (was 6567) | middle of the screen right away 11, after 8 s 64 (page helpers stopped while away: expect over 200 once reloaded) | crashes so far 0
+00:35:03 screenshot r17_a_recents
+00:35:07 stopped Raven's gpu tab helper(s)
+00:35:15 tapped Raven's card in Recent Apps at 25 304
+00:35:18 screenshot r17_b_back
+00:35:25 screenshot r17_c_later
+00:35:25 r17: in front yes | app process 6567 (was 6567) | middle of the screen right away 11, after 8 s 64 (both stopped while away: expect over 200 once reloaded) | crashes so far 0
+00:35:41 NOT FOUND: 'open tabs'
+00:35:59 NOT FOUND: 'Address'
+00:35:59 go http://10.0.2.2:8000/long.html
+00:36:22 NOT FOUND: 'Menu'
+00:36:41 NOT FOUND: 'open tabs'
+00:36:59 NOT FOUND: 'Address'
+00:36:59 go http://10.0.2.2:8000/jar.html
+00:37:22 NOT FOUND: 'Menu'
+00:37:39 NOT FOUND: 'Split with Raven long page'
+00:37:45 screenshot r18_a_before
+00:37:49 screenshot r18_a_recents
+00:37:53 stopped Raven's tab helper(s)
+00:38:01 tapped Raven's card in Recent Apps at 25 304
+00:38:12 screenshot r18_b_back
+00:38:19 screenshot r18_c_later
+00:38:20 r18: in front yes | app process 6567 (was 6567) | middle of the screen right away 64, after 8 s 64 (split and floating, page helpers stopped) | crashes so far 0
+00:38:26 after: halves no no floating no (expect yes yes yes)
+00:38:29 screenshot r19_a_recents
+00:38:33 stopped Raven's gpu tab helper(s)
+00:38:41 tapped Raven's card in Recent Apps at 25 304
+00:38:53 screenshot r19_b_back
+00:39:00 screenshot r19_c_later
+00:39:00 r19: in front yes | app process 6567 (was 6567) | middle of the screen right away 64, after 8 s 64 (split and floating, both stopped) | crashes so far 0
+00:39:15 NOT FOUND: 'Menu'
+00:39:36 NOT FOUND: 'open tabs'
+00:39:54 NOT FOUND: 'Address'
+00:39:54 go http://10.0.2.2:8000/video.html
+00:40:04 tap '=Play' at 41 153
+00:40:23 NOT FOUND: 'Menu'
+00:40:29 tap '=Fullscreen' at 230 237
+00:40:34 screenshot r20_a_fullscreen
+00:40:37 screenshot r20_a_recents
+00:40:41 stopped Raven's tab helper(s)
+00:40:50 tapped Raven's card in Recent Apps at 25 304
+00:41:01 screenshot r20_b_back
+00:41:08 screenshot r20_c_later
+00:41:08 r20: in front yes | app process 6567 (was 6567) | middle of the screen right away 64, after 8 s 64 (floating video was fullscreen, page helpers stopped) | crashes so far 0
+00:41:12 screenshot r20_d_after_back
+00:41:14 after Back: Raven in front yes, floating no
+00:41:18 recents: crashes 0 (expect 0)
+00:41:19 ---- recents done
+00:41:19 ---- recents
+00:41:26 tap 'open tabs' at 240 63
+00:41:31 tap '^Tabs · ' at 65 136
+00:41:34 tap '!=New tab' at 141 575
+00:41:40 tap 'Address' at 139 63
+00:41:43 go http://10.0.2.2:8000/long.html
+00:41:57 screenshot r01_a_recents
+00:42:06 tapped Raven's card in Recent Apps at 25 304
+00:42:07 screenshot r01_b_back
+00:42:14 screenshot r01_c_later
+00:42:15 r01: in front yes | app process 6567 (was 6567) | middle of the screen right away 221, after 8 s 221 (expect over 200) | crashes so far 0
+00:42:30 NOT FOUND: 'open tabs'
+00:42:48 NOT FOUND: 'Address'
+00:42:48 go http://10.0.2.2:8000/jar.html
+00:43:12 NOT FOUND: 'open tabs'
+00:43:30 NOT FOUND: 'Address'
+00:43:30 go http://10.0.2.2:8000/jar.html
+00:43:53 NOT FOUND: 'open tabs'
+00:44:12 NOT FOUND: 'Address'
+00:44:12 go http://10.0.2.2:8000/jar.html
+00:44:35 NOT FOUND: 'open tabs'
+00:44:53 NOT FOUND: 'Address'
+00:44:53 go http://10.0.2.2:8000/long.html
+00:45:05 screenshot r02_a_recents
+00:45:17 tapped Raven's card in Recent Apps at 25 304
+00:45:18 screenshot r02_b_back
+00:45:25 screenshot r02_c_later
+00:45:26 r02: in front yes | app process 6567 (was 6567) | middle of the screen right away 221, after 8 s 221 (expect over 200) | crashes so far 0
+00:45:41 NOT FOUND: 'open tabs'
+00:45:44 screenshot r02_d_tabs
+00:45:50 screenshot r03_a_recents
+00:45:59 tapped Raven's card in Recent Apps at 25 304
+00:46:00 screenshot r03_b_back
+00:46:07 screenshot r03_c_later
+00:46:08 r03: in front yes | app process 6567 (was 6567) | middle of the screen right away 58, after 8 s 58 (expect over 200) | crashes so far 0
+00:46:11 screenshot r04_a_recents
+00:46:20 tapped Raven's card in Recent Apps at 25 304
+00:46:21 screenshot r04_b_back
+00:46:29 screenshot r04_c_later
+00:46:29 r04: in front yes | app process 6567 (was 6567) | middle of the screen right away 31, after 8 s 31 (expect over 200) | crashes so far 0
+00:46:31 tap 'open tabs' at 240 63
+00:46:37 screenshot r05_a_recents
+00:46:46 tapped Raven's card in Recent Apps at 25 304
+00:46:48 screenshot r05_b_back
+00:46:55 screenshot r05_c_later
+00:46:55 r05: in front yes | app process 6567 (was 6567) | middle of the screen right away 16, after 8 s 16 (the Tabs screen) | crashes so far 0
+00:47:01 screenshot r06_a_recents
+00:47:08 after am kill: app process  (expect none)
+00:47:13 tapped Raven's card in Recent Apps at 25 304
+00:47:34 screenshot r06_b_back
+00:47:41 screenshot r06_c_later
+00:47:42 r06: in front yes | app process 12559 (was 6567) | middle of the screen right away 221, after 8 s 221 (expect over 200 once the page is back) | crashes so far 0
+00:47:57 NOT FOUND: 'open tabs'
+00:48:04 screenshot r07_a_recents
+00:48:13 tapped Raven's card in Recent Apps at 25 304
+00:48:15 screenshot r07_b_back
+00:48:22 screenshot r07_c_later
+00:48:23 r07: in front yes | app process 12559 (was 12559) | middle of the screen right away 221, after 8 s 221 (the home page, dark) | crashes so far 0
+00:48:38 NOT FOUND: 'open tabs'
+00:48:56 NOT FOUND: 'Address'
+00:48:56 go http://10.0.2.2:8000/long.html
+00:49:20 NOT FOUND: 'Menu'
+00:49:39 NOT FOUND: 'open tabs'
+00:49:57 NOT FOUND: 'Address'
+00:49:57 go http://10.0.2.2:8000/jar.html
+00:50:08 screenshot r08_a_recents
+00:50:18 tapped Raven's card in Recent Apps at 25 304
+00:50:19 screenshot r08_b_back
+00:50:26 screenshot r08_c_later
+00:50:27 r08: in front yes | app process 12559 (was 12559) | middle of the screen right away 221, after 8 s 221 (a page with the floating tab) | crashes so far 0
+00:50:29 floating tab still there: no (expect yes)
+00:50:32 screenshot r09_a_recents
+00:50:41 tapped Raven's card in Recent Apps at 25 304
+00:50:42 screenshot r09_b_back
+00:50:50 screenshot r09_c_later
+00:50:50 r09: in front yes | app process 12559 (was 12559) | middle of the screen right away 221, after 8 s 221 (a page with the floating tab, screen rebuilt) | crashes so far 0
+00:50:52 floating tab still there: no (expect yes)
+00:51:10 NOT FOUND: 'Menu'
+00:51:27 NOT FOUND: 'Split with Raven long page'
+00:51:36 screenshot r10_a_recents
+00:51:45 tapped Raven's card in Recent Apps at 25 304
+00:51:47 screenshot r10_b_back
+00:51:54 screenshot r10_c_later
+00:51:54 r10: in front yes | app process 12559 (was 12559) | middle of the screen right away 221, after 8 s 221 (split screen) | crashes so far 0
+00:51:59 split still there: no no (expect yes yes)
+00:52:02 screenshot r11_a_recents
+00:52:11 tapped Raven's card in Recent Apps at 25 304
+00:52:12 screenshot r11_b_back
+00:52:20 screenshot r11_c_later
+00:52:20 r11: in front yes | app process 12559 (was 12559) | middle of the screen right away 221, after 8 s 221 (split screen, screen rebuilt) | crashes so far 0
+00:52:35 NOT FOUND: 'Menu'
+00:52:54 NOT FOUND: 'open tabs'
+00:53:12 NOT FOUND: 'Address'
+00:53:12 go http://10.0.2.2:8000/long.html
+00:53:35 NOT FOUND: 'Menu'
+00:53:45 screenshot r12_a_recents
+00:53:54 tapped Raven's card in Recent Apps at 25 304
+00:53:55 screenshot r12_b_back
+00:54:02 screenshot r12_c_later
+00:54:03 r12: in front yes | app process 12559 (was 12559) | middle of the screen right away 221, after 8 s 221 (expect over 200, no bars) | crashes so far 0
+00:54:26 NOT FOUND: 'Full screen for pages'
+00:54:44 NOT FOUND: 'open tabs'
+00:55:02 NOT FOUND: 'Address'
+00:55:02 go http://10.0.2.2:8000/video.html
+00:55:26 NOT FOUND: '=Play'
+00:55:43 NOT FOUND: '=Fullscreen'
+00:55:48 screenshot r13_a_fullscreen
+00:55:51 screenshot r13_a_recents
+00:56:00 tapped Raven's card in Recent Apps at 25 304
+00:56:02 screenshot r13_b_back
+00:56:09 screenshot r13_c_later
+00:56:09 r13: in front yes | app process 12559 (was 12559) | middle of the screen right away 221, after 8 s 221 (the video, fullscreen or back in its page) | crashes so far 0
+00:56:15 tap 'open tabs' at 240 63
+00:56:20 tap '^Tabs · ' at 65 136
+00:56:23 tap '!=New tab' at 141 575
+00:56:28 tap 'Address' at 139 63
+00:56:32 go http://10.0.2.2:8000/video.html?once
+00:56:42 tap '=Play' at 41 255
+00:56:55 tap '=Fullscreen' at 230 339
+00:57:05 screenshot r13b_a_recents
+00:57:15 tapped Raven's card in Recent Apps at 25 304
+00:57:16 screenshot r13b_b_back
+00:57:23 screenshot r13b_c_later
+00:57:24 r13b: in front yes | app process 12559 (was 12559) | middle of the screen right away 70, after 8 s 70 (paused fullscreen video: the page back, not fullscreen) | crashes so far 0
+00:57:26 r13b: screen 320x640 (expect taller than wide) | bars back: no (expect yes)
+00:57:41 NOT FOUND: 'open tabs'
+00:57:59 NOT FOUND: 'Address'
+00:57:59 go http://10.0.2.2:8000/long.html
+00:58:44 screenshot r14_b_back
+00:58:51 screenshot r14_c_later
+00:58:52 r14: in front yes | app process 12559 (was 12559) | middle of the screen right away 70, after 8 s 70 (expect over 200 after five quick trips) | crashes so far 0
+00:59:11 NOT FOUND: 'open tabs'
+00:59:29 NOT FOUND: 'Address'
+00:59:29 go http://10.0.2.2:8000/long.html
+00:59:40 screenshot r15_a_recents
+00:59:44 stopped Raven's gpu helper(s)
+00:59:52 tapped Raven's card in Recent Apps at 25 304
+00:59:55 screenshot r15_b_back
+01:00:02 screenshot r15_c_later
+01:00:02 r15: in front yes | app process 12559 (was 12559) | middle of the screen right away 11, after 8 s 70 (drawing helper stopped while away: expect over 200) | crashes so far 0
+01:00:05 screenshot r16_a_recents
+01:00:10 stopped Raven's tab helper(s)
+01:00:18 tapped Raven's card in Recent Apps at 25 304
+01:00:20 screenshot r16_b_back
+01:00:27 screenshot r16_c_later
+01:00:28 r16: in front yes | app process 12559 (was 12559) | middle of the screen right away 11, after 8 s 64 (page helpers stopped while away: expect over 200 once reloaded) | crashes so far 0
+01:00:31 screenshot r17_a_recents
+01:00:35 stopped Raven's gpu tab helper(s)
+01:00:43 tapped Raven's card in Recent Apps at 25 304
+01:00:46 screenshot r17_b_back
+01:00:53 screenshot r17_c_later
+01:00:54 r17: in front yes | app process 12559 (was 12559) | middle of the screen right away 11, after 8 s 64 (both stopped while away: expect over 200 once reloaded) | crashes so far 0
+01:01:09 NOT FOUND: 'open tabs'
+01:01:27 NOT FOUND: 'Address'
+01:01:27 go http://10.0.2.2:8000/long.html
+01:01:50 NOT FOUND: 'Menu'
+01:02:09 NOT FOUND: 'open tabs'
+01:02:27 NOT FOUND: 'Address'
+01:02:27 go http://10.0.2.2:8000/jar.html
+01:02:50 NOT FOUND: 'Menu'
+01:03:08 NOT FOUND: 'Split with Raven long page'
+01:03:14 screenshot r18_a_before
+01:03:17 screenshot r18_a_recents
+01:03:21 stopped Raven's tab helper(s)
+01:03:29 tapped Raven's card in Recent Apps at 25 304
+01:03:40 screenshot r18_b_back
+01:03:48 screenshot r18_c_later
+01:03:48 r18: in front yes | app process 12559 (was 12559) | middle of the screen right away 64, after 8 s 64 (split and floating, page helpers stopped) | crashes so far 0
+01:03:54 after: halves no no floating no (expect yes yes yes)
+01:03:57 screenshot r19_a_recents
+01:04:01 stopped Raven's gpu tab helper(s)
+01:04:10 tapped Raven's card in Recent Apps at 25 304
+01:04:21 screenshot r19_b_back
+01:04:28 screenshot r19_c_later
+01:04:29 r19: in front yes | app process 12559 (was 12559) | middle of the screen right away 64, after 8 s 64 (split and floating, both stopped) | crashes so far 0
+01:04:44 NOT FOUND: 'Menu'
+01:05:04 NOT FOUND: 'open tabs'
+01:05:22 NOT FOUND: 'Address'
+01:05:22 go http://10.0.2.2:8000/video.html
+01:05:32 tap '=Play' at 41 153
+01:05:51 NOT FOUND: 'Menu'
+01:05:57 tap '=Fullscreen' at 230 237
+01:06:02 screenshot r20_a_fullscreen
+01:06:06 screenshot r20_a_recents
+01:06:10 stopped Raven's tab helper(s)
+01:06:18 tapped Raven's card in Recent Apps at 25 304
+01:06:29 screenshot r20_b_back
+01:06:36 screenshot r20_c_later
+01:06:37 r20: in front yes | app process 12559 (was 12559) | middle of the screen right away 64, after 8 s 64 (floating video was fullscreen, page helpers stopped) | crashes so far 0
+01:06:40 screenshot r20_d_after_back
+01:06:42 after Back: Raven in front yes, floating no
+01:06:47 recents: crashes 0 (expect 0)
+01:06:47 ---- recents done
+01:06:47 reports: ANR 0, crash 0, native crash 0 (all apps)
