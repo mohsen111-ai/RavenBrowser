@@ -1,0 +1,137 @@
+01:23:17 ---- setup
+Performing Streamed Install
+Success
+01:23:56 tap 'Not now' at 160 574
+01:24:26 Raven is in front
+01:24:27 screenshot 00_setup
+01:24:27 ---- setup done
+01:24:27 ---- tabs
+01:24:34 tap 'open tabs' at 240 63
+01:24:39 tap '^Tabs · ' at 65 136
+01:24:43 tap '=Close all' at 268 70
+01:24:47 tap '!=Close all' at 254 382
+01:24:50 screenshot t00_after_close_all
+  [after Close all (expect tabs 1)] tabs: 1 | private: 0
+01:24:58 tap 'Address' at 139 63
+01:25:02 go example.com
+01:25:10 tap 'open tabs' at 240 63
+01:25:15 tap '^Tabs · ' at 65 136
+01:25:18 tap '!=New tab' at 141 575
+01:25:23 tap 'Address' at 139 63
+01:25:27 go example.org
+01:25:35 tap 'open tabs' at 240 63
+01:25:40 tap '^Tabs · ' at 65 136
+01:25:43 tap '!=New tab' at 141 575
+01:25:49 tap 'Address' at 139 63
+01:25:53 go data:text/html,<title>Third</title><h1>Third</h1>
+01:26:01 tap 'open tabs' at 240 63
+01:26:06 tap '^Tabs · ' at 65 136
+01:26:10 tap '!=New tab' at 141 575
+01:26:15 tap 'Address' at 139 63
+01:26:20 go data:text/html,<title>Fourth</title><h1>Fourth</h1>
+01:26:28 tap 'open tabs' at 240 63
+01:26:31 screenshot t01_bar
+  [four pages] tabs: 4 | private: 0
+01:26:35 tap '^Close tab: Fourth' at 277 321
+01:26:36 screenshot t02_closing
+01:26:38 screenshot t03_closed
+  [after X (expect one fewer)] tabs: 3 | private: 0
+01:26:43 swipe on Third
+01:26:43 screenshot t04_snapping
+01:26:45 screenshot t05_snapped
+  [after swipe (expect one fewer)] tabs: 2 | private: 0
+01:26:50 short drag on Example Domain
+01:26:52 screenshot t06_sprang_back
+  [after short drag (expect no change)] tabs: 2 | private: 0
+01:26:56 tap '^Private · ' at 171 136
+01:26:58 screenshot t07_private_side_empty
+01:27:00 tap '!=New private tab' at 141 575
+01:27:06 tap 'Address' at 139 63
+01:27:09 go example.net
+01:27:19 tap 'open tabs' at 240 63
+01:27:22 screenshot t08_private_side_one
+  [one private (expect private 1)] tabs: 2 | private: 1
+01:27:26 tap '^Tabs · ' at 65 136
+01:27:29 screenshot t09_everyday_side
+  [everyday side] tabs: 2 | private: 1
+01:27:33 tap '^Private · ' at 171 136
+01:27:37 tap '=Close all' at 268 70
+01:27:39 screenshot t10_close_all_dialog
+01:27:41 tap '!=Close all' at 254 382
+01:27:44 screenshot t11_private_closed
+  [private closed (everyday unchanged)] tabs: 2 | private: 0
+01:27:49 tap '^Tabs · ' at 65 136
+01:27:53 tap '^Example Domain' at 160 290
+01:27:56 screenshot t12_piece_opened
+01:27:56 ---- tabs done
+01:27:56 ---- back
+01:28:03 tap 'open tabs' at 240 63
+01:28:08 tap '^Tabs · ' at 65 136
+01:28:11 tap '!=New tab' at 141 575
+01:28:14 screenshot b01_new_tab
+  [start] address: (empty) | tabs: 3
+  [start] in front: app.raven.browser/app.raven.browser.MainActivity
+01:28:19 tap 'Address' at 139 63
+01:28:22 go wikipedia%sandroid%soperating%ssystem
+01:28:37 screenshot b02_search
+  [search] address: duckduckgo.com | tabs: 3
+  [search] in front: app.raven.browser/app.raven.browser.MainActivity
+01:28:42 tap 'Android (operating system)' at 148 561
+01:28:57 screenshot b03_result
+  [result] address: en.wikipedia.org | tabs: 3
+  [result] in front: app.raven.browser/app.raven.browser.MainActivity
+01:29:01 tap '=Linux kernel' at 159 522
+01:29:16 screenshot b04_inner_page
+  [inner] address: en.wikipedia.org | tabs: 3
+  [inner] in front: app.raven.browser/app.raven.browser.MainActivity
+01:29:23 Back pressed
+01:29:23 screenshot b05_back1
+  [back 1 (expect the result)] address: en.wikipedia.org | tabs: 3
+  [back 1 (expect the result)] in front: app.raven.browser/app.raven.browser.MainActivity
+01:29:29 Back pressed
+01:29:29 screenshot b06_back2
+  [back 2 (expect the search)] address: duckduckgo.com | tabs: 3
+  [back 2 (expect the search)] in front: app.raven.browser/app.raven.browser.MainActivity
+01:29:36 Back pressed
+01:29:36 screenshot b07_back3
+  [back 3 (expect the new tab page)] address: (empty) | tabs: 3
+  [back 3 (expect the new tab page)] in front: app.raven.browser/app.raven.browser.MainActivity
+01:29:42 Back pressed
+01:29:42 screenshot b08_back4
+  [back 4 (expect the home screen)] address: - | tabs: -
+  [back 4 (expect the home screen)] in front: com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity
+01:29:48 screenshot b09_reopened
+  [reopened] address: (empty) | tabs: 3
+  [reopened] in front: app.raven.browser/app.raven.browser.MainActivity
+01:29:53 tap 'Menu' at 282 63
+01:29:59 tap 'Forward' at 104 78
+01:30:03 screenshot b10_forward
+  [forward (expect the search)] address: duckduckgo.com | tabs: 3
+  [forward (expect the search)] in front: app.raven.browser/app.raven.browser.MainActivity
+01:30:09 Back pressed
+  [back (expect the new tab page)] address: (empty) | tabs: 3
+  [back (expect the new tab page)] in front: app.raven.browser/app.raven.browser.MainActivity
+01:30:14 tap 'Address' at 139 63
+01:30:17 go example.com
+01:30:27 screenshot b11_typed
+  [typed] address: example.com | tabs: 3
+  [typed] in front: app.raven.browser/app.raven.browser.MainActivity
+01:30:33 Back pressed
+01:30:33 screenshot b12_back_after_typed
+  [back (expect the new tab page)] address: (empty) | tabs: 3
+  [back (expect the new tab page)] in front: app.raven.browser/app.raven.browser.MainActivity
+01:30:41 tap 'Address' at 139 63
+01:30:46 go data:text/html,<a%shref=https://example.com/%starget=_blank%sstyle=font-size:120px>Raven%sopener</a>
+01:30:52 screenshot b13_opener
+  [opener] address: data:text/html,<a href=https://example.com/ target=_blank style=font-size:120px>Raven opener</a> | tabs: 3
+  [opener] in front: app.raven.browser/app.raven.browser.MainActivity
+01:30:57 tap '=Raven opener' at 121 130
+01:31:07 screenshot b14_opened_tab
+  [opened tab (expect one more tab)] address: example.com | tabs: 4
+  [opened tab (expect one more tab)] in front: app.raven.browser/app.raven.browser.MainActivity
+01:31:13 Back pressed
+01:31:13 screenshot b15_back_to_opener
+  [back (expect the link page, one tab fewer)] address: data:text/html,<a href=https://example.com/ target=_blank style=font-size:120px>Raven opener</a> | tabs: 3
+  [back (expect the link page, one tab fewer)] in front: app.raven.browser/app.raven.browser.MainActivity
+01:31:19 ---- back done
+01:31:19 reports: ANR 0, crash 0, native crash 0 (all apps)

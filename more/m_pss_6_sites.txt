@@ -1,0 +1,7 @@
+app.raven.browser            TOTAL PSS:   241479            TOTAL RSS:   473636      TOTAL SWAP (KB):        0
+app.raven.browser:crashhelper_disable_art_image_            TOTAL PSS:     7281            TOTAL RSS:   112288      TOTAL SWAP (KB):        0
+app.raven.browser:gpu_disable_art_image_            TOTAL PSS:    84371            TOTAL RSS:   245252      TOTAL SWAP (KB):        0
+app.raven.browser:tab_disable_art_image_34            TOTAL PSS:   170134            TOTAL RSS:   340484      TOTAL SWAP (KB):        0
+app.raven.browser:tab_disable_art_image_32            TOTAL PSS:   499297            TOTAL RSS:   705992      TOTAL SWAP (KB):        0
+app.raven.browser:media            TOTAL PSS:    11441            TOTAL RSS:   133348      TOTAL SWAP (KB):        0
+app.raven.browser:tab_disable_art_image_30            TOTAL PSS:   139738            TOTAL RSS:   319244      TOTAL SWAP (KB):        0

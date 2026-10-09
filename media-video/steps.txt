@@ -1,0 +1,132 @@
+01:23:28 ---- setup
+Performing Streamed Install
+Success
+01:24:07 tap 'Not now' at 160 574
+01:24:37 Raven is in front
+01:24:37 screenshot 00_setup
+01:24:37 ---- setup done
+01:24:37 ---- media
+01:24:45 tap 'open tabs' at 240 63
+01:24:50 tap '^Tabs · ' at 65 136
+01:24:53 tap '!=New tab' at 141 575
+01:24:58 tap 'Address' at 139 63
+01:25:01 go example.com
+01:25:11 screenshot n01_page
+01:25:13 tap '=Home' at 37 63
+01:25:16 screenshot n02_home
+01:25:18 home: address after Home: (empty)
+01:25:21 screenshot n03_back_from_home
+01:25:23 home: address after Back (expect example.com): example.com
+01:25:26 tap '=Home' at 37 63
+01:25:30 tap 'Address' at 139 63
+01:25:33 go example.org
+01:25:48 screenshot n04_back_after_typing_from_home
+01:25:50 home: address after typing from Home then Back (expect example.com): example.com
+01:25:52 tap '=Reload' at 195 63
+01:25:57 screenshot n05_reloaded
+01:25:59 tap 'Address' at 118 63
+01:26:02 go http://10.0.2.2:8000/slow
+01:26:09 screenshot n06_loading
+01:26:11 tap '=Stop loading' at 195 63
+01:26:14 screenshot n07_stopped
+01:26:16 refresh: after Stop the bar offers: Reload
+01:26:18 tap 'Address' at 118 63
+01:26:21 go http://10.0.2.2:8000/media.html
+01:26:29 screenshot n08_media_page
+01:26:31 tap '=Play' at 160 195
+01:26:40 screenshot n09_playing
+01:26:43 media [playing]: page state: playing | session: state=PlaybackState {state=PLAYING | metadata: description=Raven test tone | notification: 2 for Raven
+01:26:46 screenshot n10_shade_controls
+01:27:04 media [after_pause]: page state: paused | session: state=PlaybackState {state=PAUSED | metadata: description=Raven test tone | notification: 2 for Raven
+01:27:09 media [after_play]: page state: playing | session: state=PlaybackState {state=PLAYING | metadata: description=Raven test tone | notification: 2 for Raven
+01:27:14 media [after_next]: page state: next 1 | session: state=PlaybackState {state=PLAYING | metadata: description=Raven test tone | notification: 2 for Raven
+01:27:19 media [after_previous]: page state: previous 1 | session: state=PlaybackState {state=PLAYING | metadata: description=Raven test tone | notification: 2 for Raven
+01:27:19 screenshot n11_after_buttons
+01:27:28 media [in_background]: page state: (not on screen) | session: state=PlaybackState {state=PLAYING | metadata: description=Raven test tone | notification: 2 for Raven
+01:27:31 screenshot n12_shade_from_home
+01:27:38 screenshot n13_lock_screen
+01:27:53 screenshot n14_back_in_app
+01:27:55 media [back_in_app]: page state: previous 1 | session: state=PlaybackState {state=PLAYING | metadata: description=Raven test tone | notification: 2 for Raven
+01:27:55 leave and return with music: process 3241 -> 3241, new crashes: 0
+01:28:12 screenshot n15_return_page
+01:28:14 tap 'open tabs' at 240 63
+01:28:33 screenshot n16_return_tabs
+01:28:39 tap 'Menu' at 282 63
+01:28:56 screenshot n17_return_menu
+01:29:02 tap '=Home' at 37 63
+01:29:19 screenshot n18_return_home
+01:29:24 hold 'open tabs' at 240 63
+01:29:27 tap '=New private tab' at 194 163
+01:29:32 tap 'Address' at 139 63
+01:29:35 go example.net
+01:29:59 screenshot n19_return_private
+01:30:02 screenshot n20_recents
+01:30:27 screenshot n21_return_landscape
+01:30:31 leave and return x6: process 3241 -> 3241, new crashes: 0
+01:30:45 screenshot n22_after_trim_memory
+01:30:51 process after am kill: '' (empty means it was ended)
+01:31:08 screenshot n23_after_process_ended
+01:31:10 tap 'open tabs' at 240 63
+01:31:13 screenshot n24_tabs_after_process_ended
+01:31:19 tap 'open tabs' at 240 63
+01:31:24 tap '^Tabs · ' at 65 136
+01:31:27 tap '=Close all' at 268 70
+01:31:31 tap '!=Close all' at 254 382
+01:31:40 tap 'Address' at 139 63
+01:31:44 go http://10.0.2.2:8000/media.html?one
+01:31:52 tap '=Play' at 160 195
+01:31:58 tap 'open tabs' at 240 63
+01:32:03 tap '^Tabs · ' at 65 136
+01:32:06 tap '!=New tab' at 141 575
+01:32:11 tap 'Address' at 139 63
+01:32:14 go http://10.0.2.2:8000/media.html?two
+01:32:22 tap '=Play' at 160 195
+01:32:29 media [two_playing]: page state: playing | session: state=PlaybackState {state=PLAYING | metadata: description=Raven test tone | notification: 2 for Raven
+01:32:31 tap 'open tabs' at 240 63
+01:32:34 screenshot n25_two_media_tabs
+01:32:36 tap '!=Raven media test one' at 158 205
+01:32:39 screenshot n26_first_media_tab
+01:32:41 tab on screen: tab: one (expect tab: one)
+01:32:43 one at a time: the first tab after the second started playing: state: paused (expect paused)
+01:32:45 tap 'open tabs' at 240 63
+01:32:50 tap '^Close tab: Raven media test two' at 278 297
+01:32:54 tap '^Close tab: Raven media test one' at 277 203
+01:32:57 screenshot n27_media_tabs_closed
+01:33:01 media tabs closed: media notifications left: 0 (expect 0)
+01:33:04 hold 'open tabs' at 240 63
+01:33:07 tap '=New private tab' at 194 163
+01:33:12 tap 'Address' at 139 63
+01:33:16 go http://10.0.2.2:8000/media.html?private
+01:33:24 tap '=Play' at 160 195
+01:33:30 media [private_playing]: page state: playing | session: state=PlaybackState {state=PLAYING | metadata:  | notification: 2 for Raven
+01:33:30 private: title for the lock screen: description=Playing in a private tab (expect Playing in a private tab)
+01:33:33 screenshot n28_private_controls
+01:33:36 tap 'open tabs' at 240 63
+01:33:41 tap '=Close all' at 268 70
+01:33:45 tap '!=Close all' at 254 382
+01:33:52 private tabs closed: media notifications left: 0 (expect 0)
+01:33:52 media: new crashes in this whole test: 0
+01:33:52 ---- media done
+01:33:53 ---- video
+01:34:00 tap 'open tabs' at 240 63
+01:34:05 tap '^Tabs · ' at 65 136
+01:34:08 tap '!=New tab' at 141 575
+01:34:13 tap 'Address' at 139 63
+01:34:16 go http://10.0.2.2:8000/video.html
+01:34:26 tap '=Play' at 41 255
+01:34:30 screenshot v01_playing
+01:34:34 video: state: paused | fullscreen: no | screen: portrait-primary
+01:34:36 tap '=Fullscreen' at 230 339
+01:34:46 screenshot v02_fullscreen
+01:34:50 fullscreen: screen 640x320 (expect wider than tall) | no bar (expect no bar)
+01:35:10 screenshot v03_back_to_fullscreen
+01:35:14 back in the app: screen 640x320 (expect taller than wide: the video stepped back to its page for the trip) | bar shown (expect bar shown)
+01:35:16 screenshot v04_after_back
+01:35:20 after return: screen 640x320 (expect taller than wide) | bar shown (expect bar shown) | state: (not on screen)
+01:35:35 NOT FOUND: '=Fullscreen'
+01:35:41 screenshot v05_fullscreen_again
+01:35:45 screenshot v06_out_again
+01:35:47 second fullscreen: 640x320 then 640x320 | bar shown (expect bar shown)
+01:35:51 video: new crashes: 0
+01:35:51 ---- video done
+01:35:51 reports: ANR 0, crash 0, native crash 0 (all apps)

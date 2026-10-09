@@ -1,0 +1,75 @@
+01:22:20 ---- setup
+Performing Streamed Install
+Success
+01:23:04 tap 'Not now' at 160 574
+01:23:34 Raven is in front
+01:23:34 screenshot 00_setup
+01:23:34 ---- setup done
+01:23:34 ---- more
+01:23:34 reports (before-more): ANR 0, crash 0, native crash 0 (all apps)
+01:23:41 tap 'open tabs' at 240 63
+01:23:47 tap '^Tabs · ' at 65 136
+01:23:50 tap '!=New tab' at 141 575
+01:23:55 tap 'Address' at 139 63
+01:23:58 go raven%sbird%sfacts
+01:24:14 screenshot m01_search_results
+01:24:16 tap 'Address' at 118 63
+01:24:19 go example.com
+01:24:31 tap 'Menu' at 282 63
+01:24:37 tap 'Save as PDF' at 47 455
+01:24:46 screenshot m02_saved_pdf
+01:24:48 tap 'Menu' at 282 63
+01:24:54 tap 'Downloads' at 197 161
+01:24:57 screenshot m03_downloads_with_pdf
+01:25:03 tap 'Address' at 118 63
+01:25:07 go https://permission.site/
+01:25:19 screenshot m04_permission_site
+01:25:21 tap 'Location' at 160 257
+01:25:25 screenshot m05_location_prompt
+01:25:27 tap '=Block' at 87 562
+01:25:30 screenshot m06_after_block
+01:25:33 tap 'Address' at 118 63
+01:25:36 go https://proof.ovh.net/files/1Gb.dat
+01:25:43 screenshot m07_download_notification
+01:25:54 notification intent sent
+01:25:57 screenshot m07b_opened_from_notification
+01:25:59 screenshot m07c_time_left
+01:26:02 tap 'Pause' at 274 327
+01:26:05 screenshot m07d_paused
+01:26:07 tap 'Cancel' at 274 327
+01:26:16 tap 'open tabs' at 240 63
+01:26:21 tap '^Tabs · ' at 65 136
+01:26:24 tap '!=New tab' at 141 575
+01:26:28 tap 'Address' at 139 63
+01:26:32 go https://en.m.wikipedia.org/wiki/Android_(operating_system)
+01:26:46 tap 'open tabs' at 240 63
+01:26:51 tap '^Tabs · ' at 65 136
+01:26:54 tap '!=New tab' at 141 575
+01:26:59 tap 'Address' at 139 63
+01:27:02 go https://www.reddit.com/
+01:27:16 tap 'open tabs' at 240 63
+01:27:21 tap '^Tabs · ' at 65 136
+01:27:24 tap '!=New tab' at 141 575
+01:27:28 tap 'Address' at 139 63
+01:27:32 go https://www.bbc.com/news
+01:27:46 tap 'open tabs' at 240 63
+01:27:51 tap '^Tabs · ' at 65 136
+01:27:54 tap '!=New tab' at 141 575
+01:27:58 tap 'Address' at 139 63
+01:28:02 go https://edition.cnn.com/
+01:28:16 tap 'open tabs' at 240 63
+01:28:22 tap '^Tabs · ' at 65 136
+01:28:25 tap '!=New tab' at 141 575
+01:28:29 tap 'Address' at 139 63
+01:28:33 go https://stackoverflow.com/questions
+01:28:47 tap 'open tabs' at 240 63
+01:28:52 tap '^Tabs · ' at 65 136
+01:28:55 tap '!=New tab' at 141 575
+01:28:59 tap 'Address' at 139 63
+01:29:03 go https://www.justwatch.com/
+01:29:15 screenshot m08_after_6_sites
+01:29:17 tap 'open tabs' at 240 63
+01:29:21 screenshot m09_tabs_6_sites
+01:29:25 processes: 7
+01:29:25 more done
+01:29:26 reports: ANR 0, crash 0, native crash 0 (all apps)

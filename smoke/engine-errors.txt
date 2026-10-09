@@ -1,0 +1,82 @@
+10-09 01:23:03.107   671  1371 I MediaSessionStack: addSession to bottom of stack | record: app.raven.browser/Raven/6 (userId=0)
+10-09 01:23:10.521  3468  3493 I GeckoConsole: 1791508990519	addons.webextension.uBlock0@raymondhill.net	WARN	Loading extension 'uBlock0@raymondhill.net': Reading manifest: Warning processing permissions: Error processing permissions.2: Value "menus" must either: must either [must either [must either [be one of ["idle"], be one of ["activeTab"], be one of ["cookies"], be one of ["publicSuffix"], be one of ["scripting"], or be one of ["webRequest", "webRequestAuthProvider", "webRequestBlocking", "webRequestFilterResponse", "webRequestFilterResponse.serviceWorkerScript"]], must either [be one of ["mozillaAddons"], be one of ["geckoViewAddons", "nativeMessagingFromContent"], be one of ["activityLog"], be one of ["networkStatus"], or be one of ["telemetry"]], be one of ["alarms", "storage", "unlimitedStorage"], be one of ["declarativeNetRequestWithHostAccess"], be one of ["dns"], or be one of ["theme"]], must either [must either [be one of ["idle"], be one of ["activeTab"], be one of ["cookies"], be one of ["publicSuffix"], be one of ["scripting"], or be one
+10-09 01:23:12.068  3468  3493 I GeckoConsole: 1791508992068	addons.webextension.uBlock0@raymondhill.net	WARN	Loading extension 'uBlock0@raymondhill.net': Reading manifest: Warning processing permissions: Error processing permissions.2: Value "menus" must either: must either [must either [must either [be one of ["idle"], be one of ["activeTab"], be one of ["cookies"], be one of ["publicSuffix"], be one of ["scripting"], or be one of ["webRequest", "webRequestAuthProvider", "webRequestBlocking", "webRequestFilterResponse", "webRequestFilterResponse.serviceWorkerScript"]], must either [be one of ["mozillaAddons"], be one of ["geckoViewAddons", "nativeMessagingFromContent"], be one of ["activityLog"], be one of ["networkStatus"], or be one of ["telemetry"]], be one of ["alarms", "storage", "unlimitedStorage"], be one of ["declarativeNetRequestWithHostAccess"], be one of ["dns"], or be one of ["theme"]], must either [must either [be one of ["idle"], be one of ["activeTab"], be one of ["cookies"], be one of ["publicSuffix"], be one of ["scripting"], or be one
+10-09 01:23:13.754  3468  3493 E GeckoConsole: [JavaScript Error: "Native manifests are not supported on android" {file: "resource://gre/modules/NativeManifests.sys.mjs" line: 44}]
+10-09 01:23:13.759  3468  3493 E GeckoConsole: [JavaScript Error: "Native manifests are not supported on android" {file: "resource://gre/modules/NativeManifests.sys.mjs" line: 44}]
+10-09 01:23:13.767  3468  3493 E GeckoConsole: [JavaScript Error: "Native manifests are not supported on android" {file: "resource://gre/modules/NativeManifests.sys.mjs" line: 44}]
+10-09 01:23:13.770  3468  3493 E GeckoConsole: [JavaScript Error: "Native manifests are not supported on android" {file: "resource://gre/modules/NativeManifests.sys.mjs" line: 44}]
+10-09 01:23:13.798  3468  3493 E GeckoConsole: [JavaScript Error: "Native manifests are not supported on android" {file: "resource://gre/modules/NativeManifests.sys.mjs" line: 44}]
+10-09 01:23:13.857  3468  3493 E GeckoConsole: [JavaScript Error: "Native manifests are not supported on android" {file: "resource://gre/modules/NativeManifests.sys.mjs" line: 44}]
+10-09 01:23:19.133  1399  1426 D AlphabeticIndexCompat: computeSectionName: cs: Raven sectionName: R
+10-09 01:23:19.137  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:23:19.140  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:23:19.243  1399  1426 D AlphabeticIndexCompat: computeSectionName: cs: Raven sectionName: R
+10-09 01:23:19.250  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:23:19.251  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:23:20.004  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:23:20.007  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:23:22.488  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:23:22.489  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:23:22.597  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:23:22.598  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:23:22.688  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:23:22.688  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:23:22.890  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:23:22.890  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:23:22.945  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:23:22.950  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:23:31.162  3468  3468 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-09 01:23:31.168  3468  3468 I Raven   : fullscreen: none
+10-09 01:23:32.005  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:23:32.005  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:23:39.134  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:23:39.135  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:23:39.410  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:23:39.410  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:24:11.838  3468  3468 I Raven   : warm up: example.com
+10-09 01:24:12.942  3468  3493 I GeckoConsole: [JavaScript Error: "HTTPS-Only Mode: Not upgrading insecure request “http://firefox-portal-detection.com/success.txt?ipv4” because it is exempt."]
+10-09 01:24:12.942  3468  3493 I GeckoConsole: [JavaScript Error: "HTTPS-Only Mode: Not upgrading insecure request “http://firefox-portal-detection.com/success.txt?ipv6” because it is exempt."]
+10-09 01:24:13.120  3468  3468 I Raven   : screen: page unlocks the orientation
+10-09 01:24:36.286  3468  3468 I Raven   : screen: page unlocks the orientation
+10-09 01:24:36.413  3468  3493 E GeckoConsole: [JavaScript Error: "Error: No impl for message: DOMContentLoaded." {file: "chrome://geckoview/content/geckoview.js" line: 412}]
+10-09 01:24:36.491  3468  3493 E GeckoConsole: [JavaScript Error: "Error: No impl for message: pageshow." {file: "chrome://geckoview/content/geckoview.js" line: 412}]
+10-09 01:24:36.493  3468  3493 E GeckoConsole: [JavaScript Error: "Error: No impl for message: MozAfterPaint." {file: "chrome://geckoview/content/geckoview.js" line: 412}]
+10-09 01:24:36.512  3468  3493 E GeckoConsole: [JavaScript Error: "Error: No impl for message: MozAfterPaint." {file: "chrome://geckoview/content/geckoview.js" line: 412}]
+10-09 01:24:36.532  3468  3493 E GeckoConsole: [JavaScript Error: "Error: No impl for message: MozAfterPaint." {file: "chrome://geckoview/content/geckoview.js" line: 412}]
+10-09 01:24:37.301  3468  3493 E GeckoConsole: [JavaScript Error: "Error: No impl for message: MozAfterPaint." {file: "chrome://geckoview/content/geckoview.js" line: 412}]
+10-09 01:24:37.301  3468  3493 E GeckoConsole: [JavaScript Error: "Error: No impl for message: MozAfterPaint." {file: "chrome://geckoview/content/geckoview.js" line: 412}]
+10-09 01:24:37.870  3468  3493 E GeckoConsole: [JavaScript Error: "Error: No impl for message: MozAfterPaint." {file: "chrome://geckoview/content/geckoview.js" line: 412}]
+10-09 01:24:37.870  3468  3493 E GeckoConsole: [JavaScript Error: "Error: No impl for message: MozAfterPaint." {file: "chrome://geckoview/content/geckoview.js" line: 412}]
+10-09 01:24:48.419  3468  3493 E GeckoConsole: [JavaScript Error: "TypeError: can't access property "WindowEventDispatcher", win is null" {file: "resource://gre/modules/GeckoViewSessionStore.sys.mjs" line: 149}]
+10-09 01:24:48.421  3468  3493 E GeckoConsole: [JavaScript Error: "TypeError: can't access property "sendRequest", this.eventDispatcher is undefined" {file: "resource:///actors/ContentDelegateParent.sys.mjs" line: 60}]
+10-09 01:24:57.449  3468  3468 I Raven   : warm up: www.bbc.com
+10-09 01:25:00.276  3468  3493 I GeckoConsole: [JavaScript Error: "Referrer Policy: Ignoring the less restricted referrer policy “no-referrer-when-downgrade” for the cross-site request: https://cdn.privacy-mgmt.com/us_pm/index.html?hasCsp=true&usNatOrigin=https%3A%2F%2Fcdn.privacy-mgmt.com%2Fusnat&uuid=null&message_id=1504881&site_id=26225&mms_origin=https%3A%2F%2Fcdn.privacy-mgmt.com%2Fmms%2Fv2&is_usnat_notice=true&version=v1" {file: "https://cdn.privacy-mgmt.com/us_pm/index.html?hasCsp=true&usNatOrigin=https%3A%2F%2Fcdn.privacy-mgmt.com%2Fusnat&uuid=null&message_id=1504881&site_id=26225&mms_origin=https%3A%2F%2Fcdn.privacy-mgmt.com%2Fmms%2Fv2&is_usnat_notice=true&version=v1" line: 0}]
+10-09 01:25:31.897  3468  3468 I Raven   : screen: page unlocks the orientation
+10-09 01:25:32.012  3468  3493 E GeckoConsole: [JavaScript Error: "Error: No impl for message: MozAfterPaint." {file: "chrome://geckoview/content/geckoview.js" line: 412}]
+10-09 01:25:32.014  3468  3493 E GeckoConsole: [JavaScript Error: "Error: No impl for message: DOMContentLoaded." {file: "chrome://geckoview/content/geckoview.js" line: 412}]
+10-09 01:25:32.033  3468  3493 E GeckoConsole: [JavaScript Error: "Error: No impl for message: pageshow." {file: "chrome://geckoview/content/geckoview.js" line: 412}]
+10-09 01:25:32.047  3468  3493 E GeckoConsole: [JavaScript Error: "Error: No impl for message: MozAfterPaint." {file: "chrome://geckoview/content/geckoview.js" line: 412}]
+10-09 01:25:32.054  3468  3493 E GeckoConsole: [JavaScript Error: "Error: No impl for message: MozAfterPaint." {file: "chrome://geckoview/content/geckoview.js" line: 412}]
+10-09 01:25:32.086  3468  3493 E GeckoConsole: [JavaScript Error: "Error: No impl for message: MozAfterPaint." {file: "chrome://geckoview/content/geckoview.js" line: 412}]
+10-09 01:25:32.111  3468  3493 E GeckoConsole: [JavaScript Error: "Error: No impl for message: MozAfterPaint." {file: "chrome://geckoview/content/geckoview.js" line: 412}]
+10-09 01:25:32.396  3468  3493 E GeckoConsole: [JavaScript Error: "Error: No impl for message: MozAfterPaint." {file: "chrome://geckoview/content/geckoview.js" line: 412}]
+10-09 01:25:32.548  3468  3493 E GeckoConsole: [JavaScript Error: "Error: No impl for message: MozAfterPaint." {file: "chrome://geckoview/content/geckoview.js" line: 412}]
+10-09 01:25:32.868  3468  3493 E GeckoConsole: [JavaScript Error: "Error: No impl for message: MozAfterPaint." {file: "chrome://geckoview/content/geckoview.js" line: 412}]
+10-09 01:25:44.014  3468  3493 E GeckoConsole: [JavaScript Error: "TypeError: can't access property "WindowEventDispatcher", win is null" {file: "resource://gre/modules/GeckoViewSessionStore.sys.mjs" line: 149}]
+10-09 01:25:44.019  3468  3493 E GeckoConsole: [JavaScript Error: "TypeError: can't access property "sendRequest", this.eventDispatcher is undefined" {file: "resource:///actors/ContentDelegateParent.sys.mjs" line: 60}]
+10-09 01:25:59.449  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:25:59.450  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:26:03.807  3468  3468 I Raven   : screen: page unlocks the orientation
+10-09 01:26:24.011  3468  3468 I Raven   : screen: page unlocks the orientation
+10-09 01:26:53.774  3468  3468 I Raven   : screen: page unlocks the orientation
+10-09 01:26:58.220  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:26:58.220  1399  1399 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 01:27:30.686  3468  3493 E GeckoConsole: [JavaScript Error: "NS_ERROR_FAILURE: Ignore PDF.js for this download." {file: "resource://pdf.js/PdfStreamConverter.sys.mjs" line: 1}]
+10-09 01:27:30.698  3468  3468 I Raven   : download 200 size=104857600 ranges=true connections=4 https://proof.ovh.net/files/100Mb.dat
+10-09 01:27:31.382  3468  5974 I Raven   : piece 1: own connection from byte 26214400
+10-09 01:27:31.813  3468  5975 I Raven   : piece 3: own connection from byte 78643200
+10-09 01:27:31.880  3468  5973 I Raven   : piece 2: own connection from byte 52428800
+10-09 01:28:13.978  3468  3468 I Raven   : screen: page unlocks the orientation
+10-09 01:29:14.846  3468  3468 I Raven   : screen: page unlocks the orientation
+10-09 01:29:30.559  3468  3468 I Raven   : screen: page unlocks the orientation
+10-09 01:29:46.193  3468  3468 I Raven   : screen: page unlocks the orientation

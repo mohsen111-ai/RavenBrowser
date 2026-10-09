@@ -1,0 +1,63 @@
+Performing Streamed Install
+Success
+01:23:28 Raven is in front
+01:23:29 screenshot 01_welcome
+01:23:31 tap 'Not now' at 160 574
+01:23:37 screenshot 03_new_tab
+01:24:07 screenshot 04_new_tab_after_shield_install
+01:24:09 tap 'Address' at 139 63
+01:24:13 go example.com
+01:24:28 screenshot 05_example_com
+01:24:30 tap 'Menu' at 282 63
+01:24:37 tap 'Shield' at 97 532
+01:24:49 screenshot 06_shield_panel
+01:24:55 tap 'Address' at 118 63
+01:24:59 go https://www.bbc.com/news
+01:25:24 screenshot 07_bbc
+01:25:26 tap 'Menu' at 282 63
+01:25:32 tap 'Shield' at 97 532
+01:25:44 screenshot 08_shield_panel_bbc
+01:25:51 tap 'Menu' at 282 63
+01:25:54 screenshot 09_menu
+01:26:00 tap 'open tabs' at 240 63
+01:26:04 screenshot 10_tabs
+01:26:11 hold 'open tabs' at 240 63
+01:26:15 tap '=New private tab' at 194 163
+01:26:19 screenshot 12_private_new_tab
+01:26:21 tap 'Address' at 139 63
+01:26:24 go duckduckgo.com
+01:26:39 screenshot 13_private_page
+01:26:42 tap 'open tabs' at 240 63
+01:26:46 screenshot 14_tabs_private_side
+01:26:48 tap '^Tabs · ' at 65 136
+01:26:50 screenshot 14b_tabs_everyday_side
+01:26:52 tap '^Private · ' at 171 136
+01:27:00 tap 'Address' at 118 63
+01:27:04 go http://http.badssl.com/
+01:27:24 screenshot 15_https_only
+01:27:26 tap 'Address' at 118 63
+01:27:30 go https://proof.ovh.net/files/100Mb.dat
+01:27:36 screenshot 16_download_started
+01:27:39 tap '=Allow' at 160 351
+01:27:42 screenshot 16b_after_permission
+01:27:45 tap 'Menu' at 282 63
+01:27:51 tap 'Downloads' at 197 161
+01:27:54 screenshot 17_downloads
+01:28:14 screenshot 18_downloads_later
+01:28:43 download md5: 2f282b84e7e608d5852449ed940bfc51 expected: 2f282b84e7e608d5852449ed940bfc51
+01:28:45 tap 'Menu' at 282 63
+01:28:52 tap 'Find in page' at 197 259
+01:28:56 screenshot 19_find
+01:29:03 tap 'Menu' at 282 63
+01:29:09 tap 'Settings' at 197 357
+01:29:13 screenshot 20_settings
+01:29:15 screenshot 21_settings_more
+01:29:21 tap 'Menu' at 282 63
+01:29:28 tap 'Add-ons' at 272 357
+01:29:31 screenshot 22_addons
+01:29:37 tap 'Menu' at 282 63
+01:29:43 tap 'History' at 272 161
+01:29:47 screenshot 23_history
+01:29:56 screenshot 24_app_list
+01:29:57 done
+01:29:57 reports: ANR 0, crash 0, native crash 0 (all apps)

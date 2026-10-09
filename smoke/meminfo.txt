@@ -1,0 +1,64 @@
+Applications Memory Usage (in Kilobytes):
+Uptime: 484777 Realtime: 484777
+
+** MEMINFO in pid 3468 [app.raven.browser] **
+                   Pss  Private  Private     Swap      Rss     Heap     Heap     Heap
+                 Total    Dirty    Clean    Dirty    Total     Size    Alloc     Free
+                ------   ------   ------   ------   ------   ------   ------   ------
+  Native Heap    45552    45516        0        0    49264    56468    47139     4765
+  Dalvik Heap     4949     4852        0        0    12464     6995     5247     1748
+ Dalvik Other     3392     2388        0        0     5092                           
+        Stack     1556     1556        0        0     1568                           
+       Ashmem      319       68        0        0     1600                           
+    Other dev       24        0       24        0      272                           
+     .so mmap    38962     6984     9364        0   142184                           
+    .jar mmap     1591        0        0        0    44376                           
+    .apk mmap     3690        0        0        0    16072                           
+    .ttf mmap     3844        0      356        0    11264                           
+    .dex mmap     2656        0     1724        0     7024                           
+    .oat mmap      368        0        0        0    12256                           
+    .art mmap     1377      984        0        0    32060                           
+   Other mmap     2570        4      400        0     8608                           
+      Unknown   103803    75904    27896        0   104724                           
+        TOTAL   214653   138256    39764        0   448828    63463    52386     6513
+ 
+ App Summary
+                       Pss(KB)                        Rss(KB)
+                        ------                         ------
+           Java Heap:     5836                          44524
+         Native Heap:    45516                          49264
+                Code:    18448                         235196
+               Stack:     1556                           1568
+            Graphics:        0                              0
+       Private Other:   106664
+              System:    36633
+             Unknown:                                  118276
+ 
+           TOTAL PSS:   214653            TOTAL RSS:   448828      TOTAL SWAP (KB):        0
+ 
+ Objects
+               Views:       15         ViewRootImpl:        1
+         AppContexts:        6           Activities:        1
+              Assets:       21        AssetManagers:        0
+       Local Binders:      113        Proxy Binders:       65
+       Parcel memory:       10         Parcel count:       43
+    Death Recipients:        7             WebViews:        0
+ 
+ Native Allocations
+                         Count                       Total(kB)
+                        ------                         ------
+    Other (malloced):      416                             38
+ Other (nonmalloced):      205                            126
+   Bitmap (malloced):        4                          21344
+ 
+ SQL
+         MEMORY_USED:      142
+  PAGECACHE_OVERFLOW:       54          MALLOC_SIZE:       46
+ 
+ DATABASES
+      pgsz     dbsz   Lookaside(b) cache hits cache misses cache size  Dbname
+PER CONNECTION STATS
+         4       44            116   214    44    13  /data/user/0/app.raven.browser/databases/raven.db
+POOL STATS
+     cache hits  cache misses    cache size  Dbname
+            214            45           259  /data/user/0/app.raven.browser/databases/raven.db

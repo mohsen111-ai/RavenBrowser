@@ -1,0 +1,85 @@
+01:23:49 ---- setup
+Performing Streamed Install
+Success
+01:24:25 tap 'Not now' at 160 574
+01:24:55 Raven is in front
+01:24:55 screenshot 00_setup
+01:24:55 ---- setup done
+01:24:55 ---- deep test
+01:25:02 tap 'open tabs' at 240 63
+01:25:07 tap '^Tabs · ' at 65 136
+01:25:10 tap '!=New tab' at 141 575
+01:25:16 tap 'Address' at 139 63
+01:25:20 go data:text/html,<a%shref=https://example.com/%sstyle=font-size:160px>Hold%sme</a>
+01:25:26 screenshot d01_link_page
+01:25:27 hold at 100 150
+01:25:30 screenshot d02_long_press
+01:25:32 tap 'Open in new tab' at 110 366
+01:25:35 screenshot d03_opened_in_new_tab
+01:25:45 screenshot d04_followed_link
+01:25:51 screenshot d05_back_to_link_page
+01:25:53 tap 'Address' at 118 63
+01:25:56 go example.com
+01:26:08 tap 'Address' at 118 63
+01:26:10 screenshot d05b_address_editing
+01:26:12 tap 'Edit link' at 284 133
+01:26:14 screenshot d05c_address_in_field
+01:26:19 tap 'Address' at 118 63
+01:26:26 go data:text/html,<meta%sname=viewport%scontent=width=device-width><p%sstyle=font-size:44px;line-height:1>Raven%sflies%sRaven%sflies%sRaven%sflies%sRaven%sflies%sRaven%sflies%sRaven%sflies%sRaven%sflies%sRaven%sflies%sRaven%sflies%sRaven%sflies%sRaven%sflies%sRaven%sflies%sRaven%sflies%sRaven%sflies%sRaven%sflies%sRaven%sflies%sRaven%sflies%sRaven%sflies%sRaven%sflies%sRaven%sflies%sRaven%sflies%sRaven%sflies%sRaven%sflies%sRaven%sflies%s</p>
+01:26:42 screenshot d05d_after_double_tap
+01:26:43 double tap x3: seen as double tap 3 time(s), engine asked for the toolbar 3 time(s), Raven dropped (expect the same number) 3
+01:26:44 hold at 160 330
+01:26:47 screenshot d05e_after_long_press
+01:26:47 long press: toolbar requests 1 (expect 1 or more; the screenshot shows the toolbar)
+01:26:52 tap 'Menu' at 282 63
+01:26:58 tap 'Desktop site' at 47 357
+01:27:06 screenshot d06_desktop_on
+01:27:08 tap 'Menu' at 282 63
+01:27:14 tap 'Desktop site' at 47 357
+01:27:20 screenshot d07_desktop_off
+01:27:28 screenshot d08_landscape
+01:27:30 tap 'open tabs' at 554 63
+01:27:33 screenshot d09_tabs_landscape
+01:28:01 screenshot d10_after_restart
+01:28:03 tap 'open tabs' at 240 63
+01:28:06 screenshot d11_tabs_after_restart
+01:28:12 tap 'Menu' at 282 63
+01:28:18 tap 'Settings' at 197 357
+01:28:23 tap 'Search settings' at 174 116
+01:28:30 tap '^Site isolation' at 73 182
+01:28:34 tap 'Every site' at 89 358
+01:28:36 screenshot d12_restart_banner
+01:28:38 tap '=Restart' at 254 122
+01:29:03 screenshot d13_after_settings_restart
+01:29:05 tap 'Menu' at 282 63
+01:29:11 tap 'Settings' at 197 357
+01:29:16 tap 'Search settings' at 174 116
+01:29:22 tap '^Site isolation' at 73 182
+01:29:26 tap 'Sites you log into' at 112 211
+01:29:31 tap '=Restart' at 254 122
+01:29:58 tap 'Address' at 118 63
+01:30:01 go https://addons.mozilla.org/android/addon/darkreader/
+01:30:21 screenshot d14_amo_page
+01:30:27 tap 'Add to Firefox' at 160 420
+01:30:37 screenshot d15_install_sheet
+01:30:39 tap '=Add' at 233 558
+01:30:51 screenshot d16_after_install
+01:30:53 tap 'Menu' at 282 63
+01:30:59 tap 'Add-ons' at 272 351
+01:31:03 screenshot d17_addons_list
+01:31:09 tap 'Menu' at 282 63
+01:31:15 tap 'Dark Reader' at 102 598
+01:31:23 screenshot d17b_dark_reader_panel
+01:31:29 tap 'Address' at 118 63
+01:31:33 go https://developer.mozilla.org/en-US/
+01:31:48 screenshot d21_dark_website
+01:31:50 tap 'Menu' at 282 63
+01:31:56 tap '=Clean slate' at 197 449
+01:31:58 screenshot d18_clean_slate_sheet
+01:32:00 tap 'Erase everything' at 214 558
+01:32:08 screenshot d19_after_clean_slate
+01:32:11 tap 'Menu' at 282 63
+01:32:17 tap 'History' at 272 155
+01:32:20 screenshot d20_history_after_clean_slate
+01:32:24 deep done
+01:32:24 reports: ANR 0, crash 0, native crash 0 (all apps)
