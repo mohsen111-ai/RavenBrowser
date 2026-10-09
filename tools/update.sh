@@ -145,15 +145,19 @@ $A shell locksettings set-pin 1234 > /dev/null 2>&1
 pin() { sleep 3; $A shell input text 1234; sleep 1; $A shell input keyevent 66; sleep 3; }
 focus() { $A shell dumpsys window | grep -m1 mCurrentFocus | sed 's/.*{[^ ]* [^ ]* //; s/}//'; }
 setting "lock" "Lock"; shot u24_lock_page
-# The switch is the last thing called "Lock Raven" (its title comes first).
-tap "!=Lock Raven"; sleep 3; shot u25_asks_pin; pin; shot u25b_lock_on
+# The switch sits at the right of the "Lock Raven" row, level with the middle of its two lines of text.
+lock_switch() {
+  local a b; a=$(find_xy "^Lock Raven" | cut -d' ' -f2); b=$(find_xy "=Off until you turn it on" | cut -d' ' -f2)
+  [ -n "$a" ] && [ -n "$b" ] && { $A shell input tap $((W * 84 / 100)) $(( (a + b) / 2 )); log "tapped the Lock Raven switch"; }
+}
+lock_switch; sleep 3; shot u25_asks_pin; pin; shot u25b_lock_on
 log "lock on: $(has "=Immediately") (expect yes: 'Lock after' shows once it's on)"
 tap "=Immediately"; sleep 1; leave_settings
 $A shell input keyevent 3; sleep 3; front; sleep 2; shot u26_locked
 log "after leaving and coming back: in front $(focus) (expect the PIN screen over Raven's lock) | lock screen $(has "^Locked for the night") (expect yes, or the PIN screen over it)"
 pin; shot u27_unlocked
 log "after the PIN: locked $(has "^Locked for the night") (expect no) | address bar $(has "^Address ") (expect yes)"
-setting "lock" "Lock"; tap "!=Lock Raven"; pin; leave_settings
+setting "lock" "Lock"; lock_switch; pin; leave_settings
 $A shell locksettings clear --old 1234 > /dev/null 2>&1
 
 # 9. The backup file: saved with a password, then put back (Raven restarts).

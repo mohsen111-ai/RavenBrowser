@@ -116,7 +116,7 @@ menu "Full screen for pages"; sleep 3; try_tap "Got it"; sleep 1
 p=$(pid); away r12; come_back r12; check r12 "expect over 200, no bars" "$p"
 $A shell input swipe $((W / 2)) 5 $((W / 2)) $((H / 3)) 300; sleep 1
 # The bar stays only a few seconds, and reading the screen takes longer: tap its menu button straight away.
-$A shell input tap $((W * 88 / 100)) 63; sleep 2
+$A shell input tap $((W * 88 / 100)) $((H * 6 / 100)); sleep 2
 dump; python3 tools/find.py "$OUT/ui.xml" "Full screen for pages" > /dev/null || { $A shell input swipe $((W / 2)) $((H * 85 / 100)) $((W / 2)) $((H * 40 / 100)) 400; sleep 1; }
 tap "Full screen for pages"; sleep 3
 
