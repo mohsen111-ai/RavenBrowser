@@ -165,9 +165,11 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
         }
         // With the rotation lock on, the direction the screen had before the video (if Android left it turned).
         val rotationHold = rememberRotationHold(activity, fullscreen)
-        LaunchedEffect(pageLock, fullscreen, wideVideo, inFront, rotationHold) {
+        LaunchedEffect(pageLock, fullscreen, wideVideo, inFront, rotationHold, ui.pip) {
             if (!inFront) return@LaunchedEffect
             val want = when {
+                // In the small picture-in-picture window the screen is left alone, so opening it back up doesn't turn it.
+                ui.pip -> android.content.pm.ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
                 pageLock != null -> pageLock!!
                 fullscreen && wideVideo == true -> android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
                 else -> rotationHold ?: android.content.pm.ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED

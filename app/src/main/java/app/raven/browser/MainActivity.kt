@@ -271,6 +271,14 @@ class MainActivity : FragmentActivity() {
             // The little window was closed (not opened back up into Raven): the video stops, as in Chrome.
             val c = container
             (ui.fullscreenTabId?.let { id -> c.tabs.tabs.value.firstOrNull { it.id == id } } ?: c.tabs.selected)?.media?.pause()
+        } else {
+            // The little window was opened back up into Raven: the video returns to its page, upright. Turning the
+            // screen sideways and changing the page's size right as Raven comes back is what made the engine stall
+            // (a black screen, then "Raven isn't responding"); the video's own fullscreen button goes sideways again.
+            container.tabs.leaveFullscreen()
+            ui.fullscreen = false
+            ui.fullscreenTabId = null
+            requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
     }
 
