@@ -1,0 +1,99 @@
+03:11:56 ---- setup
+Performing Streamed Install
+Success
+03:12:39 tap 'Not now' at 160 574
+03:13:09 Raven is in front
+03:13:09 screenshot 00_setup
+03:13:09 ---- setup done
+03:13:09 ---- pull
+03:13:17 tap 'open tabs' at 240 63
+03:13:22 tap '^Tabs · ' at 65 136
+03:13:25 tap '!=New tab' at 141 575
+03:13:30 tap 'Address' at 139 63
+03:13:34 go http://10.0.2.2:8000/pull.html
+03:13:44 loaded: Loaded 1 times (expect 1 time)
+03:13:46 screenshot p01_pulled
+03:13:52 after a pull from the top: Loaded 2 times (expect 2 times)
+03:13:59 after a short pull: Loaded 2 times (expect still 2 times)
+03:14:07 screenshot p02_scrolled_back
+03:14:11 scrolled down, then a pull: Loaded 2 times (expect still 2 times: it only scrolled up) | top of the page in view: yes
+03:14:19 then a pull from the top: Loaded 2 times (expect 3 times)
+03:14:24 after a sideways swipe: Loaded 2 times (expect still 3 times)
+03:14:26 tap 'Address' at 118 63
+03:14:30 go http://10.0.2.2:8000/pull.html?grab=1
+03:14:46 screenshot p03_map
+03:14:48 a map-like page: before 'Map: loaded 3 times', after a pull 'Map: loaded 3 times' (expect the same)
+03:14:50 tap 'Address' at 118 63
+03:14:54 go http://10.0.2.2:8000/pull.html?listen=1
+03:15:13 pull on a 'listen' page: before 'Loaded 4 times', after 'Loaded 5 times' (expect one more)
+03:15:15 tap 'Address' at 118 63
+03:15:19 go http://10.0.2.2:8000/pull.html?contain=1
+03:15:38 pull on a 'contain' page: before 'Loaded 6 times', after 'Loaded 6 times' (expect the same)
+03:15:40 tap 'Address' at 118 63
+03:15:43 go http://10.0.2.2:8000/pull.html?short=1
+03:16:02 pull on a 'short' page: before 'Loaded 7 times', after 'Loaded 8 times' (expect one more)
+03:16:04 tap 'Address' at 118 63
+03:16:08 go http://10.0.2.2:8000/pull.html?late=1
+03:16:27 pull on a 'late' page: before 'Loaded 9 times', after 'Loaded 10 times' (expect either)
+03:16:27 screenshot p03b_modes
+03:16:29 tap 'Address' at 118 63
+03:16:33 go http://10.0.2.2:8000/pull.html
+03:16:44 tap 'open tabs' at 240 63
+03:16:49 tap '^Tabs · ' at 65 136
+03:16:52 tap '!=New tab' at 141 575
+03:16:56 tap 'Address' at 139 63
+03:17:01 go http://10.0.2.2:8000/pull.html?name=Other
+03:17:09 screenshot p03c_other_tab
+03:17:19 after going to another tab mid-reload: a pull there reloads: before 'Other: loaded 1 times', after 'Other: loaded 2 times' (expect one more)
+03:17:21 tap 'open tabs' at 240 63
+03:17:26 tap '^Tabs · ' at 65 136
+03:17:29 tap '!=New tab' at 141 575
+03:17:34 tap 'Address' at 139 63
+03:17:38 go http://10.0.2.2:8000/pull.html
+03:17:48 tap 'open tabs' at 240 63
+03:17:53 tap '^Tabs · ' at 65 136
+03:17:56 tap '!=New tab' at 141 575
+03:18:01 tap 'Address' at 139 63
+03:18:05 go example.com
+03:18:15 tap 'Menu' at 282 63
+03:18:21 tap '=Split screen' at 122 259
+03:18:25 tap 'Split with Raven pull test' at 160 386
+03:18:31 screenshot p04_split
+03:18:39 screenshot p05_split_pulled
+03:18:43 split, bottom half pulled: before 'Loaded 1 times', after 'Loaded 2 times' (expect one more) | top half: Top half: Example Domain
+03:18:45 tap 'Menu' at 295 48
+03:18:52 tap 'End split screen' at 122 259
+03:18:57 tap 'open tabs' at 240 63
+03:19:02 tap '^Tabs · ' at 65 136
+03:19:05 tap '!=New tab' at 141 575
+03:19:10 tap 'Address' at 139 63
+03:19:14 go http://10.0.2.2:8000/pull.html
+03:19:24 tap 'Menu' at 282 63
+03:19:30 tap 'Full screen for pages' at 122 357
+03:19:37 screenshot p06_edge_swipe
+03:19:44 full screen, swipe from the top edge: bars back yes (expect yes) | before 'Loaded 1 times', after 'Loaded 1 times' (expect the same)
+03:19:56 full screen, a pull lower down: Loaded 2 times (expect one more than 'Loaded 1 times')
+03:20:04 tap 'Full screen for pages' at 122 357
+03:20:09 tap 'open tabs' at 240 63
+03:20:14 tap '^Tabs · ' at 65 136
+03:20:17 tap '!=New tab' at 141 575
+03:20:22 tap 'Address' at 139 63
+03:20:26 go http://10.0.2.2:8000/pull.html?name=Floating
+03:20:36 tap 'Menu' at 282 63
+03:20:43 tap 'Float this tab' at 47 259
+03:20:57 screenshot p07_floating_pulled
+03:20:59 floating tab pulled: before 'Floating: loaded 1 times', after 'Floating: loaded 2 times' (expect one more)
+03:21:01 tap 'Move the floating tab' at 224 106
+03:21:04 tap '=Close the floating tab' at 284 251
+03:21:08 tap 'open tabs' at 240 63
+03:21:13 tap '^Tabs · ' at 65 136
+03:21:16 tap '!=New tab' at 141 575
+03:21:22 tap 'Address' at 139 63
+03:21:25 go http://10.0.2.2:8000/video.html
+03:21:35 tap '=Play' at 41 255
+03:21:49 tap '=Fullscreen' at 230 339
+03:21:58 screenshot p08_video_pull
+03:22:01 a pull on a fullscreen video: 0 reloads after the mark (expect 0) | still fullscreen: -
+03:22:04 pull: crashes 0 (expect 0)
+03:22:04 ---- pull done
+03:22:05 reports: ANR 0, crash 0, native crash 0 (all apps)

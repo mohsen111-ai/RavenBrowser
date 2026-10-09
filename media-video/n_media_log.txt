@@ -1,0 +1,154 @@
+10-09 03:10:46.847   666   757 I MediaSessionStack: addSession to bottom of stack | record: app.raven.browser/Raven/6 (userId=0)
+10-09 03:10:57.470  1368  1408 D AlphabeticIndexCompat: computeSectionName: cs: Raven sectionName: R
+10-09 03:10:57.474  1368  1368 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 03:10:57.474  1368  1368 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 03:10:58.076  1368  1408 D AlphabeticIndexCompat: computeSectionName: cs: Raven sectionName: R
+10-09 03:10:58.100  1368  1368 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 03:10:58.100  1368  1368 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 03:10:58.504  1368  1368 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 03:10:58.515  1368  1368 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 03:10:58.681  1368  1368 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 03:10:58.682  1368  1368 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 03:11:04.935  1368  1368 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 03:11:04.936  1368  1368 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 03:11:05.010  1368  1368 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 03:11:05.010  1368  1368 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 03:11:05.188  1368  1368 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 03:11:05.189  1368  1368 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 03:11:05.218  1368  1368 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 03:11:05.218  1368  1368 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 03:11:14.157  1368  1368 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 03:11:14.170  1368  1368 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 03:11:14.175  3436  3436 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-09 03:11:14.190  3436  3436 I Raven   : fullscreen: none
+10-09 03:12:07.758  3436  3436 I Raven   : warm up: example.com
+10-09 03:12:08.841  3436  3436 I Raven   : screen: page unlocks the orientation
+10-09 03:12:25.842  3436  3436 I Raven   : screen: page unlocks the orientation
+10-09 03:12:39.722  3436  3436 I Raven   : warm up: example.org
+10-09 03:12:40.406  3436  3436 I Raven   : screen: page unlocks the orientation
+10-09 03:12:50.366  3436  3436 I Raven   : screen: page unlocks the orientation
+10-09 03:13:09.433  3436  3436 I Raven   : warm up: 10.0.2.2
+10-09 03:13:39.075  3436  3436 I Raven   : media: activated tab d38bf7 (playing false, current null)
+10-09 03:13:39.075  3436  3436 I Raven   : media: play tab d38bf7 (playing false, current null)
+10-09 03:13:39.076  3436  3436 I Raven   : media: d38bf7 takes over from null (its session unknown)
+10-09 03:13:39.080   666  1551 I MediaSessionStack: onPlaybackStateChanged - Pushing session to top | record: app.raven.browser/Raven/6 (userId=0)
+10-09 03:13:39.080   666  1551 D MediaSessionService: onSessionPlaybackStateChanged: record=app.raven.browser/Raven/6 (userId=0) playbackState=PlaybackState {state=PLAYING(3), position=0, buffered position=0, speed=1.0, updated=233820, actions=519, custom actions=[], active item id=-1, error=null}
+10-09 03:13:39.081   666  1551 D MediaSessionService: onSessionActiveStateChanged: record=app.raven.browser/Raven/6 (userId=0) playbackState=PlaybackState {state=PLAYING(3), position=0, buffered position=0, speed=1.0, updated=233820, actions=519, custom actions=[], active item id=-1, error=null}
+10-09 03:13:39.084   666  2221 D MediaSessionService: onSessionPlaybackStateChanged: record=app.raven.browser/Raven/6 (userId=0) playbackState=PlaybackState {state=PLAYING(3), position=0, buffered position=0, speed=1.0, updated=233820, actions=519, custom actions=[], active item id=-1, error=null}
+10-09 03:13:39.085   666  1551 D MediaSessionService: onSessionPlaybackStateChanged: record=app.raven.browser/Raven/6 (userId=0) playbackState=PlaybackState {state=PLAYING(3), position=0, buffered position=0, speed=1.0, updated=233820, actions=639, custom actions=[], active item id=-1, error=null}
+10-09 03:13:39.088   666  1692 D MediaSessionService: onSessionPlaybackStateChanged: record=app.raven.browser/Raven/6 (userId=0) playbackState=PlaybackState {state=PLAYING(3), position=0, buffered position=0, speed=1.0, updated=233832, actions=895, custom actions=[], active item id=-1, error=null}
+10-09 03:13:39.103   666   666 D MediaSessionService: Media button session is changed to app.raven.browser/Raven/6 (userId=0)
+10-09 03:13:39.112   666  1902 I MediaSessionService: tempAllowlistTargetPkgIfPossible callingPackage:com.google.android.bluetooth targetPackage:app.raven.browser reason:MediaSessionRecord:android.support.v4.media.session.command.GET_EXTRA_BINDER [WIU] [FGS]
+10-09 03:13:46.765  1368  1368 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 03:13:46.766  1368  1368 D AlphabeticalAppsList: addAppsWithSections: adding sectionName: R with appInfoTitle: Raven
+10-09 03:14:06.660   666  1551 D MediaSessionService: Sending KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_MEDIA_PAUSE, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=261404000000, downTime=261404000000, deviceId=-1, source=0x101, displayId=-1 } to app.raven.browser/Raven/6 (userId=0)
+10-09 03:14:06.660   666  1551 I MediaSessionService: tempAllowlistTargetPkgIfPossible callingPackage:com.android.shell targetPackage:app.raven.browser reason:action=ACTION_DOWN;code=KEYCODE_MEDIA_PAUSE [WIU] [FGS]
+10-09 03:14:06.661   666  1551 D MediaSessionService: Sending KeyEvent { action=ACTION_UP, keyCode=KEYCODE_MEDIA_PAUSE, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=261404000000, downTime=261404000000, deviceId=-1, source=0x101, displayId=-1 } to app.raven.browser/Raven/6 (userId=0)
+10-09 03:14:06.661   666  1551 I MediaSessionService: tempAllowlistTargetPkgIfPossible callingPackage:com.android.shell targetPackage:app.raven.browser reason:action=ACTION_UP;code=KEYCODE_MEDIA_PAUSE [WIU] [FGS]
+10-09 03:14:06.662  3436  3436 I Raven   : media: pause tab d38bf7 (playing true, current d38bf7)
+10-09 03:14:06.663   666  1937 D MediaSessionService: onSessionPlaybackStateChanged: record=app.raven.browser/Raven/6 (userId=0) playbackState=PlaybackState {state=PAUSED(2), position=27575, buffered position=0, speed=0.0, updated=261407, actions=895, custom actions=[], active item id=-1, error=null}
+10-09 03:14:06.668   666  1902 D MediaSessionService: onSessionPlaybackStateChanged: record=app.raven.browser/Raven/6 (userId=0) playbackState=PlaybackState {state=PAUSED(2), position=27498, buffered position=0, speed=0.0, updated=261412, actions=895, custom actions=[], active item id=-1, error=null}
+10-09 03:14:11.752   666  1194 D MediaSessionService: Sending KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_MEDIA_PLAY, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=266496000000, downTime=266496000000, deviceId=-1, source=0x101, displayId=-1 } to app.raven.browser/Raven/6 (userId=0)
+10-09 03:14:11.752   666  1194 I MediaSessionService: tempAllowlistTargetPkgIfPossible callingPackage:com.android.shell targetPackage:app.raven.browser reason:action=ACTION_DOWN;code=KEYCODE_MEDIA_PLAY [WIU] [FGS]
+10-09 03:14:11.752   666  1194 D MediaSessionService: Sending KeyEvent { action=ACTION_UP, keyCode=KEYCODE_MEDIA_PLAY, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=266496000000, downTime=266496000000, deviceId=-1, source=0x101, displayId=-1 } to app.raven.browser/Raven/6 (userId=0)
+10-09 03:14:11.752   666  1194 I MediaSessionService: tempAllowlistTargetPkgIfPossible callingPackage:com.android.shell targetPackage:app.raven.browser reason:action=ACTION_UP;code=KEYCODE_MEDIA_PLAY [WIU] [FGS]
+10-09 03:14:11.753  3436  3436 I Raven   : media: play tab d38bf7 (playing false, current d38bf7)
+10-09 03:14:11.755   666  1258 I MediaSessionStack: onPlaybackStateChanged - Pushing session to top | record: app.raven.browser/Raven/6 (userId=0)
+10-09 03:14:11.755   666  1258 D MediaSessionService: onSessionPlaybackStateChanged: record=app.raven.browser/Raven/6 (userId=0) playbackState=PlaybackState {state=PLAYING(3), position=27498, buffered position=0, speed=0.0, updated=266498, actions=895, custom actions=[], active item id=-1, error=null}
+10-09 03:14:11.761   666  1258 D MediaSessionService: onSessionPlaybackStateChanged: record=app.raven.browser/Raven/6 (userId=0) playbackState=PlaybackState {state=PLAYING(3), position=27498, buffered position=0, speed=1.0, updated=266504, actions=895, custom actions=[], active item id=-1, error=null}
+10-09 03:14:16.858   666  1902 D MediaSessionService: Sending KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_MEDIA_NEXT, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=271602000000, downTime=271602000000, deviceId=-1, source=0x101, displayId=-1 } to app.raven.browser/Raven/6 (userId=0)
+10-09 03:14:16.858   666  1902 I MediaSessionService: tempAllowlistTargetPkgIfPossible callingPackage:com.android.shell targetPackage:app.raven.browser reason:action=ACTION_DOWN;code=KEYCODE_MEDIA_NEXT [WIU] [FGS]
+10-09 03:14:16.858   666  1902 D MediaSessionService: Sending KeyEvent { action=ACTION_UP, keyCode=KEYCODE_MEDIA_NEXT, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=271602000000, downTime=271602000000, deviceId=-1, source=0x101, displayId=-1 } to app.raven.browser/Raven/6 (userId=0)
+10-09 03:14:16.858   666  1902 I MediaSessionService: tempAllowlistTargetPkgIfPossible callingPackage:com.android.shell targetPackage:app.raven.browser reason:action=ACTION_UP;code=KEYCODE_MEDIA_NEXT [WIU] [FGS]
+10-09 03:14:21.957   666  1902 D MediaSessionService: Sending KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_MEDIA_PREVIOUS, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=276702000000, downTime=276702000000, deviceId=-1, source=0x101, displayId=-1 } to app.raven.browser/Raven/6 (userId=0)
+10-09 03:14:21.957   666  1902 I MediaSessionService: tempAllowlistTargetPkgIfPossible callingPackage:com.android.shell targetPackage:app.raven.browser reason:action=ACTION_DOWN;code=KEYCODE_MEDIA_PREVIOUS [WIU] [FGS]
+10-09 03:14:21.957   666  1902 D MediaSessionService: Sending KeyEvent { action=ACTION_UP, keyCode=KEYCODE_MEDIA_PREVIOUS, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=276702000000, downTime=276702000000, deviceId=-1, source=0x101, displayId=-1 } to app.raven.browser/Raven/6 (userId=0)
+10-09 03:14:21.957   666  1902 I MediaSessionService: tempAllowlistTargetPkgIfPossible callingPackage:com.android.shell targetPackage:app.raven.browser reason:action=ACTION_UP;code=KEYCODE_MEDIA_PREVIOUS [WIU] [FGS]
+10-09 03:14:27.882  3436  3436 I Raven   : screen: page unlocks the orientation
+10-09 03:14:52.652  3436  3436 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-09 03:15:03.087   666  1248 D MediaSessionService: Sending KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_MEDIA_PAUSE, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=317831000000, downTime=317831000000, deviceId=-1, source=0x101, displayId=-1 } to app.raven.browser/Raven/6 (userId=0)
+10-09 03:15:03.087   666  1248 I MediaSessionService: tempAllowlistTargetPkgIfPossible callingPackage:com.android.shell targetPackage:app.raven.browser reason:action=ACTION_DOWN;code=KEYCODE_MEDIA_PAUSE [WIU] [FGS]
+10-09 03:15:03.088   666  1248 D MediaSessionService: Sending KeyEvent { action=ACTION_UP, keyCode=KEYCODE_MEDIA_PAUSE, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=317831000000, downTime=317831000000, deviceId=-1, source=0x101, displayId=-1 } to app.raven.browser/Raven/6 (userId=0)
+10-09 03:15:03.088   666  1248 I MediaSessionService: tempAllowlistTargetPkgIfPossible callingPackage:com.android.shell targetPackage:app.raven.browser reason:action=ACTION_UP;code=KEYCODE_MEDIA_PAUSE [WIU] [FGS]
+10-09 03:15:03.090  3436  3436 I Raven   : media: pause tab d38bf7 (playing true, current d38bf7)
+10-09 03:15:03.090   666  2223 D MediaSessionService: onSessionPlaybackStateChanged: record=app.raven.browser/Raven/6 (userId=0) playbackState=PlaybackState {state=PAUSED(2), position=78829, buffered position=0, speed=0.0, updated=317835, actions=895, custom actions=[], active item id=-1, error=null}
+10-09 03:15:03.104   666  1248 D MediaSessionService: onSessionPlaybackStateChanged: record=app.raven.browser/Raven/6 (userId=0) playbackState=PlaybackState {state=PAUSED(2), position=78688, buffered position=0, speed=0.0, updated=317845, actions=895, custom actions=[], active item id=-1, error=null}
+10-09 03:15:14.324  3436  3436 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-09 03:15:14.325  3436  3436 I Raven   : screen: page unlocks the orientation
+10-09 03:15:35.914  3436  3436 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-09 03:15:35.914  3436  3436 I Raven   : screen: page unlocks the orientation
+10-09 03:15:40.944  3436  3436 I Raven   : screen: page unlocks the orientation
+10-09 03:15:58.222  3436  3436 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-09 03:15:58.223  3436  3436 I Raven   : screen: page unlocks the orientation
+10-09 03:16:21.839  3436  3436 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-09 03:16:21.854  3436  3436 I Raven   : screen: page unlocks the orientation
+10-09 03:16:27.663  3436  3436 I Raven   : screen: page unlocks the orientation
+10-09 03:16:44.046  3436  3436 I Raven   : screen: page unlocks the orientation
+10-09 03:17:00.971  3436  3436 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-09 03:17:00.972  3436  3436 I Raven   : screen: page unlocks the orientation
+10-09 03:17:29.698  3436  3436 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-09 03:17:29.700  3436  3436 I Raven   : screen: page unlocks the orientation
+10-09 03:17:41.893   666  1551 D MediaSessionService: onSessionActiveStateChanged: record=app.raven.browser/Raven/6 (userId=0) playbackState=PlaybackState {state=PAUSED(2), position=78688, buffered position=0, speed=0.0, updated=317845, actions=895, custom actions=[], active item id=-1, error=null}
+10-09 03:17:46.744  3436  3436 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-09 03:17:46.745  3436  3436 I Raven   : screen: page unlocks the orientation
+10-09 03:17:56.137   666  1258 I MediaSessionStack: removeSession | record: app.raven.browser/Raven/6 (userId=0)
+10-09 03:17:56.137   666  1258 D MediaSessionService: Media button session is changed to null
+10-09 03:17:56.138   666  1258 D MediaSessionService: destroySessionLocked: record=app.raven.browser/Raven/6 (userId=0)
+10-09 03:17:59.229   666  1902 I MediaSessionStack: addSession to bottom of stack | record: app.raven.browser/Raven/7 (userId=0)
+10-09 03:17:59.229   666  1902 D MediaSessionService: Media button session is changed to app.raven.browser/Raven/7 (userId=0)
+10-09 03:17:59.230   666  1902 I MediaSessionService: tempAllowlistTargetPkgIfPossible callingPackage:com.google.android.bluetooth targetPackage:app.raven.browser reason:MediaSessionRecord:android.support.v4.media.session.command.GET_EXTRA_BINDER [WIU] [FGS]
+10-09 03:18:00.357  6813  6813 I Raven   : screen: fullscreen=false wide=null pageLock=null hold=null -> -1 (was -1)
+10-09 03:18:00.362  6813  6813 I Raven   : fullscreen: none
+10-09 03:18:00.709  6813  6813 I Raven   : screen: page unlocks the orientation
+10-09 03:18:00.716  6813  6813 I Raven   : screen: page unlocks the orientation
+10-09 03:18:21.565  6813  6813 I Raven   : screen: page unlocks the orientation
+10-09 03:18:31.794  7159  7159 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@9398; boundsInParent: Rect(0, 0 - 320, 514); boundsInScreen: Rect(0, 102 - 320, 616); boundsInWindow: Rect(0, 102 - 320, 616); packageName: app.raven.browser; className: android.webkit.WebView; text: Raven media test; error: null; maxTextLength: -1; stateDescription: null; contentDescription: ; tooltipText: null; containerTitle: ; viewIdResName: ; uniqueId: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; granularScrollingSupported: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_NEXT_HTML_ELEMENT - null, AccessibilityAction: ACTION_PREVIOUS_HTML_ELEMENT - null, AccessibilityAction: ACTION_SCROLL_FORWARD - null, AccessibilityAction: ACTION_SCROLL_BACKWARD - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]; isTextSelectable: false
+10-09 03:18:34.859  7179  7179 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@939e; boundsInParent: Rect(0, 0 - 320, 514); boundsInScreen: Rect(0, 102 - 320, 616); boundsInWindow: Rect(0, 102 - 320, 616); packageName: app.raven.browser; className: android.webkit.WebView; text: Raven media test; error: null; maxTextLength: -1; stateDescription: null; contentDescription: ; tooltipText: null; containerTitle: ; viewIdResName: ; uniqueId: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; granularScrollingSupported: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_NEXT_HTML_ELEMENT - null, AccessibilityAction: ACTION_PREVIOUS_HTML_ELEMENT - null, AccessibilityAction: ACTION_SCROLL_FORWARD - null, AccessibilityAction: ACTION_SCROLL_BACKWARD - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]; isTextSelectable: false
+10-09 03:18:39.817  6813  6813 I Raven   : helper: pause to 1 port(s)
+10-09 03:18:39.864  6813  6813 I Raven   : helper: page did pause on 0 player(s), 0 still playing
+10-09 03:18:52.155  6813  6813 I Raven   : warm up: 10.0.2.2
+10-09 03:18:52.865  6813  6813 I Raven   : screen: page unlocks the orientation
+10-09 03:19:00.868  6813  6813 I Raven   : media: activated tab 59d745 (playing false, current null)
+10-09 03:19:00.868  6813  6813 I Raven   : media: play tab 59d745 (playing false, current null)
+10-09 03:19:00.868  6813  6813 I Raven   : media: 59d745 takes over from null (its session unknown)
+10-09 03:19:00.873   666  1936 I MediaSessionStack: onPlaybackStateChanged - Pushing session to top | record: app.raven.browser/Raven/7 (userId=0)
+10-09 03:19:00.873   666  1936 D MediaSessionService: onSessionPlaybackStateChanged: record=app.raven.browser/Raven/7 (userId=0) playbackState=PlaybackState {state=PLAYING(3), position=0, buffered position=0, speed=1.0, updated=555613, actions=519, custom actions=[], active item id=-1, error=null}
+10-09 03:19:00.874   666  1936 D MediaSessionService: onSessionActiveStateChanged: record=app.raven.browser/Raven/7 (userId=0) playbackState=PlaybackState {state=PLAYING(3), position=0, buffered position=0, speed=1.0, updated=555613, actions=519, custom actions=[], active item id=-1, error=null}
+10-09 03:19:00.880   666  1938 D MediaSessionService: onSessionPlaybackStateChanged: record=app.raven.browser/Raven/7 (userId=0) playbackState=PlaybackState {state=PLAYING(3), position=0, buffered position=0, speed=1.0, updated=555613, actions=519, custom actions=[], active item id=-1, error=null}
+10-09 03:19:00.884   666  1936 D MediaSessionService: onSessionPlaybackStateChanged: record=app.raven.browser/Raven/7 (userId=0) playbackState=PlaybackState {state=PLAYING(3), position=0, buffered position=0, speed=1.0, updated=555613, actions=639, custom actions=[], active item id=-1, error=null}
+10-09 03:19:00.886   666  2223 D MediaSessionService: onSessionPlaybackStateChanged: record=app.raven.browser/Raven/7 (userId=0) playbackState=PlaybackState {state=PLAYING(3), position=0, buffered position=0, speed=1.0, updated=555630, actions=895, custom actions=[], active item id=-1, error=null}
+10-09 03:19:23.337  6813  6813 I Raven   : warm up: 10.0.2.2
+10-09 03:19:23.980  6813  6813 I Raven   : screen: page unlocks the orientation
+10-09 03:19:32.024  6813  6813 I Raven   : media: activated tab 46bbdf (playing false, current 59d745)
+10-09 03:19:32.024  6813  6813 I Raven   : media: play tab 46bbdf (playing false, current 59d745)
+10-09 03:19:32.024  6813  6813 I Raven   : media: 46bbdf takes over from 59d745 (its session known)
+10-09 03:19:32.024  6813  6813 I Raven   : media: pausing 59d745 (helper reaches it)
+10-09 03:19:32.024  6813  6813 I Raven   : helper: pause to 1 port(s)
+10-09 03:19:32.027   666  2223 D MediaSessionService: onSessionPlaybackStateChanged: record=app.raven.browser/Raven/7 (userId=0) playbackState=PlaybackState {state=PLAYING(3), position=0, buffered position=0, speed=1.0, updated=586769, actions=519, custom actions=[], active item id=-1, error=null}
+10-09 03:19:32.031   666   683 D MediaSessionService: onSessionPlaybackStateChanged: record=app.raven.browser/Raven/7 (userId=0) playbackState=PlaybackState {state=PLAYING(3), position=0, buffered position=0, speed=1.0, updated=586769, actions=519, custom actions=[], active item id=-1, error=null}
+10-09 03:19:32.036   666  2230 D MediaSessionService: onSessionPlaybackStateChanged: record=app.raven.browser/Raven/7 (userId=0) playbackState=PlaybackState {state=PLAYING(3), position=0, buffered position=0, speed=1.0, updated=586769, actions=639, custom actions=[], active item id=-1, error=null}
+10-09 03:19:32.039   666  2226 D MediaSessionService: onSessionPlaybackStateChanged: record=app.raven.browser/Raven/7 (userId=0) playbackState=PlaybackState {state=PLAYING(3), position=0, buffered position=0, speed=1.0, updated=586783, actions=895, custom actions=[], active item id=-1, error=null}
+10-09 03:19:32.041  6813  6813 I Raven   : helper: page did pause on 1 player(s), 0 still playing
+10-09 03:19:32.041  6813  6813 I Raven   : media: pause tab 59d745 (playing true, current 46bbdf)
+10-09 03:19:45.386  6813  6813 I Raven   : screen: page unlocks the orientation
+10-09 03:19:58.810  7615  7615 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@9425; boundsInParent: Rect(0, 0 - 320, 749); boundsInScreen: Rect(0, 102 - 320, 851); boundsInWindow: Rect(0, 102 - 320, 851); packageName: app.raven.browser; className: android.webkit.WebView; text: Raven media test one; error: null; maxTextLength: -1; stateDescription: null; contentDescription: ; tooltipText: null; containerTitle: ; viewIdResName: ; uniqueId: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; granularScrollingSupported: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_CLEAR_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_NEXT_HTML_ELEMENT - null, AccessibilityAction: ACTION_PREVIOUS_HTML_ELEMENT - null, AccessibilityAction: ACTION_SCROLL_FORWARD - null, AccessibilityAction: ACTION_SCROLL_BACKWARD - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]; isTextSelectable: false
+10-09 03:19:59.710   666  1902 D MediaSessionService: onSessionActiveStateChanged: record=app.raven.browser/Raven/7 (userId=0) playbackState=PlaybackState {state=PLAYING(3), position=0, buffered position=0, speed=1.0, updated=586783, actions=895, custom actions=[], active item id=-1, error=null}
+10-09 03:19:59.712  6813  6813 I Raven   : helper: pause to 1 port(s)
+10-09 03:19:59.904  6813  6813 I Raven   : helper: page did pause on 1 player(s), 0 still playing
+10-09 03:19:59.904  6813  6813 I Raven   : media: pause tab 46bbdf (playing false, current null)
+10-09 03:20:02.879  7636  7636 I AccessibilityNodeInfoDumper: Skipping invisible child: android.view.accessibility.AccessibilityNodeInfo@942d; boundsInParent: Rect(0, 0 - 320, 749); boundsInScreen: Rect(0, 102 - 320, 851); boundsInWindow: Rect(0, 102 - 320, 851); packageName: app.raven.browser; className: android.webkit.WebView; text: Raven media test one; error: null; maxTextLength: -1; stateDescription: null; contentDescription: ; tooltipText: null; containerTitle: ; viewIdResName: ; uniqueId: null; checkable: false; checked: false; focusable: true; focused: false; selected: false; clickable: false; longClickable: false; contextClickable: false; enabled: true; password: false; scrollable: false; granularScrollingSupported: false; importantForAccessibility: true; visible: false; actions: [AccessibilityAction: ACTION_CLEAR_FOCUS - null, AccessibilityAction: ACTION_SELECT - null, AccessibilityAction: ACTION_CLEAR_SELECTION - null, AccessibilityAction: ACTION_ACCESSIBILITY_FOCUS - null, AccessibilityAction: ACTION_NEXT_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY - null, AccessibilityAction: ACTION_NEXT_HTML_ELEMENT - null, AccessibilityAction: ACTION_PREVIOUS_HTML_ELEMENT - null, AccessibilityAction: ACTION_SCROLL_FORWARD - null, AccessibilityAction: ACTION_SCROLL_BACKWARD - null, AccessibilityAction: ACTION_SHOW_ON_SCREEN - null]; isTextSelectable: false
+10-09 03:20:03.778  6813  6813 I Raven   : helper: pause to 1 port(s)
+10-09 03:20:03.805  6813  6813 I Raven   : helper: page did pause on 1 player(s), 0 still playing
+10-09 03:20:25.856  6813  6813 I Raven   : screen: page unlocks the orientation
+10-09 03:20:33.768  6813  6813 I Raven   : media: activated tab 905a54 (playing false, current null)
+10-09 03:20:33.768  6813  6813 I Raven   : media: play tab 905a54 (playing false, current null)
+10-09 03:20:33.768  6813  6813 I Raven   : media: 905a54 takes over from null (its session unknown)
+10-09 03:20:33.770   666  1551 D MediaSessionService: onSessionPlaybackStateChanged: record=app.raven.browser/Raven/7 (userId=0) playbackState=PlaybackState {state=PLAYING(3), position=0, buffered position=0, speed=1.0, updated=648513, actions=519, custom actions=[], active item id=-1, error=null}
+10-09 03:20:33.771   666  2232 D MediaSessionService: onSessionActiveStateChanged: record=app.raven.browser/Raven/7 (userId=0) playbackState=PlaybackState {state=PLAYING(3), position=0, buffered position=0, speed=1.0, updated=648513, actions=519, custom actions=[], active item id=-1, error=null}
+10-09 03:20:33.780   666  1938 D MediaSessionService: onSessionPlaybackStateChanged: record=app.raven.browser/Raven/7 (userId=0) playbackState=PlaybackState {state=PLAYING(3), position=0, buffered position=0, speed=1.0, updated=648513, actions=519, custom actions=[], active item id=-1, error=null}
+10-09 03:20:33.781   666  2232 D MediaSessionService: onSessionPlaybackStateChanged: record=app.raven.browser/Raven/7 (userId=0) playbackState=PlaybackState {state=PLAYING(3), position=0, buffered position=0, speed=1.0, updated=648513, actions=639, custom actions=[], active item id=-1, error=null}
+10-09 03:20:33.782   666  2226 D MediaSessionService: onSessionPlaybackStateChanged: record=app.raven.browser/Raven/7 (userId=0) playbackState=PlaybackState {state=PLAYING(3), position=0, buffered position=0, speed=1.0, updated=648527, actions=895, custom actions=[], active item id=-1, error=null}
+10-09 03:20:55.218   666  2226 D MediaSessionService: onSessionActiveStateChanged: record=app.raven.browser/Raven/7 (userId=0) playbackState=PlaybackState {state=PLAYING(3), position=0, buffered position=0, speed=1.0, updated=648527, actions=895, custom actions=[], active item id=-1, error=null}
+10-09 03:20:55.220  6813  6813 I Raven   : helper: pause to 1 port(s)
+10-09 03:20:55.239  6813  6813 I Raven   : helper: page did pause on 1 player(s), 0 still playing
+10-09 03:20:55.239  6813  6813 I Raven   : media: pause tab 905a54 (playing false, current null)
