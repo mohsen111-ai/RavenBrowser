@@ -244,6 +244,19 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
                         else launch { ui.snackbar.showSnackbar("No app on this phone can open that link") }
                     }
                     is TabEvent.ContextMenu -> ui.sheet = Sheet.LongPress(e.tabId, e.element)
+                    is TabEvent.NewTabOpened -> launch {
+                        val r = ui.snackbar.showSnackbar(
+                            "New tab opened",
+                            actionLabel = "Switch",
+                            duration = androidx.compose.material3.SnackbarDuration.Short,
+                        )
+                        if (r == androidx.compose.material3.SnackbarResult.ActionPerformed &&
+                            c.tabs.tabs.value.any { it.id == e.tabId }
+                        ) {
+                            c.tabs.select(e.tabId)
+                            ui.go(Screen.Browser)
+                        }
+                    }
                     is TabEvent.OfferApp -> launch {
                         val r = ui.snackbar.showSnackbar("Open in ${e.app}?", actionLabel = "Open", duration = androidx.compose.material3.SnackbarDuration.Short)
                         if (r == androidx.compose.material3.SnackbarResult.ActionPerformed) runCatching { activity.startActivity(e.intent) }
