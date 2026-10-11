@@ -3,6 +3,15 @@ name: Build Raven
 # Started by hand when a version is ready, so GitHub isn't asked to build every small change.
 on:
   workflow_dispatch:
+  # Build and publish the phone APK when one of the app files fixed here changes.
+  push:
+    branches: [main]
+    paths:
+      - "app/src/main/java/app/raven/browser/downloads/**"
+      - "app/src/main/java/app/raven/browser/engine/TabManager.kt"
+      - "app/src/main/java/app/raven/browser/ui/RavenRoot.kt"
+      - "app/src/main/AndroidManifest.xml"
+      - ".github/workflows/build.yml"
 
 permissions:
   contents: write
