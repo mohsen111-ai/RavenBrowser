@@ -104,9 +104,21 @@ class TabManager(
     fun onAppShown() {
         inFront = true
         val kept = keptAwake()
-        _tabs.value.filter { it.id in kept && it.asleep.value }.forEach { tab ->
-            Log.i("Raven", "back on screen: reopening ${tab.id.take(6)}")
-            wake(tab)
+
+        _tabs.value.filter { it.id in kept }.forEach { tab ->
+            if (tab.asleep.value) {
+                Log.i("Raven", "back on screen: reopening asleep ${tab.id.take(6)}")
+                wake(tab)
+            } else if (tab.session.isOpen) {
+                // The phone probably killed the engine processes while Raven was away
+                Log.i("Raven", "back on screen: reactivating ${tab.id.take(6)}")
+                tab.session.setActive(true)
+                engine.runtime.webExtensionController.setTabActive(tab.session, true)
+            } else {
+                // Session is completely dead
+                Log.i("Raven", "back on screen: recreating ${tab.id.take(6)}")
+                wake(tab)
+            }
         }
     }
 
