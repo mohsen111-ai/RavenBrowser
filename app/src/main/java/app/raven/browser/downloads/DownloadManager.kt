@@ -277,7 +277,7 @@ class DownloadManager(private val context: Context, private val db: Database, pr
 
         if (extension == "apk") {
             return Intent(Intent.ACTION_INSTALL_PACKAGE)
-                .setData(uri)
+                .setDataAndType(uri, "application/vnd.android.package-archive")
                 .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
         }
 
