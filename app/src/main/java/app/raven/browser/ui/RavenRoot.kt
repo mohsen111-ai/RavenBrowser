@@ -311,6 +311,20 @@ fun RavenRoot(c: Container, ui: UiState, activity: Activity) {
                 // Moonlight pill; an action (Undo, Folder) sits at its end.
                 Snackbar(
                     data,
+                    modifier = Modifier.pointerInput(data) {
+                        var horizontalDrag = 0f
+                        detectHorizontalDragGestures(
+                            onHorizontalDrag = { _, dragAmount ->
+                                horizontalDrag += dragAmount
+                                if (abs(horizontalDrag) >= 64.dp.toPx()) {
+                                    data.dismiss()
+                                    horizontalDrag = 0f
+                                }
+                            },
+                            onDragEnd = { horizontalDrag = 0f },
+                            onDragCancel = { horizontalDrag = 0f },
+                        )
+                    },
                     shape = androidx.compose.foundation.shape.CircleShape,
                     containerColor = Space.Text,
                     contentColor = Space.OnAccent,
