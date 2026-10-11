@@ -1,0 +1,10 @@
+== slow-first   (seconds until the page finished loading; in brackets: until it started)
+  https://en.m.wikipedia.org/wiki/Crow          Raven   1.2 (0.1)   NoHelper   1.1 (0.1)   NoTranslate   1.1 (0.0)
+  https://www.theguardian.com/international     Raven   1.7 (0.1)   NoHelper   1.4 (0.0)   NoTranslate   1.8 (0.1)
+  https://stackoverflow.com/questions           Raven   0.5 (0.1)   NoHelper   0.5 (0.1)   NoTranslate   0.6 (0.1)
+  https://www.imdb.com/                         Raven   1.0 (0.1)   NoHelper   1.1 (0.1)   NoTranslate   1.1 (0.1)
+  https://www.aljazeera.com/                    Raven   2.0 (0.1)   NoHelper   1.8 (0.1)   NoTranslate   1.8 (0.1)
+  https://www.npr.org/                          Raven   2.4 (0.1)   NoHelper   3.1 (0.1)   NoTranslate   2.2 (0.1)
+  https://www.bbc.com/sport                     Raven   1.3 (0.1)   NoHelper   1.2 (0.1)   NoTranslate   1.4 (0.1)
+  https://www.mozilla.org/en-US/                Raven   1.2 (0.1)   NoHelper   1.3 (0.1)   NoTranslate   1.4 (0.1)
+  median: Raven 1.2  NoHelper 1.2  NoTranslate 1.4
