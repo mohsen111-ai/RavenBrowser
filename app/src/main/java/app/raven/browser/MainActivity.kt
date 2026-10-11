@@ -34,20 +34,24 @@ import java.io.File
 class MainActivity : FragmentActivity() {
     private val ui = UiState()
     private val container get() = (application as RavenApp).container
-
+    private var screenWasRebuilt = false
+    
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
-            navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
-        )
-        super.onCreate(savedInstanceState)
-        val c = container
-        c.tabs.selectionDelegateFactory = { RavenSelectionDelegate(this) }
-        c.tabs.refreshSelectionDelegates()
-        prompt  // created now, while the screen is being made
-        if (savedInstanceState != null) settleRebuiltScreen()
-        setContent { RavenRoot(c, ui, this) }
-        if (savedInstanceState == null) handle(intent)
+    enableEdgeToEdge(
+        statusBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
+        navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
+    )
+
+    super.onCreate(savedInstanceState)
+    screenWasRebuilt = savedInstanceState != null
+    val c = container
+
+    c.tabs.selectionDelegateFactory = { RavenSelectionDelegate(this) }
+    c.tabs.refreshSelectionDelegates()
+    prompt  // created now, while the screen is being made
+    if (savedInstanceState != null) settleRebuiltScreen()
+    setContent { RavenRoot(c, ui, this) }
+    if (savedInstanceState == null) handle(intent)
     }
 
     /**
@@ -78,8 +82,11 @@ class MainActivity : FragmentActivity() {
     override fun onStart() {
         super.onStart()
         val c = container
-        // Pages the phone stopped while Raven was away load again.
-        c.tabs.onAppShown()
+
+        // Recover visible Gecko sessions if Android rebuilt Raven's screen.
+        c.tabs.onAppShown(recoverVisible = screenWasRebuilt)
+        screenWasRebuilt = false
+
         if (c.wasAway) {
             c.wasAway = false
             c.sky.next()
