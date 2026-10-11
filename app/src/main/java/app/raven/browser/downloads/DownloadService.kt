@@ -111,6 +111,7 @@ class DownloadService : Service() {
                     this@DownloadService, 1, Intent(this@DownloadService, DownloadService::class.java).setAction(ACTION_PAUSE_ALL),
                     PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
                 ))
+                addAction(0, "Details", openApp(this@DownloadService, showDownloads = true))
             }
         }
         .build()
