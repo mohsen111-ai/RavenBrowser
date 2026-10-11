@@ -101,8 +101,6 @@ class TabManager(
         private set
 
     /** Raven came back on screen: the pages on it whose engine was stopped meanwhile load again where they were. */
-    fun onAppShown() {
-    
 fun onAppShown(recoverVisible: Boolean = false) {
     inFront = true
     val kept = keptAwake()
