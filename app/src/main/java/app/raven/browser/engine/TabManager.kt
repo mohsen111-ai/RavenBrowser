@@ -48,6 +48,8 @@ sealed interface TabEvent {
     class OfferApp(val intent: Intent, val app: String) : TabEvent
     /** Tabs you closed: "Tab closed · Undo" shows for a few seconds. */
     class Closed(val batch: Long, val count: Int) : TabEvent
+    /** A page opened a background tab; the snackbar can switch to it without interrupting the current page. */
+    class NewTabOpened(val tabId: String) : TabEvent
 }
 
 /** All open tabs: creating, switching, sleeping, crash recovery, and restoring them after a restart. */
@@ -947,11 +949,13 @@ fun onAppShown(recoverVisible: Boolean = false) {
             }
 
             override fun onNewSession(session: GeckoSession, uri: String): GeckoResult<GeckoSession> {
-                val t = newTab(private = tab.private, select = true, open = false, profile = tab.profile)
+                // Keep the page that opened this tab on screen. Offer a Switch action like Firefox instead.
+                val t = newTab(private = tab.private, select = false, open = false, profile = tab.profile)
                 t.url.value = uri
                 t.openedByPage = true
                 t.openerId = tab.id
                 t.expectingLoad = true
+                events.tryEmit(TabEvent.NewTabOpened(t.id))
                 return GeckoResult.fromValue(t.session)
             }
 
