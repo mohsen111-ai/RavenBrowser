@@ -146,8 +146,10 @@ class DownloadManager(private val context: Context, private val db: Database, pr
     fun start(response: WebResponse, private: Boolean): DownloadItem? {
         val headers = response.headers.entries.associate { it.key.lowercase() to it.value }
         val name = fileName(response.uri, headers["content-disposition"], headers["content-type"])
-        val mime = headers["content-type"]?.substringBefore(';')?.trim()?.takeIf { it.isNotBlank() && it != "application/octet-stream" }
-            ?: MimeTypeMap.getSingleton().getMimeTypeFromExtension(name.substringAfterLast('.', "").lowercase()) ?: "application/octet-stream"
+        val extension = name.substringAfterLast('.', "").lowercase()
+        val mime = if (extension == "apk") "application/vnd.android.package-archive"
+            else headers["content-type"]?.substringBefore(';')?.trim()?.takeIf { it.isNotBlank() && it != "application/octet-stream" }
+                ?: MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension) ?: "application/octet-stream"
         val encoded = headers["content-encoding"]?.let { it != "identity" } == true
         val total = if (encoded) -1 else headers["content-length"]?.toLongOrNull() ?: -1
         val ranges = headers["accept-ranges"]?.contains("bytes") == true && total > 0 && response.statusCode == 200
@@ -271,6 +273,12 @@ class DownloadManager(private val context: Context, private val db: Database, pr
                     it.isNotBlank() && it != "application/octet-stream"
                 }
                 ?: "*/*"
+        }
+
+        if (extension == "apk") {
+            return Intent(Intent.ACTION_INSTALL_PACKAGE)
+                .setData(uri)
+                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
         }
 
         val viewIntent = Intent(Intent.ACTION_VIEW)
