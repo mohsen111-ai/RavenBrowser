@@ -251,10 +251,34 @@ class DownloadManager(private val context: Context, private val db: Database, pr
 
     fun openIntent(item: DownloadItem): Intent {
         val uri = Uri.parse(item.target).let { u ->
-            if (u.scheme == "file") FileProvider.getUriForFile(context, context.packageName + ".files", File(u.path!!)) else u
+            if (u.scheme == "file") {
+                FileProvider.getUriForFile(
+                    context,
+                    context.packageName + ".files",
+                    File(u.path!!)
+                )
+            } else {
+                u
+            }
         }
-        return Intent(Intent.ACTION_VIEW).setDataAndType(uri, item.mime)
-            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
+
+        val extension = item.name.substringAfterLast('.', "").lowercase()
+        val mime = when (extension) {
+            "apk" -> "application/vnd.android.package-archive"
+            else -> MimeTypeMap.getSingleton()
+                .getMimeTypeFromExtension(extension)
+                ?: item.mime.takeIf {
+                    it.isNotBlank() && it != "application/octet-stream"
+                }
+                ?: "*/*"
+        }
+
+        val viewIntent = Intent(Intent.ACTION_VIEW)
+            .setDataAndType(uri, mime)
+            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+        return Intent.createChooser(viewIntent, "Open with")
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }
 
     // ------------------------------------------------------------------ workers
