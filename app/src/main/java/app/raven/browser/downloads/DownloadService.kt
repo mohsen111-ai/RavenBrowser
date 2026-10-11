@@ -83,7 +83,7 @@ class DownloadService : Service() {
         .setSmallIcon(R.drawable.ic_stat_raven)
         .setOngoing(true)
         .setOnlyAlertOnce(true)
-        .setSilent(true)
+        .setPriority(NotificationCompat.PRIORITY_HIGH)
         // Tapping it while files download opens Raven's Downloads screen.
         .setContentIntent(openApp(this, showDownloads = true))
         .apply {
@@ -117,7 +117,7 @@ class DownloadService : Service() {
         .build()
 
     companion object {
-        private const val CHANNEL_PROGRESS = "downloads"
+        private const val CHANNEL_PROGRESS = "downloads_progress_v2"
         private const val CHANNEL_DONE = "downloads_done"
         // Its own number: the media controls' notification is 7001, and sharing it made one replace the other.
         private const val NOTIFICATION_ID = 7002
@@ -159,7 +159,7 @@ class DownloadService : Service() {
         private fun ensureChannels(context: Context) {
             if (Build.VERSION.SDK_INT < 26) return
             val nm = context.getSystemService(NotificationManager::class.java)
-            nm.createNotificationChannel(NotificationChannel(CHANNEL_PROGRESS, "Download progress", NotificationManager.IMPORTANCE_LOW))
+            nm.createNotificationChannel(NotificationChannel(CHANNEL_PROGRESS, "Download progress", NotificationManager.IMPORTANCE_HIGH))
             nm.createNotificationChannel(NotificationChannel(CHANNEL_DONE, "Finished downloads", NotificationManager.IMPORTANCE_DEFAULT))
         }
     }
