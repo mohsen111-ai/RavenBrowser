@@ -102,25 +102,42 @@ class TabManager(
 
     /** Raven came back on screen: the pages on it whose engine was stopped meanwhile load again where they were. */
     fun onAppShown() {
-        inFront = true
-        val kept = keptAwake()
+    
+fun onAppShown(recoverVisible: Boolean = false) {
+    inFront = true
+    val kept = keptAwake()
+    val visible = onScreenIds()
 
-        _tabs.value.filter { it.id in kept }.forEach { tab ->
-            if (tab.asleep.value) {
+    _tabs.value.filter { it.id in kept }.forEach { tab ->
+        when {
+            tab.asleep.value -> {
                 Log.i("Raven", "back on screen: reopening asleep ${tab.id.take(6)}")
                 wake(tab)
-            } else if (tab.session.isOpen) {
-                // The phone probably killed the engine processes while Raven was away
+            }
+
+            recoverVisible && tab.id in visible && tab.session.isOpen -> {
+                Log.i("Raven", "back on screen: rebuilding visible session ${tab.id.take(6)}")
+
+                // Release the old display before closing the session.
+                Displays.release(tab.session)
+                tab.session.close()
+                tab.asleep.value = true
+                wake(tab)
+            }
+
+            tab.session.isOpen -> {
                 Log.i("Raven", "back on screen: reactivating ${tab.id.take(6)}")
                 tab.session.setActive(true)
                 engine.runtime.webExtensionController.setTabActive(tab.session, true)
-            } else {
-                // Session is completely dead
+            }
+
+            else -> {
                 Log.i("Raven", "back on screen: recreating ${tab.id.take(6)}")
                 wake(tab)
             }
         }
     }
+}
 
     fun onAppHidden() {
         inFront = false
