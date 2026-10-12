@@ -11,6 +11,9 @@ on:
       - "app/src/main/java/app/raven/browser/engine/TabManager.kt"
       - "app/src/main/java/app/raven/browser/MainActivity.kt"
       - "app/src/main/java/app/raven/browser/ui/RavenRoot.kt"
+      - "app/src/main/java/app/raven/browser/ui/browser/**"
+      - "app/src/main/java/app/raven/browser/ui/screens/DownloadsScreen.kt"
+      - "app/src/main/res/xml/file_paths.xml"
       - "app/src/main/AndroidManifest.xml"
       - ".github/workflows/build.yml"
 
