@@ -97,6 +97,20 @@ class MainActivity : FragmentActivity() {
 
     override fun onStop() {
         super.onStop()
+
+        // Don't leave a focused Compose text field/IME attached to a background browser window.
+        // On some Android 16 devices, returning with the address bar keyboard restored can leave
+        // GeckoView's surface black and stall the UI while the window is resized again.
+        if (ui.editing || ui.findOpen) {
+            runCatching {
+                val inputMethod = getSystemService(INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
+                inputMethod.hideSoftInputFromWindow(window.decorView.windowToken, 0)
+            }
+            // Keep ui.editText so text already typed isn't discarded; the user can reopen the field.
+            ui.editing = false
+            ui.findOpen = false
+        }
+
         container.tabs.onAppHidden()
         if (!isChangingConfigurations) container.wasAway = true
         // Leaving for the phone's own lock screen (to unlock Raven) isn't leaving Raven.
