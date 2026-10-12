@@ -108,13 +108,16 @@ fun BrowserScreen(c: Container, ui: UiState) {
     val selectedId by c.tabs.selectedId.collectAsState()
     val tab = tabs.firstOrNull { it.id == selectedId }
     val ground = Raven.ground
+    // Keep the page's size stable while the address/find keyboard is visible. Only the suggestions
+    // list should make room for the keyboard; resizing the GeckoView here can stall on resume.
+    val keyboardOverPage = ui.editing || ui.findOpen
 
     Column(
         Modifier
             .fillMaxSize()
             .background(if (tab?.private == true) Space.NebulaGround else ground)
             .navigationBarsPadding()
-            .imePadding(),
+            .then(if (keyboardOverPage) Modifier else Modifier.imePadding()),
     ) {
         // Split screen: two tabs, each with its own small bar. A video going fullscreen in a half fills the whole
         // screen, and the split comes back when it leaves fullscreen (the halves stay as they are meanwhile, so the
@@ -639,6 +642,7 @@ private fun Suggestions(c: Container, ui: UiState, tab: BrowserTab, top: android
         Modifier
             .fillMaxSize()
             .background(if (tab.private) Space.NebulaGround else Raven.ground)
+            .imePadding()
             .padding(horizontal = 12.dp),
         contentPadding = androidx.compose.foundation.layout.PaddingValues(top = top),
     ) {
