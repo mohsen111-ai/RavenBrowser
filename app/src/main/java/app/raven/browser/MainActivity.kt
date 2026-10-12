@@ -34,7 +34,6 @@ import java.io.File
 class MainActivity : FragmentActivity() {
     private val ui = UiState()
     private val container get() = (application as RavenApp).container
-    private var screenWasRebuilt = false
     
     override fun onCreate(savedInstanceState: Bundle?) {
     enableEdgeToEdge(
@@ -43,7 +42,6 @@ class MainActivity : FragmentActivity() {
     )
 
     super.onCreate(savedInstanceState)
-    screenWasRebuilt = savedInstanceState != null
     val c = container
 
     c.tabs.selectionDelegateFactory = { RavenSelectionDelegate(this) }
@@ -83,9 +81,8 @@ class MainActivity : FragmentActivity() {
         super.onStart()
         val c = container
 
-        // Recover visible Gecko sessions if Android rebuilt Raven's screen.
-        c.tabs.onAppShown(recoverVisible = screenWasRebuilt)
-        screenWasRebuilt = false
+        // Resume existing Gecko sessions instead of closing and reopening the visible page.
+        c.tabs.onAppShown()
 
         if (c.wasAway) {
             c.wasAway = false
