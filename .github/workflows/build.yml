@@ -9,6 +9,7 @@ on:
     paths:
       - "app/src/main/java/app/raven/browser/downloads/**"
       - "app/src/main/java/app/raven/browser/engine/TabManager.kt"
+      - "app/src/main/java/app/raven/browser/MainActivity.kt"
       - "app/src/main/java/app/raven/browser/ui/RavenRoot.kt"
       - "app/src/main/AndroidManifest.xml"
       - ".github/workflows/build.yml"
