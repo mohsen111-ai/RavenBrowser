@@ -115,16 +115,6 @@ fun onAppShown(recoverVisible: Boolean = false) {
                 wake(tab)
             }
 
-            recoverVisible && tab.id in visible && tab.session.isOpen -> {
-                Log.i("Raven", "back on screen: rebuilding visible session ${tab.id.take(6)}")
-
-                // Release the old display before closing the session.
-                Displays.release(tab.session)
-                tab.session.close()
-                tab.asleep.value = true
-                wake(tab)
-            }
-
             tab.session.isOpen -> {
                 Log.i("Raven", "back on screen: reactivating ${tab.id.take(6)}")
                 tab.session.setActive(true)
