@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
     <external-files-path name="downloads" path="Download/" />
+    <!-- Downloads may also be stored in Raven's internal files directory. -->
+    <files-path name="files" path="." />
 </paths>
