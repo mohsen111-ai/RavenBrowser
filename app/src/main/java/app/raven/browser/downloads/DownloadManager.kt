@@ -251,6 +251,22 @@ class DownloadManager(private val context: Context, private val db: Database, pr
         scope.launch { db.clearDownloads() }
     }
 
+    /**
+     * Opens a completed download. For APKs, take the user to Android's per-app install permission
+     * screen when Raven has not been allowed to request package installs yet.
+     */
+    fun open(from: Context, item: DownloadItem): Boolean {
+        val isApk = item.name.substringAfterLast('.', "").equals("apk", ignoreCase = true)
+        if (isApk && Build.VERSION.SDK_INT >= 26 && !from.packageManager.canRequestPackageInstalls()) {
+            val allow = Intent(
+                android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
+                Uri.parse("package:${from.packageName}")
+            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            return runCatching { from.startActivity(allow) }.isSuccess
+        }
+        return runCatching { from.startActivity(openIntent(item)) }.isSuccess
+    }
+
     fun openIntent(item: DownloadItem): Intent {
         val uri = Uri.parse(item.target).let { u ->
             if (u.scheme == "file") {
